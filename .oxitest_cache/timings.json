@@ -1,314 +1,296 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_add_sinks.py::test_coroutine_sink[none]": {
-      "duration_ms": 10.158009000000002,
+    "/home/user/loguru/tests/test_datetime.py::test_file_formatting": {
+      "duration_ms": 12.015248,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_coroutine_sink[once]": {
-      "duration_ms": 28.050338,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[eleven_pm]": {
+      "duration_ms": 10.16511,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_coroutine_sink[twice]": {
-      "duration_ms": 28.428217,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[empty_brackets]": {
+      "duration_ms": 10.673696,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_complete[integer]": {
-      "duration_ms": 7.175698000000001,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[empty_format]": {
+      "duration_ms": 9.476357,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_complete[none]": {
-      "duration_ms": 7.733313000000001,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[empty_nested_brackets]": {
+      "duration_ms": 10.672777,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_complete[zero_argument_callable]": {
-      "duration_ms": 7.719625,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[escaped_brackets]": {
+      "duration_ms": 9.915849,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_flush[integer]": {
-      "duration_ms": 6.733238,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[escaped_tokens]": {
+      "duration_ms": 9.575674,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_flush[none]": {
-      "duration_ms": 6.476577,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[escaped_utc_marker]": {
+      "duration_ms": 9.799967,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_stop[integer]": {
-      "duration_ms": 6.678113000000001,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[escaped_z_with_utc_marker]": {
+      "duration_ms": 9.853427,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_custom_sink_invalid_stop[none]": {
-      "duration_ms": 6.589595999999999,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[exotic_tokens]": {
+      "duration_ms": 9.683306,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_deprecated_start_and_stop": {
-      "duration_ms": 6.837605,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[leading_utc_marker_is_literal]": {
+      "duration_ms": 9.561608,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_devnull[none]": {
-      "duration_ms": 11.339738,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[midnight_is_12_am]": {
+      "duration_ms": 9.429414000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_devnull[once]": {
-      "duration_ms": 10.773548000000002,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[nested_brackets]": {
+      "duration_ms": 10.943049,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_devnull[twice]": {
-      "duration_ms": 10.710578,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[noon_is_12_pm]": {
+      "duration_ms": 9.397976,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_disabled_logger_in_sink": {
-      "duration_ms": 6.669754,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[only_utc_marker]": {
+      "duration_ms": 9.773411,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_object_sink[none]": {
-      "duration_ms": 7.178124,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[short_tokens]": {
+      "duration_ms": 9.725836,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_object_sink[once]": {
-      "duration_ms": 6.270382,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[strftime_converted_to_utc]": {
+      "duration_ms": 10.188203,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_object_sink[twice]": {
-      "duration_ms": 6.459501,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[strftime_est]": {
+      "duration_ms": 10.522723,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_opened_sink[none]": {
-      "duration_ms": 11.877331,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[strftime_forced_utc]": {
+      "duration_ms": 10.215860000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_opened_sink[once]": {
-      "duration_ms": 12.448312,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[strftime_utc]": {
+      "duration_ms": 55.530346,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_opened_sink[twice]": {
-      "duration_ms": 12.054552,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[timestamps]": {
+      "duration_ms": 10.666662,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[none-pathlib_path]": {
-      "duration_ms": 11.898205,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[tokens_around_brackets]": {
+      "duration_ms": 10.433261,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[none-string]": {
-      "duration_ms": 12.442539,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[tokens_converted_to_utc]": {
+      "duration_ms": 9.822846,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[once-pathlib_path]": {
-      "duration_ms": 12.621978,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[tokens_est]": {
+      "duration_ms": 10.039276,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[once-string]": {
-      "duration_ms": 12.123107,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[tokens_forced_utc]": {
+      "duration_ms": 9.996917,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[twice-pathlib_path]": {
-      "duration_ms": 12.112547,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[tokens_utc]": {
+      "duration_ms": 11.345532,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_path_sink[twice-string]": {
-      "duration_ms": 11.937279,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[unclosed_bracket]": {
+      "duration_ms": 9.483460000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_ascii_encoding": {
-      "duration_ms": 8.184463,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[unopened_bracket]": {
+      "duration_ms": 9.568978000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_default_encoding": {
-      "duration_ms": 7.462034999999999,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[utc_marker_after_space]": {
+      "duration_ms": 9.635152,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_folder_creation[none]": {
-      "duration_ms": 12.918676,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[utc_prefix_is_literal]": {
+      "duration_ms": 9.401823,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_folder_creation[once]": {
-      "duration_ms": 13.827591,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[utc_suffix]": {
+      "duration_ms": 9.668778,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_folder_creation[twice]": {
-      "duration_ms": 13.253938,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting[year_2242]": {
+      "duration_ms": 9.876434999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_file_sink_utf8_encoding": {
-      "duration_ms": 7.583254,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting_timezone_offset_down_to_the_second[negative_offset]": {
+      "duration_ms": 9.878141999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_flush[none]": {
-      "duration_ms": 6.430885,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting_timezone_offset_down_to_the_second[strftime_with_fractional_seconds]": {
+      "duration_ms": 10.391734999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_flush[once]": {
-      "duration_ms": 6.58864,
+    "/home/user/loguru/tests/test_datetime.py::test_formatting_timezone_offset_down_to_the_second[tokens_with_whole_seconds]": {
+      "duration_ms": 9.559216000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_flush[twice]": {
-      "duration_ms": 6.462717,
+    "/home/user/loguru/tests/test_datetime.py::test_freezegun_mocking": {
+      "duration_ms": 10.916596,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_function_sink[none]": {
-      "duration_ms": 10.742702999999999,
+    "/home/user/loguru/tests/test_datetime.py::test_invalid_time_format[eight_fractional_digits]": {
+      "duration_ms": 6.587937999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_function_sink[once]": {
-      "duration_ms": 11.620476,
+    "/home/user/loguru/tests/test_datetime.py::test_invalid_time_format[nine_fractional_digits]": {
+      "duration_ms": 6.098839,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_function_sink[twice]": {
-      "duration_ms": 10.99297,
+    "/home/user/loguru/tests/test_datetime.py::test_invalid_time_format[seven_fractional_digits]": {
+      "duration_ms": 7.249562999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_invalid_sink[integer]": {
-      "duration_ms": 0.889265,
+    "/home/user/loguru/tests/test_datetime.py::test_invalid_time_format[ten_fractional_digits]": {
+      "duration_ms": 6.247561,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_invalid_sink[module]": {
-      "duration_ms": 0.45870900000000003,
+    "/home/user/loguru/tests/test_datetime.py::test_locale_formatting": {
+      "duration_ms": 9.95527,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_invalid_sink[object_instance]": {
-      "duration_ms": 0.430655,
+    "/home/user/loguru/tests/test_datetime.py::test_localtime_raising_exception[os_error]": {
+      "duration_ms": 10.843062,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_invalid_sink[type_object]": {
-      "duration_ms": 6.638421999999999,
+    "/home/user/loguru/tests/test_datetime.py::test_localtime_raising_exception[overflow_error]": {
+      "duration_ms": 10.185825000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_standard_handler_sink[none]": {
-      "duration_ms": 6.428475000000001,
+    "/home/user/loguru/tests/test_datetime.py::test_missing_struct_time_fields": {
+      "duration_ms": 10.612697,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_standard_handler_sink[once]": {
-      "duration_ms": 6.722977,
+    "/home/user/loguru/tests/test_datetime.py::test_stdout_formatting": {
+      "duration_ms": 10.077910000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_standard_handler_sink[twice]": {
-      "duration_ms": 6.408203,
+    "/home/user/loguru/tests/test_datetime.py::test_update_with_zone_info[summer]": {
+      "duration_ms": 18.291868,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stderr_sink[none]": {
-      "duration_ms": 11.269527,
+    "/home/user/loguru/tests/test_datetime.py::test_update_with_zone_info[winter]": {
+      "duration_ms": 10.546244,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stderr_sink[once]": {
-      "duration_ms": 11.371286,
+    "/home/user/loguru/tests/test_datetime.py::test_value_of_gmtoff_is_invalid[above_maximum]": {
+      "duration_ms": 10.233578999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stderr_sink[twice]": {
-      "duration_ms": 10.616458,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stdout_sink[none]": {
-      "duration_ms": 45.212269,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stdout_sink[once]": {
-      "duration_ms": 11.895835,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_add_sinks.py::test_stdout_sink[twice]": {
-      "duration_ms": 11.281292,
+    "/home/user/loguru/tests/test_datetime.py::test_value_of_gmtoff_is_invalid[below_minimum]": {
+      "duration_ms": 10.48643,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
