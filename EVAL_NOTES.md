@@ -185,3 +185,159 @@ Local eval was Linux-only. CI on kalonji-tools/loguru surfaced platform-specific
 The map's "learning phase" framing was correct — the first T8 pass produced anti-signal; this second-agent pass produced real signal AND surfaced a real cross-platform bug that only end-to-end CI catches. Pathfinder umbrella should NOT close until N3 is at least bisected.
 
 T9/T10/T11 can proceed but should note the cross-platform-verification requirement in their exit criteria.
+
+## Deep audit addendum (2026-07-26) — fine-tooth-comb pass across all 60 files
+
+Prompted by user directive: "look at the features that we have today, look at the features that were used, ask why previous agent chose to resolve it like it did? if created it's own question our built-in? why did author/dev chose this way over our available features?" — done systematically.
+
+### Method
+
+1. Enumerated oxitest's full public API from `oxitest/__init__.py:__all__` (42 exported names).
+2. Cataloged every INVENTION in `tests/conftest.py` (423 lines), `tests/_utils.py` (70 lines), `tests/_naming.py` (23 lines).
+3. Counted usage of every oxitest built-in fixture, mark, helper across all 60 migrated test files.
+4. Cross-referenced original pytest usage (at commit `2a17be7`) with oxitest usage (at HEAD `91f18e6`) at the per-test-function-parameter granularity.
+
+### Usage census (oxitest built-in fixtures)
+
+| Built-in | Uses across 60 files |
+|---|---|
+| `TempDir` | 101 tests (parameter) |
+| `StdCapture` | 108 tests (parameter) |
+| `LogCapture` | 2 tests (both in `test_coroutine_sink.py`) |
+| **`Patcher`** | **0 tests** — replaced by `patch_context` helper (see N2) |
+| **`WarnCapture`** | **0 tests** — `oxitest.warns()` context manager covers assertion case (3 uses) |
+| **`FdCapture`** | **0 tests** — loguru writes at Python stream level; StdCapture suffices |
+| **`TempDirFactory`** | **0 tests** — no session-scoped temp dir need |
+| **`TestContext`** | **0 tests** — `Yields[None]` covers teardown; `addfinalizer` unused |
+
+### Usage census (oxitest APIs)
+
+| API | Uses |
+|---|---|
+| `Fixture[T]` (type-annotated user fixtures) | 297 (244 `Writer` + 52 `FreezeTime` + 1 `Type[SinkWithLogger]`) |
+| `@oxitest.parametrize` | 274 |
+| `oxitest.raises(...)` | 116 |
+| `oxitest.partial(...)` (composed parametrize) | 89 |
+| `oxitest.mark.skip(...)` (all 71 `mark.*` uses are skip) | 71 |
+| `oxitest.skip()` (imperative) | 6 |
+| `oxitest.warns(...)` | 3 |
+| **`FixtureRef[T]`** | **0** — see finding N4 below |
+| **`oxitest.arrange(...)`** | **0** — autouse fixtures used instead |
+| **`oxitest.approx(...)`** | **0** — loguru has no float-comparison tests |
+| **`oxitest.importorskip(...)`** | **0** — dev-deps guaranteed installed |
+
+### User-defined fixture surface (7 total on `fx`)
+
+All 7 are in `tests/conftest.py`:
+
+| Fixture | Type | Notes |
+|---|---|---|
+| `writer` | function-scope | Returns fresh `Writer()` — loguru sink for tests |
+| `sink_with_logger` | function-scope | Returns `Type[SinkWithLogger]` class — tests instantiate per case |
+| `freeze_time` | function-scope | Returns fresh `FreezeTime()` instance |
+| `check_env_variables` | **`autouse=True, shared=True`** | Session-warn on `LOGURU_*` env vars |
+| `strict_warnings` | `autouse=True` | Warnings-as-errors (see N1) |
+| `reset_logger` | `autouse=True` | Loguru state reset between tests |
+| `reset_multiprocessing_start_method` | `autouse=True` | Global multiprocessing state reset |
+
+### Helper surface (5 on `common`)
+
+| Helper | Uses | Notes |
+|---|---|---|
+| `check_dir` | 90 | Assert on directory contents (rotation tests) |
+| `patch_context` | 36 direct + 5 in conftest = 41 total | Block-scoped patching (see N2) |
+| `make_logging_logger` | 18 | Stdlib logger setup for loguru→stdlib bridging tests |
+| `default_threading_excepthook` | 5 | Thread-excepthook context manager |
+| `simulate_f_globals_name_absent` / `simulate_no_frame_available` / `simulate_missing_frame_lineno` | via string dispatch (~6 total) | Loguru frame-inspection simulations |
+
+### Original-vs-migrated pytest concepts (per test-function parameter counts)
+
+| Concept | Pytest (2a17be7) | Oxitest (HEAD) | Assessment |
+|---|---|---|---|
+| Custom fixtures | 19 `@pytest.fixture` | 7 `@fx.fixture` | Consolidated: some pytest fixtures became helpers or `Yields[T]` inline |
+| Fixture with `params=[...]` (parametrized) | 2 | **0 FixtureRef** — replaced by string-dispatch helpers | **N4** |
+| Fixture with `scope="session"` | 1 (`check_env_variables`) | 1 (same, now `shared=True`) | 1:1 |
+| Fixture with `scope="module"` | 1 (`test_filesink_permissions`) | Collapsed to `shared=True` | Per docs, module scope collapses to shared |
+| `tmp_path` param | 123 tests | 101 `tmp: TempDir` tests | -22 (some tests consolidated) |
+| `capsys` param | 115 tests | 108 `cap: StdCapture` tests | -7 |
+| `caplog` param | 4 tests | 2 `log: LogCapture` tests | -2 |
+| `monkeypatch` param | 55 tests | **0 `patch: Patcher` params + 36 block-scoped `patch_context()`** | See N2 — shape shifted |
+| `@pytest.mark.parametrize` | 259 | 274 `@oxitest.parametrize` | ≈ (some added via composition) |
+| `@pytest.mark.skipif` / `.skip` | 81 | 71 `@mark.skip(when=…)` | ≈ (unified per docs) |
+| `@pytest.mark.xfail` | 1 | 0 | -1 (single case rewritten?) |
+| `pytest.raises` | 116 | 116 `oxitest.raises` | 1:1 exact |
+| `pytest.warns` | 3 | 3 `oxitest.warns` | 1:1 exact |
+| `pytest.fixture(params=[...])` | 2 | 0 FixtureRef | Replaced (N4) |
+
+### New findings from the deep audit
+
+Beyond N1 (filterwarnings) and N2 (Patcher shape) already filed:
+
+#### N4 — `FixtureRef[T]` unused because helpers are the natural shape for scoped setup
+
+pytest's `@pytest.fixture(params=[...])` parametrizes over fixture strategies. oxitest docs propose `FixtureRef[T]` in dataclass parametrize cases as the equivalent. **Migration used it 0 times.**
+
+Instead: the migration dispatches over helper names as strings:
+
+```python
+INCOMPLETE_FRAME_CASES = {
+    "no_globals_name": IncompleteFrameCase(simulate="simulate_f_globals_name_absent"),
+    "no_frame": IncompleteFrameCase(simulate="simulate_no_frame_available"),
+}
+
+@oxitest.parametrize(**INCOMPLETE_FRAME_CASES)
+def test_x(simulate: str, ...) -> None:
+    with getattr(helpers.common, simulate)():
+        ...
+```
+
+**Why not FixtureRef?** Because the "simulate" strategies are helpers (context managers used inside test body with `with`), not fixtures. Converting them to fixtures would:
+- Force implicit setup/teardown (loses visible scope in test body)
+- Move the block-scope semantic to a fixture, which is test-scoped (see N2)
+
+**Above threshold.** Same shape family as N2 — the fixture-only parametrization surface misses the case where an adopter wants to parametrize over HELPERS (block-scoped, inline-visible setup). Options:
+
+1. `HelperRef[T]` — a parametrize case field that resolves to a helper, invoked as context manager
+2. Document the string-dispatch idiom as a canonical pattern (with type-safety caveats)
+3. Broaden FixtureRef semantics to allow "fixture OR helper" targets
+
+Related to Patcher / N2 and the wayfinder map on Fixture-vs-Helper identity ([#1697](https://github.com/kalonji-tools/oxitest/issues/1697)) — this is a third data point that the shape distinction has under-explored edges.
+
+#### N5 — `oxitest.helpers` proxy inaccessible at import time / in subprocess workers → forces file split
+
+Migration ships **two separate modules** for stateless test utilities:
+
+- `tests/conftest.py` — `common = Helpers()` + `@common.helper` decorators for session-time helpers accessed via `oxitest.helpers.common.X()`
+- `tests/_utils.py` — plain module-level functions for utilities needed at:
+  - Parametrize case build time (import-time evaluation before session)
+  - Worker subprocess functions (different process, no session)
+
+The `_utils.py` docstring explicitly explains WHY:
+> Everything here is plain module-level code rather than a `conftest.py` helper because the `oxitest.helpers` proxy only resolves while a session is running, and these are needed in two places where that is not true: `@oxitest.parametrize` case values, which are built as the test module is imported, and worker functions executed in a child process.
+
+**Above threshold** — this is a real architectural constraint on helper design that adopters WILL rediscover the hard way if not documented. Options:
+
+1. **Docs fix**: add a recipe/section in `use-fixtures.md` (or a new `share-test-helpers.md`) explaining the session-time-only nature of the helpers proxy, and recommending the plain-module split with `tests/_utils.py` naming convention.
+2. **API fix**: make the helpers registration mechanism work at import time (e.g., a static registry that doesn't require a session). Bigger change.
+
+Docs fix is cheaper and probably enough — the pattern is fine once you know it, just non-obvious.
+
+#### Non-findings (built-ins legit-unused for this project)
+
+- **`FdCapture` (0 uses)** — loguru writes via Python stream API, never fd-direct. Legit unused. Not a shape issue.
+- **`TempDirFactory` (0 uses)** — no session-shared temp-dir need. Legit unused.
+- **`TestContext` (0 uses)** — `Yields[T]` fixture teardown was preferred over `ctx.addfinalizer()` for all cleanup. Style choice, not a shape issue.
+- **`WarnCapture` (0 uses)** — `oxitest.warns(Category, match=...)` context manager covers the 3 warning-assertion cases loguru has. No test needs aggregate warning collection. Legit unused for this project.
+- **`oxitest.arrange` (0 uses)** — autouse fixtures used instead. Both patterns exist for good reasons; migration reached for one. Style choice.
+- **`oxitest.approx` (0 uses)** — loguru has no float-tolerance comparisons. Legit unused.
+- **`oxitest.importorskip` (0 uses)** — dev-deps are guaranteed installed. Legit unused.
+
+### Interpretation
+
+**Two of the eight built-in fixtures are shipped in a shape adopters don't reach for** — `Patcher` (see N2) and (weakly) `WarnCapture`. The others are either idiomatic for their intended purpose or legitimately unused because loguru doesn't need them.
+
+**One parametrize pattern is missing** — the ability to parametrize over helpers (see N4). Adopters invent string-dispatch workarounds.
+
+**One architectural constraint is under-documented** — the session-time-only nature of `helpers` forces a plain-module split (see N5).
+
+All three findings converge on the same theme: **oxitest's Fixture-vs-Helper identity distinction has under-explored edges**. The wayfinder map [`Wayfinder: fixture-vs-helper identity for oxitest built-ins` #1697](https://github.com/kalonji-tools/oxitest/issues/1697) is the right place to grill these — N4 and N5 should be added to its "Not yet specified" fog as evidence.
