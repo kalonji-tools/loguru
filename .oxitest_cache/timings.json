@@ -1,914 +1,200 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.229229999999999,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_async_callable_sink": {
+      "duration_ms": 17.540993,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.293583,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_and_contextualize_concurrency": {
+      "duration_ms": 7.104012,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.4129570000000005,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_and_sink_write_concurrency": {
+      "duration_ms": 89.49703600000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 5.994532,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_file_noop": {
+      "duration_ms": 7.673193,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.008817,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_another_loop[loop_is_bound]": {
+      "duration_ms": 18.681394,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 5.95316,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_another_loop[loop_is_none]": {
+      "duration_ms": 18.415047,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 5.9365879999999995,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_multiple_threads_loop_is_none": {
+      "duration_ms": 104.79034399999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_off-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 5.975994999999999,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_multiple_threads_loop_is_not_none": {
+      "duration_ms": 114.35269500000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.030873,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_function_noop": {
+      "duration_ms": 6.495105000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.09939,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_in_another_run": {
+      "duration_ms": 17.373245,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.125107,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_standard_noop": {
+      "duration_ms": 6.849621,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.14506,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_stream_noop": {
+      "duration_ms": 6.732101,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 5.973262,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_with_sub_processes": {
+      "duration_ms": 210.518646,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.11599,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_without_tasks": {
+      "duration_ms": 6.447037,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.0464780000000005,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_concurrent_execution": {
+      "duration_ms": 18.599112,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_off-colors_on-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.091624,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_coroutine_function": {
+      "duration_ms": 40.886765,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.079041999999999,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_custom_complete_function": {
+      "duration_ms": 7.502199999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.213203,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_enqueue_coroutine_from_inside_coroutine_without_loop": {
+      "duration_ms": 21.902010999999998,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.1663619999999995,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_enqueue_coroutine_loop": {
+      "duration_ms": 23.954676000000003,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.206903,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_caught": {
+      "duration_ms": 108.356558,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.151443,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_during_complete_caught": {
+      "duration_ms": 108.033918,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.075872,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_during_complete_not_caught": {
+      "duration_ms": 108.068692,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.129825,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_not_caught": {
+      "duration_ms": 110.43779400000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_off-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.3324560000000005,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_global_loop_not_used": {
+      "duration_ms": 12.100717000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.329191,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_invalid_coroutine_sink_if_no_loop_with_enqueue": {
+      "duration_ms": 0.9454049999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.444498,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_recursive_coroutine": {
+      "duration_ms": 18.485145000000003,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 7.1796359999999995,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_remove_without_tasks": {
+      "duration_ms": 6.654333,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.48179,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_run_multiple_different_loops": {
+      "duration_ms": 28.843067,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.209809,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_run_multiple_same_loop": {
+      "duration_ms": 29.801261999999998,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.1918679999999995,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_tasks_cancelled_on_remove": {
+      "duration_ms": 7.0572550000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.285042,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_another_event_loop": {
+      "duration_ms": 17.727895,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_off-colorize_on-colors_on-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.387785,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_sink_without_running_loop_none": {
+      "duration_ms": 12.325296,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.422373,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.64923,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.298553999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.242835,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.254948,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.276198,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.223306,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_off-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.604775,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.25746,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.6021,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.440936000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.411827,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 7.519432,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.685218,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.515566000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_off-colors_on-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.497843,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.635829,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.688734,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.339024,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.395711,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.1502040000000004,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 6.266796,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 6.818121,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_off-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 6.309531,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_off-use_log_off-use_arg_off]": {
-      "duration_ms": 6.145785,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_off-use_log_off-use_arg_on]": {
-      "duration_ms": 6.1919699999999995,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_off-use_log_on-use_arg_off]": {
-      "duration_ms": 6.23544,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_off-use_log_on-use_arg_on]": {
-      "duration_ms": 6.345206,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_on-use_log_off-use_arg_off]": {
-      "duration_ms": 6.208591,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_on-use_log_off-use_arg_on]": {
-      "duration_ms": 7.129705,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_on-use_log_on-use_arg_off]": {
-      "duration_ms": 7.198789,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_all_colors_combinations[dynamic_format_on-colorize_on-colors_on-raw_on-use_log_on-use_arg_on]": {
-      "duration_ms": 8.142974,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_args_with_colors_not_formatted_twice": {
-      "duration_ms": 13.150146999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_before_bind": {
-      "duration_ms": 6.2262070000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_capture": {
-      "duration_ms": 7.554934,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colored_string_getitem[colorized]": {
-      "duration_ms": 7.830171,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colored_string_getitem[plain]": {
-      "duration_ms": 7.030539,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colored_string_used_as_spec[colorized]": {
-      "duration_ms": 8.028033,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colored_string_used_as_spec[plain]": {
-      "duration_ms": 7.7898000000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors": {
-      "duration_ms": 6.440636,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_color_unrelated": {
-      "duration_ms": 6.293162,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_raise_unrelated_colorize": {
-      "duration_ms": 6.806552,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_raise_unrelated_colorize_dynamic": {
-      "duration_ms": 6.397871,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_raise_unrelated_not_colorize": {
-      "duration_ms": 6.59329,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_raise_unrelated_not_colorize_dynamic": {
-      "duration_ms": 6.54862,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_doesnt_strip_unrelated": {
-      "duration_ms": 6.040265000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_double_message[colorized]": {
-      "duration_ms": 7.29119,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_double_message[plain]": {
-      "duration_ms": 7.097427,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_multiple_calls[colorized]": {
-      "duration_ms": 6.8364020000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_multiple_calls[plain]": {
-      "duration_ms": 6.327191,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_multiple_calls_level_color_changed[colorized]": {
-      "duration_ms": 7.838296999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_multiple_calls_level_color_changed[plain]": {
-      "duration_ms": 7.869328,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_nested[colorized]": {
-      "duration_ms": 6.39158,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_nested[plain]": {
-      "duration_ms": 6.491032,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_not_colorize": {
-      "duration_ms": 6.191158000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_stripped_in_message_record[colorized]": {
-      "duration_ms": 6.090058,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_stripped_in_message_record[plain]": {
-      "duration_ms": 6.068364,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_args[colorized]": {
-      "duration_ms": 7.018085,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_args[plain]": {
-      "duration_ms": 6.144772,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_auto_indexing[colorized]": {
-      "duration_ms": 6.9575569999999995,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_auto_indexing[plain]": {
-      "duration_ms": 6.271139,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_dynamic_formatter[colorized]": {
-      "duration_ms": 7.266746,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_dynamic_formatter[plain]": {
-      "duration_ms": 6.944821999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_format_specs[colorized]": {
-      "duration_ms": 6.590543,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_format_specs[plain]": {
-      "duration_ms": 6.295051,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_invalid_indexing[colorize_off-auto_then_manual]": {
-      "duration_ms": 6.473667,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_invalid_indexing[colorize_off-manual_then_auto]": {
-      "duration_ms": 6.119142,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_invalid_indexing[colorize_on-auto_then_manual]": {
-      "duration_ms": 7.022101999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_invalid_indexing[colorize_on-manual_then_auto]": {
-      "duration_ms": 6.229722,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_level[colorized]": {
-      "duration_ms": 6.6158,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_level[plain]": {
-      "duration_ms": 6.190735,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_manual_indexing[colorized]": {
-      "duration_ms": 6.674772,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_manual_indexing[plain]": {
-      "duration_ms": 6.47149,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_message_specs[colorized]": {
-      "duration_ms": 6.669308,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_message_specs[plain]": {
-      "duration_ms": 7.815417999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_recursion_depth_exceeded_in_format[colorized]": {
-      "duration_ms": 0.824151,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_recursion_depth_exceeded_in_format[plain]": {
-      "duration_ms": 0.524698,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_recursion_depth_exceeded_in_message[colorized]": {
-      "duration_ms": 8.420518999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_with_recursion_depth_exceeded_in_message[plain]": {
-      "duration_ms": 6.6927330000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_within_record[colorized]": {
-      "duration_ms": 6.690557,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_within_record[plain]": {
-      "duration_ms": 6.058865,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_without_formatting_args[colorized]": {
-      "duration_ms": 7.602879,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_colors_without_formatting_args[plain]": {
-      "duration_ms": 8.328349000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_deprecated_ansi_argument": {
-      "duration_ms": 6.475195,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_depth": {
-      "duration_ms": 6.737604,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_depth_with_unreachable_frame": {
-      "duration_ms": 6.322527,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_exception_boolean": {
-      "duration_ms": 10.978923,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_exception_class": {
-      "duration_ms": 6.922421,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_exception_exc_info": {
-      "duration_ms": 6.967003,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_exception_log_function": {
-      "duration_ms": 7.264767999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_off-crossed]": {
-      "duration_ms": 8.011017,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_off-unclosed]": {
-      "duration_ms": 7.671622999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_off-unopened]": {
-      "duration_ms": 8.199825,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_on-crossed]": {
-      "duration_ms": 6.493716,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_on-unclosed]": {
-      "duration_ms": 6.402188,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_invalid_markup_in_message[colorize_on-unopened]": {
-      "duration_ms": 7.078771000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_keep_extra": {
-      "duration_ms": 6.103585,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_kwargs_in_extra_of_record": {
-      "duration_ms": 6.193645,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_lazy": {
-      "duration_ms": 17.850212,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_lazy_function_executed_only_once": {
-      "duration_ms": 6.507441999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_level_tag_wrapping_with_colors[colorized]": {
-      "duration_ms": 6.79169,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_level_tag_wrapping_with_colors[plain]": {
-      "duration_ms": 6.372998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_logging_within_lazy_function": {
-      "duration_ms": 6.331593,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_filter[with_colors]": {
-      "duration_ms": 6.6100710000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_filter[without_colors]": {
-      "duration_ms": 6.232206,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_format[with_colors]": {
-      "duration_ms": 6.552314,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_format[without_colors]": {
-      "duration_ms": 6.049818999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_patch[with_colors]": {
-      "duration_ms": 6.128342999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_patch[without_colors]": {
-      "duration_ms": 6.496532,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_raw[with_colors]": {
-      "duration_ms": 6.663601,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_message_update_not_overridden_by_raw[without_colors]": {
-      "duration_ms": 6.982418,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_overridden_message_ignore_colors": {
-      "duration_ms": 6.734167,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_raw": {
-      "duration_ms": 6.259358,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_raw_with_colors[colorized]": {
-      "duration_ms": 6.216912,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_raw_with_colors[plain]": {
-      "duration_ms": 6.024445,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_raw_with_format_function": {
-      "duration_ms": 6.1407620000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_raw_with_record": {
-      "duration_ms": 6.189204999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_record": {
-      "duration_ms": 29.404049,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_record_in_kwargs_too": {
-      "duration_ms": 6.454592,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_opt.py::test_record_not_in_extra": {
-      "duration_ms": 6.582534,
+    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_sink_without_running_loop_not_none": {
+      "duration_ms": 22.990274000000003,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0

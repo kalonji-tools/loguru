@@ -4,12 +4,25 @@ import multiprocessing
 import re
 import sys
 import threading
+from dataclasses import dataclass
 
-import pytest
+import oxitest
+from oxitest import LogCapture, StdCapture, TempDir
 
 from loguru import logger
+from tests._naming import pin_module_name
+from tests._utils import new_event_loop_context, set_event_loop_context
 
-from .conftest import new_event_loop_context, set_event_loop_context
+# "spawn" re-imports this module in the child to unpickle the worker functions below, so
+# the module has to be reachable under an importable name.
+pin_module_name(globals(), "tests.test_coroutine_sink")
+
+NO_STDERR_EXPECTED = "the sink writes to stdout, so stderr must stay empty"
+
+
+@dataclass(frozen=True)
+class LoopIsNoneCase:
+    loop_is_none: bool
 
 
 async def async_writer(msg):
@@ -23,7 +36,7 @@ class AsyncWriter:
         print(msg, end="")
 
 
-def test_coroutine_function(capsys):
+def test_coroutine_function(cap: StdCapture) -> None:
     async def worker():
         logger.debug("A message")
         await logger.complete()
@@ -32,12 +45,15 @@ def test_coroutine_function(capsys):
 
     asyncio.run(worker())
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert out == "A message\n"
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert captured.out == "A message\n", (
+        "a coroutine function must be usable as a sink, scheduled per record and awaited by "
+        "complete()"
+    )
 
 
-def test_async_callable_sink(capsys):
+def test_async_callable_sink(cap: StdCapture) -> None:
     async def worker():
         logger.debug("A message")
         await logger.complete()
@@ -46,12 +62,14 @@ def test_async_callable_sink(capsys):
 
     asyncio.run(worker())
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert out == "A message\n"
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert captured.out == "A message\n", (
+        "an object with an async __call__ must be accepted like a bare coroutine function"
+    )
 
 
-def test_concurrent_execution(capsys):
+def test_concurrent_execution(cap: StdCapture) -> None:
     async def task(i):
         logger.debug("=> {}", i)
 
@@ -64,12 +82,15 @@ def test_concurrent_execution(capsys):
 
     asyncio.run(main())
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert sorted(out.splitlines()) == sorted("=> %d" % i for i in range(10))
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert sorted(captured.out.splitlines()) == sorted("=> %d" % i for i in range(10)), (
+        "complete() must await every task scheduled from concurrent callers, so no message "
+        "is lost; only their order may vary"
+    )
 
 
-def test_recursive_coroutine(capsys):
+def test_recursive_coroutine(cap: StdCapture) -> None:
     async def task(i):
         if i == 0:
             await logger.complete()
@@ -81,13 +102,15 @@ def test_recursive_coroutine(capsys):
 
     asyncio.run(task(9))
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert sorted(out.splitlines()) == sorted("%d!" % i for i in range(1, 10))
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert sorted(captured.out.splitlines()) == sorted("%d!" % i for i in range(1, 10)), (
+        "a single complete() at the bottom of the recursion must await the tasks scheduled "
+        "at every level above it"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-def test_using_another_event_loop(capsys):
+def test_using_another_event_loop(cap: StdCapture) -> None:
     async def worker():
         logger.debug("A message")
         await logger.complete()
@@ -97,12 +120,14 @@ def test_using_another_event_loop(capsys):
 
         loop.run_until_complete(worker())
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert out == "A message\n"
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert captured.out == "A message\n", (
+        "an explicitly supplied loop must be the one the sink is scheduled on"
+    )
 
 
-def test_run_multiple_different_loops(capsys):
+def test_run_multiple_different_loops(cap: StdCapture) -> None:
     async def worker(i):
         logger.debug("Message {}", i)
         await logger.complete()
@@ -112,13 +137,15 @@ def test_run_multiple_different_loops(capsys):
     asyncio.run(worker(1))
     asyncio.run(worker(2))
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert out == "Message 1\nMessage 2\n"
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert captured.out == "Message 1\nMessage 2\n", (
+        "with loop=None the sink must bind to whichever loop is running at the time, so it "
+        "keeps working across successive asyncio.run() calls"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-def test_run_multiple_same_loop(capsys):
+def test_run_multiple_same_loop(cap: StdCapture) -> None:
     async def worker(i):
         logger.debug("Message {}", i)
         await logger.complete()
@@ -129,12 +156,14 @@ def test_run_multiple_same_loop(capsys):
         loop.run_until_complete(worker(1))
         loop.run_until_complete(worker(2))
 
-    out, err = capsys.readouterr()
-    assert err == ""
-    assert out == "Message 1\nMessage 2\n"
+    captured = cap.readouterr()
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert captured.out == "Message 1\nMessage 2\n", (
+        "a bound loop must stay usable across successive run_until_complete() calls"
+    )
 
 
-def test_using_sink_without_running_loop_not_none(capsys):
+def test_using_sink_without_running_loop_not_none(cap: StdCapture) -> None:
     with new_event_loop_context() as loop:
         logger.add(sys.stderr, format="=> {message}")
         logger.add(async_writer, format="{message}", loop=loop)
@@ -143,12 +172,15 @@ def test_using_sink_without_running_loop_not_none(capsys):
 
         loop.run_until_complete(logger.complete())
 
-    out, err = capsys.readouterr()
-    assert err == "=> A message\n"
-    assert out == "A message\n"
+    captured = cap.readouterr()
+    assert captured.err == "=> A message\n", "the synchronous sink must be written immediately"
+    assert captured.out == "A message\n", (
+        "logging from outside the loop must still schedule the task on the bound loop, so "
+        "the record is delivered once that loop runs"
+    )
 
 
-def test_using_sink_without_running_loop_none(capsys):
+def test_using_sink_without_running_loop_none(cap: StdCapture) -> None:
     with new_event_loop_context() as loop:
         logger.add(sys.stderr, format="=> {message}")
         logger.add(async_writer, format="{message}", loop=None)
@@ -157,13 +189,18 @@ def test_using_sink_without_running_loop_none(capsys):
 
         loop.run_until_complete(logger.complete())
 
-    out, err = capsys.readouterr()
-    assert err == "=> A message\n"
-    assert out == ""
+    captured = cap.readouterr()
+    assert captured.err == "=> A message\n", "the synchronous sink must be written immediately"
+    assert captured.out == "", (
+        "with loop=None and no loop running there is nowhere to schedule the task, so the "
+        "record must be dropped rather than raise"
+    )
 
 
-@pytest.mark.skipif(sys.version_info >= (3, 16), reason="The 'set_event_loop' function is removed")
-def test_global_loop_not_used(capsys):
+@oxitest.mark.skip(
+    when=sys.version_info >= (3, 16), reason="The 'set_event_loop' function is removed"
+)
+def test_global_loop_not_used(cap: StdCapture) -> None:
     with new_event_loop_context() as loop:
         with set_event_loop_context(loop):
             logger.add(sys.stderr, format="=> {message}")
@@ -173,13 +210,15 @@ def test_global_loop_not_used(capsys):
 
             loop.run_until_complete(logger.complete())
 
-    out, err = capsys.readouterr()
-    assert err == "=> A message\n"
-    assert out == ""
+    captured = cap.readouterr()
+    assert captured.err == "=> A message\n", "the synchronous sink must be written immediately"
+    assert captured.out == "", (
+        "loop=None must mean the *running* loop, not the one merely installed as global; "
+        "using the global one would schedule work on a loop nobody is driving"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-def test_complete_in_another_run(capsys):
+def test_complete_in_another_run(cap: StdCapture) -> None:
     async def worker_1():
         logger.debug("A")
 
@@ -193,12 +232,15 @@ def test_complete_in_another_run(capsys):
         loop.run_until_complete(worker_1())
         loop.run_until_complete(worker_2())
 
-    out, err = capsys.readouterr()
-    assert out == "A\nB\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "A\nB\n", (
+        "a task scheduled in an earlier run must still be pending, and complete() in a later "
+        "run must await it too"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_tasks_cancelled_on_remove(capsys):
+def test_tasks_cancelled_on_remove(cap: StdCapture) -> None:
     logger.add(async_writer, format="{message}", catch=False)
 
     async def foo():
@@ -210,11 +252,14 @@ def test_tasks_cancelled_on_remove(capsys):
 
     asyncio.run(foo())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "remove() must cancel the sink's pending tasks, otherwise records would be written "
+        "after the caller released the sink"
+    )
 
 
-def test_remove_without_tasks(capsys):
+def test_remove_without_tasks(cap: StdCapture) -> None:
     logger.add(async_writer, format="{message}", catch=False)
     logger.remove()
 
@@ -224,11 +269,13 @@ def test_remove_without_tasks(capsys):
 
     asyncio.run(foo())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "removing a sink that never ran must be a no-op rather than raise"
+    )
 
 
-def test_complete_without_tasks(capsys):
+def test_complete_without_tasks(cap: StdCapture) -> None:
     logger.add(async_writer, catch=False)
 
     async def worker():
@@ -236,11 +283,13 @@ def test_complete_without_tasks(capsys):
 
     asyncio.run(worker())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "complete() with nothing pending must return immediately rather than raise"
+    )
 
 
-def test_complete_stream_noop(capsys):
+def test_complete_stream_noop(cap: StdCapture) -> None:
     logger.add(sys.stderr, format="{message}", catch=False)
     logger.info("A")
 
@@ -253,13 +302,16 @@ def test_complete_stream_noop(capsys):
 
     logger.info("D")
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == "A\nB\nC\nD\n"
+    captured = cap.readouterr()
+    assert captured.out == "", "the sink targets stderr, so stdout must stay empty"
+    assert captured.err == "A\nB\nC\nD\n", (
+        "complete() must be a no-op for a synchronous sink, leaving it fully usable "
+        "afterwards"
+    )
 
 
-def test_complete_file_noop(tmp_path):
-    filepath = tmp_path / "test.log"
+def test_complete_file_noop(tmp: TempDir) -> None:
+    filepath = tmp.path / "test.log"
 
     logger.add(filepath, format="{message}", catch=False)
     logger.info("A")
@@ -273,10 +325,12 @@ def test_complete_file_noop(tmp_path):
 
     logger.info("D")
 
-    assert filepath.read_text() == "A\nB\nC\nD\n"
+    assert filepath.read_text() == "A\nB\nC\nD\n", (
+        "complete() must be a no-op for a file sink, leaving it open and usable afterwards"
+    )
 
 
-def test_complete_function_noop():
+def test_complete_function_noop() -> None:
     out = ""
 
     def write(msg):
@@ -295,10 +349,12 @@ def test_complete_function_noop():
 
     logger.info("D")
 
-    assert out == "A\nB\nC\nD\n"
+    assert out == "A\nB\nC\nD\n", (
+        "complete() must be a no-op for a plain function sink, leaving it usable afterwards"
+    )
 
 
-def test_complete_standard_noop(capsys):
+def test_complete_standard_noop(cap: StdCapture) -> None:
     logger.add(logging.StreamHandler(sys.stderr), format="{message}", catch=False)
     logger.info("A")
 
@@ -311,12 +367,15 @@ def test_complete_standard_noop(capsys):
 
     logger.info("D")
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == "A\nB\nC\nD\n"
+    captured = cap.readouterr()
+    assert captured.out == "", "the handler targets stderr, so stdout must stay empty"
+    assert captured.err == "A\nB\nC\nD\n", (
+        "complete() must be a no-op for a standard logging handler, leaving it usable "
+        "afterwards"
+    )
 
 
-def test_exception_in_coroutine_caught(capsys):
+def test_exception_in_coroutine_caught(cap: StdCapture) -> None:
     async def sink(msg):
         raise Exception("Oh no")
 
@@ -328,17 +387,21 @@ def test_exception_in_coroutine_caught(capsys):
 
     asyncio.run(main())
 
-    out, err = capsys.readouterr()
-    lines = err.strip().splitlines()
+    captured = cap.readouterr()
+    lines = captured.err.strip().splitlines()
 
-    assert out == ""
-    assert lines[0] == "--- Logging error in Loguru Handler #0 ---"
-    assert re.match(r"Record was: \{.*Hello world.*\}", lines[1])
-    assert lines[-2] == "Exception: Oh no"
-    assert lines[-1] == "--- End of logging error ---"
+    why = (
+        "a failure inside an async sink must be reported in the same fixed shape as a "
+        "synchronous one, otherwise async errors are harder to recognise"
+    )
+    assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
+    assert lines[0] == "--- Logging error in Loguru Handler #0 ---", why
+    assert re.match(r"Record was: \{.*Hello world.*\}", lines[1]), why
+    assert lines[-2] == "Exception: Oh no", why
+    assert lines[-1] == "--- End of logging error ---", why
 
 
-def test_exception_in_coroutine_not_caught(capsys, caplog):
+def test_exception_in_coroutine_not_caught(cap: StdCapture, log: LogCapture) -> None:
     async def sink(msg):
         raise ValueError("Oh no")
 
@@ -350,23 +413,34 @@ def test_exception_in_coroutine_not_caught(capsys, caplog):
 
     asyncio.run(main())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "with catch=False loguru must not report the error itself; the task's exception is "
+        "the asyncio loop's to handle"
+    )
 
-    records = caplog.records
-    assert len(records) == 1
+    records = log.records
+    assert len(records) == 1, (
+        "the loop's exception handler must report the failure exactly once, so the error is "
+        "neither lost nor duplicated"
+    )
     record = records[0]
 
     message = record.getMessage()
-    assert "Logging error in Loguru Handler" not in message
-    assert "was never retrieved" not in message
+    assert "Logging error in Loguru Handler" not in message, (
+        "the report must come from asyncio, not from loguru's own error handling"
+    )
+    assert "was never retrieved" not in message, (
+        "the task's exception must be retrieved rather than surface later as a "
+        "'never retrieved' warning at garbage-collection time"
+    )
 
     exc_type, exc_value, _ = record.exc_info
-    assert exc_type is ValueError
-    assert str(exc_value) == "Oh no"
+    assert exc_type is ValueError, "the original exception type must be preserved"
+    assert str(exc_value) == "Oh no", "the original exception message must be preserved"
 
 
-def test_exception_in_coroutine_during_complete_caught(capsys):
+def test_exception_in_coroutine_during_complete_caught(cap: StdCapture) -> None:
     async def sink(msg):
         await asyncio.sleep(0.1)
         raise Exception("Oh no")
@@ -378,17 +452,23 @@ def test_exception_in_coroutine_during_complete_caught(capsys):
 
     asyncio.run(main())
 
-    out, err = capsys.readouterr()
-    lines = err.strip().splitlines()
+    captured = cap.readouterr()
+    lines = captured.err.strip().splitlines()
 
-    assert out == ""
-    assert lines[0] == "--- Logging error in Loguru Handler #0 ---"
-    assert re.match(r"Record was: \{.*Hello world.*\}", lines[1])
-    assert lines[-2] == "Exception: Oh no"
-    assert lines[-1] == "--- End of logging error ---"
+    why = (
+        "a failure surfacing while complete() awaits the task must be reported in the same "
+        "fixed shape as one surfacing during the write itself"
+    )
+    assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
+    assert lines[0] == "--- Logging error in Loguru Handler #0 ---", why
+    assert re.match(r"Record was: \{.*Hello world.*\}", lines[1]), why
+    assert lines[-2] == "Exception: Oh no", why
+    assert lines[-1] == "--- End of logging error ---", why
 
 
-def test_exception_in_coroutine_during_complete_not_caught(capsys, caplog):
+def test_exception_in_coroutine_during_complete_not_caught(
+    cap: StdCapture, log: LogCapture
+) -> None:
     async def sink(msg):
         await asyncio.sleep(0.1)
         raise ValueError("Oh no")
@@ -400,24 +480,34 @@ def test_exception_in_coroutine_during_complete_not_caught(capsys, caplog):
 
     asyncio.run(main())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "with catch=False loguru must not report the error itself; the task's exception is "
+        "the asyncio loop's to handle"
+    )
 
-    records = caplog.records
-    assert len(records) == 1
+    records = log.records
+    assert len(records) == 1, (
+        "the loop's exception handler must report the failure exactly once, so the error is "
+        "neither lost nor duplicated"
+    )
     record = records[0]
 
     message = record.getMessage()
-    assert "Logging error in Loguru Handler" not in message
-    assert "was never retrieved" not in message
+    assert "Logging error in Loguru Handler" not in message, (
+        "the report must come from asyncio, not from loguru's own error handling"
+    )
+    assert "was never retrieved" not in message, (
+        "the task's exception must be retrieved rather than surface later as a "
+        "'never retrieved' warning at garbage-collection time"
+    )
 
     exc_type, exc_value, _ = record.exc_info
-    assert exc_type is ValueError
-    assert str(exc_value) == "Oh no"
+    assert exc_type is ValueError, "the original exception type must be preserved"
+    assert str(exc_value) == "Oh no", "the original exception message must be preserved"
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-def test_enqueue_coroutine_loop(capsys):
+def test_enqueue_coroutine_loop(cap: StdCapture) -> None:
     with new_event_loop_context() as loop:
         logger.add(async_writer, enqueue=True, loop=loop, format="{message}", catch=False)
 
@@ -427,12 +517,15 @@ def test_enqueue_coroutine_loop(capsys):
 
         loop.run_until_complete(worker())
 
-    out, err = capsys.readouterr()
-    assert out == "A\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "A\n", (
+        "enqueue and an async sink must compose: the queue thread has to schedule the "
+        "coroutine on the bound loop"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_enqueue_coroutine_from_inside_coroutine_without_loop(capsys):
+def test_enqueue_coroutine_from_inside_coroutine_without_loop(cap: StdCapture) -> None:
     with new_event_loop_context() as loop:
 
         async def worker():
@@ -442,12 +535,15 @@ def test_enqueue_coroutine_from_inside_coroutine_without_loop(capsys):
 
         loop.run_until_complete(worker())
 
-    out, err = capsys.readouterr()
-    assert out == "A\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "A\n", (
+        "adding the sink from inside a running loop must capture that loop, so loop=None is "
+        "usable in the common async setup"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_custom_complete_function(capsys):
+def test_custom_complete_function(cap: StdCapture) -> None:
     awaited = False
 
     class Handler:
@@ -466,15 +562,20 @@ def test_custom_complete_function(capsys):
 
     asyncio.run(worker())
 
-    out, err = capsys.readouterr()
-    assert out == "A\n"
-    assert err == ""
-    assert awaited
+    captured = cap.readouterr()
+    assert captured.out == "A\n", "the synchronous write() must still be used for records"
+    assert captured.err == "", NO_STDERR_EXPECTED
+    assert awaited, (
+        "a sink's own async complete() must be awaited, which is how a custom sink flushes "
+        "whatever it buffers"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-@pytest.mark.parametrize("loop_is_none", [True, False])
-def test_complete_from_another_loop(capsys, loop_is_none):
+@oxitest.parametrize(
+    loop_is_none=LoopIsNoneCase(loop_is_none=True),
+    loop_is_bound=LoopIsNoneCase(loop_is_none=False),
+)
+def test_complete_from_another_loop(cap: StdCapture, loop_is_none: bool) -> None:
     with new_event_loop_context() as main_loop, new_event_loop_context() as second_loop:
         loop = None if loop_is_none else main_loop
         logger.add(async_writer, loop=loop, format="{message}")
@@ -488,17 +589,23 @@ def test_complete_from_another_loop(capsys, loop_is_none):
         main_loop.run_until_complete(worker_1())
         second_loop.run_until_complete(worker_2())
 
-        out, err = capsys.readouterr()
-        assert out == err == ""
+        captured = cap.readouterr()
+        assert captured.out == captured.err == "", (
+            "complete() must only await tasks belonging to the loop it runs on; awaiting "
+            "another loop's task would block or raise"
+        )
 
         main_loop.run_until_complete(worker_2())
 
-    out, err = capsys.readouterr()
-    assert out == "A\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "A\n", (
+        "the pending task must still be there and must be awaited once complete() runs on "
+        "its own loop"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_complete_from_multiple_threads_loop_is_none(capsys):
+def test_complete_from_multiple_threads_loop_is_none(cap: StdCapture) -> None:
     async def worker(i):
         for _ in range(100):
             await asyncio.sleep(0)
@@ -521,12 +628,17 @@ def test_complete_from_multiple_threads_loop_is_none(capsys):
     for t in threads:
         t.join()
 
-    out, err = capsys.readouterr()
-    assert sorted(out.splitlines()) == ["{:03}".format(i) for i in range(10) for _ in range(100)]
-    assert err == ""
+    captured = cap.readouterr()
+    assert sorted(captured.out.splitlines()) == [
+        "{:03}".format(i) for i in range(10) for _ in range(100)
+    ], (
+        "each thread runs its own loop, so complete() must track tasks per loop for every "
+        "message to be delivered exactly once"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_complete_from_multiple_threads_loop_is_not_none(capsys):
+def test_complete_from_multiple_threads_loop_is_not_none(cap: StdCapture) -> None:
     async def worker(i):
         for _ in range(100):
             await asyncio.sleep(0)
@@ -555,12 +667,17 @@ def test_complete_from_multiple_threads_loop_is_not_none(capsys):
 
         loop.run_until_complete(complete())
 
-    out, err = capsys.readouterr()
-    assert sorted(out.splitlines()) == ["{:03}".format(i) for i in range(10) for _ in range(100)]
-    assert err == ""
+    captured = cap.readouterr()
+    assert sorted(captured.out.splitlines()) == [
+        "{:03}".format(i) for i in range(10) for _ in range(100)
+    ], (
+        "with a bound loop every thread must schedule onto it, and one final complete() on "
+        "that loop must deliver every message exactly once"
+    )
+    assert captured.err == "", NO_STDERR_EXPECTED
 
 
-def test_complete_and_sink_write_concurrency():
+def test_complete_and_sink_write_concurrency() -> None:
     count = 1000
     n = 0
 
@@ -586,10 +703,13 @@ def test_complete_and_sink_write_concurrency():
 
     asyncio.run(main())
 
-    assert n == count
+    assert n == count, (
+        "complete() running concurrently with logging must not drop or duplicate tasks, "
+        "which a naive 'clear the pending set' implementation would do"
+    )
 
 
-def test_complete_and_contextualize_concurrency():
+def test_complete_and_contextualize_concurrency() -> None:
     called = False
 
     async def main():
@@ -618,7 +738,10 @@ def test_complete_and_contextualize_concurrency():
 
     asyncio.run(main())
 
-    assert called
+    assert called, (
+        "contextualize() and an in-flight async sink must not share a lock, otherwise these "
+        "two tasks would wait on each other forever"
+    )
 
 
 async def async_subworker(logger_):
@@ -644,7 +767,7 @@ class Writer:
         self.output += message
 
 
-def test_complete_with_sub_processes(capsys):
+def test_complete_with_sub_processes(cap: StdCapture) -> None:
     spawn_context = multiprocessing.get_context("spawn")
 
     with new_event_loop_context() as loop:
@@ -660,14 +783,16 @@ def test_complete_with_sub_processes(capsys):
 
         loop.run_until_complete(complete())
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
-    assert writer.output == "Child\n"
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", "the sink collects messages rather than printing"
+    assert writer.output == "Child\n", (
+        "complete() in the child must not block waiting for the parent's loop, and the "
+        "record must still reach the parent's async sink"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5, 3), reason="Coroutine can't access running loop")
-def test_invalid_coroutine_sink_if_no_loop_with_enqueue():
-    with pytest.raises(
+def test_invalid_coroutine_sink_if_no_loop_with_enqueue() -> None:
+    with oxitest.raises(
         ValueError,
         match=(
             r"^An event loop is required to add a coroutine sink with `enqueue=True`, "
