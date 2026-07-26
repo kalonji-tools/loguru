@@ -1,59 +1,112 @@
 import datetime
 import os
+from dataclasses import dataclass
+from typing import Any
 from unittest.mock import Mock
 
-import pytest
+import oxitest
+from conftest import FreezeTime
+from oxitest import Fixture, StdCapture, TempDir, helpers
 
 from loguru import logger
 
-from .conftest import check_dir
+WINDOWS_HAS_NO_GLOB_IN_FILENAME = "Windows does not support '*' in filename"
 
 
-@pytest.mark.parametrize("retention", ["1 hour", "1H", " 1 h ", datetime.timedelta(hours=1)])
-def test_retention_time(freeze_time, tmp_path, retention):
-    i = logger.add(tmp_path / "test.log.x", retention=retention)
+@dataclass(frozen=True)
+class RetentionCase:
+    retention: Any
+
+
+@dataclass(frozen=True)
+class CountCase:
+    retention: int
+
+
+@dataclass(frozen=True)
+class FilenameCase:
+    filename: str
+
+
+@dataclass(frozen=True)
+class ModeCase:
+    mode: str
+
+
+@dataclass(frozen=True)
+class DelayCase:
+    delay: bool
+
+
+MODE_CASES = {
+    "append": ModeCase(mode="a"),
+    "append_and_read": ModeCase(mode="a+"),
+    "write": ModeCase(mode="w"),
+    "exclusive_create": ModeCase(mode="x"),
+}
+
+DELAY_CASES = {
+    "delayed": DelayCase(delay=True),
+    "immediate": DelayCase(delay=False),
+}
+
+
+@oxitest.parametrize(
+    words=RetentionCase(retention="1 hour"),
+    compact=RetentionCase(retention="1H"),
+    padded=RetentionCase(retention=" 1 h "),
+    timedelta=RetentionCase(retention=datetime.timedelta(hours=1)),
+)
+def test_retention_time(
+    freeze_time: Fixture[FreezeTime], tmp: TempDir, retention: Any
+) -> None:
+    i = logger.add(tmp.path / "test.log.x", retention=retention)
     logger.debug("test")
     logger.remove(i)
 
-    check_dir(tmp_path, size=1)
+    helpers.common.check_dir(tmp.path, size=1)
 
     future = datetime.datetime.now() + datetime.timedelta(days=1)
     with freeze_time(future):
-        i = logger.add(tmp_path / "test.log", retention=retention)
+        i = logger.add(tmp.path / "test.log", retention=retention)
         logger.debug("test")
 
-        check_dir(tmp_path, size=2)
+        helpers.common.check_dir(tmp.path, size=2)
         logger.remove(i)
-        check_dir(tmp_path, size=0)
+        helpers.common.check_dir(tmp.path, size=0)
 
 
-@pytest.mark.parametrize("retention", [0, 1, 10])
-def test_retention_count(tmp_path, retention):
-    file = tmp_path / "test.log"
+@oxitest.parametrize(
+    keep_none=CountCase(retention=0),
+    keep_one=CountCase(retention=1),
+    keep_ten=CountCase(retention=10),
+)
+def test_retention_count(tmp: TempDir, retention: int) -> None:
+    file = tmp.path / "test.log"
 
     for i in range(retention):
-        tmp_path.joinpath("test.2011-01-01_01-01-%d_000001.log" % i).write_text("test")
+        tmp.path.joinpath("test.2011-01-01_01-01-%d_000001.log" % i).write_text("test")
 
     i = logger.add(file, retention=retention)
     logger.debug("test")
     logger.remove(i)
 
-    check_dir(tmp_path, size=retention)
+    helpers.common.check_dir(tmp.path, size=retention)
 
 
-def test_retention_function(tmp_path):
+def test_retention_function(tmp: TempDir) -> None:
     def func(logs):
         for log in logs:
             os.rename(log, log + ".xyz")
 
-    tmp_path.joinpath("test.log.1").write_text("A")
-    tmp_path.joinpath("test").write_text("B")
+    tmp.path.joinpath("test.log.1").write_text("A")
+    tmp.path.joinpath("test").write_text("B")
 
-    i = logger.add(tmp_path / "test.log", retention=func)
+    i = logger.add(tmp.path / "test.log", retention=func)
     logger.remove(i)
 
-    check_dir(
-        tmp_path,
+    helpers.common.check_dir(
+        tmp.path,
         files=[
             ("test.log.1.xyz", "A"),
             ("test", "B"),
@@ -62,7 +115,7 @@ def test_retention_function(tmp_path):
     )
 
 
-def test_managed_files(tmp_path):
+def test_managed_files(tmp: TempDir) -> None:
     others = {
         "test.log",
         "test.log.1",
@@ -81,15 +134,15 @@ def test_managed_files(tmp_path):
     }
 
     for other in others:
-        tmp_path.joinpath(other).write_text(other)
+        tmp.path.joinpath(other).write_text(other)
 
-    i = logger.add(tmp_path / "test.log", retention=0, catch=False)
+    i = logger.add(tmp.path / "test.log", retention=0, catch=False)
     logger.remove(i)
 
-    check_dir(tmp_path, size=0)
+    helpers.common.check_dir(tmp.path, size=0)
 
 
-def test_not_managed_files(tmp_path):
+def test_not_managed_files(tmp: TempDir) -> None:
     others = {
         "test_.log",
         "_test.log",
@@ -110,16 +163,22 @@ def test_not_managed_files(tmp_path):
         others.add("test.")
 
     for other in others:
-        tmp_path.joinpath(other).write_text(other)
+        tmp.path.joinpath(other).write_text(other)
 
-    i = logger.add(tmp_path / "test.log", retention=0, catch=False)
+    i = logger.add(tmp.path / "test.log", retention=0, catch=False)
     logger.remove(i)
 
-    assert set(f.name for f in tmp_path.iterdir()) == others
+    assert set(f.name for f in tmp.path.iterdir()) == others, (
+        "retention must only ever delete files it could have created itself; deleting an "
+        "unrelated neighbour would be irreversible data loss"
+    )
 
 
-@pytest.mark.parametrize("filename", ["test", "test.log"])
-def test_no_duplicates_in_listed_files(tmp_path, filename):
+@oxitest.parametrize(
+    without_extension=FilenameCase(filename="test"),
+    with_extension=FilenameCase(filename="test.log"),
+)
+def test_no_duplicates_in_listed_files(tmp: TempDir, filename: str) -> None:
     others = [
         "test.log",
         "test.log.log",
@@ -134,139 +193,155 @@ def test_no_duplicates_in_listed_files(tmp_path, filename):
     ]
 
     for other in others:
-        tmp_path.joinpath(other).write_text(other)
+        tmp.path.joinpath(other).write_text(other)
 
     retention = Mock()
-    i = logger.add(tmp_path / filename, retention=retention, catch=False)
+    i = logger.add(tmp.path / filename, retention=retention, catch=False)
     logger.remove(i)
 
-    assert retention.call_count == 1
-    assert len(retention.call_args.args[0]) == len(set(retention.call_args.args[0]))
+    assert retention.call_count == 1, "the retention function must be invoked exactly once"
+    assert len(retention.call_args.args[0]) == len(set(retention.call_args.args[0])), (
+        "the candidate list is built from several glob patterns, so a file matching more "
+        "than one must not be handed to the function twice"
+    )
 
 
-def test_directories_ignored(tmp_path):
+def test_directories_ignored(tmp: TempDir) -> None:
     others = ["test.log.2", "test.123.log", "test.log.tar.gz", "test.archive"]
 
     for other in others:
-        tmp_path.joinpath(other).mkdir()
+        tmp.path.joinpath(other).mkdir()
 
-    i = logger.add(tmp_path / "test.log", retention=0, catch=False)
+    i = logger.add(tmp.path / "test.log", retention=0, catch=False)
     logger.remove(i)
 
-    check_dir(tmp_path, size=len(others))
+    helpers.common.check_dir(tmp.path, size=len(others))
 
 
-def test_manage_formatted_files(freeze_time, tmp_path):
+def test_manage_formatted_files(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
     with freeze_time("2018-01-01 00:00:00"):
-        f1 = tmp_path / "temp/2018/file.log"
-        f2 = tmp_path / "temp/file2018.log"
-        f3 = tmp_path / "temp/d2018/f2018.2018.log"
+        f1 = tmp.path / "temp/2018/file.log"
+        f2 = tmp.path / "temp/file2018.log"
+        f3 = tmp.path / "temp/d2018/f2018.2018.log"
 
-        a = logger.add(tmp_path / "temp/{time:YYYY}/file.log", retention=0)
-        b = logger.add(tmp_path / "temp/file{time:YYYY}.log", retention=0)
-        c = logger.add(tmp_path / "temp/d{time:YYYY}/f{time:YYYY}.{time:YYYY}.log", retention=0)
+        a = logger.add(tmp.path / "temp/{time:YYYY}/file.log", retention=0)
+        b = logger.add(tmp.path / "temp/file{time:YYYY}.log", retention=0)
+        c = logger.add(tmp.path / "temp/d{time:YYYY}/f{time:YYYY}.{time:YYYY}.log", retention=0)
 
         logger.debug("test")
 
-        assert f1.exists()
-        assert f2.exists()
-        assert f3.exists()
+        why_created = "the placeholder must be expanded when the file is created"
+        assert f1.exists(), why_created
+        assert f2.exists(), why_created
+        assert f3.exists(), why_created
 
         logger.remove(a)
         logger.remove(b)
         logger.remove(c)
 
-        assert not f1.exists()
-        assert not f2.exists()
-        assert not f3.exists()
+        why_removed = (
+            "retention must recognise files whose name came from a placeholder, in any path "
+            "segment, otherwise those logs would accumulate forever"
+        )
+        assert not f1.exists(), why_removed
+        assert not f2.exists(), why_removed
+        assert not f3.exists(), why_removed
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support '*' in filename")
-def test_date_with_dot_after_extension(tmp_path):
-    file = tmp_path / "file.{time:YYYY.MM}_log"
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_GLOB_IN_FILENAME)
+def test_date_with_dot_after_extension(tmp: TempDir) -> None:
+    file = tmp.path / "file.{time:YYYY.MM}_log"
 
-    i = logger.add(tmp_path / "file*.log", retention=0, catch=False)
+    i = logger.add(tmp.path / "file*.log", retention=0, catch=False)
     logger.remove(i)
 
-    assert not file.exists()
+    assert not file.exists(), (
+        "a literal '*' in the sink path must be treated as part of the name, not as a glob "
+        "that could match and delete unrelated files"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support '*' in filename")
-def test_symbol_in_filename(tmp_path):
-    file = tmp_path / "file123.log"
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_GLOB_IN_FILENAME)
+def test_symbol_in_filename(tmp: TempDir) -> None:
+    file = tmp.path / "file123.log"
     file.touch()
 
-    i = logger.add(tmp_path / "file*.log", retention=0, catch=False)
+    i = logger.add(tmp.path / "file*.log", retention=0, catch=False)
     logger.remove(i)
 
-    assert file.exists()
+    assert file.exists(), (
+        "the '*' must be escaped before globbing, otherwise retention would delete every "
+        "file that happens to match the pattern"
+    )
 
 
-def test_manage_file_without_extension(tmp_path):
-    file = tmp_path / "file"
+def test_manage_file_without_extension(tmp: TempDir) -> None:
+    file = tmp.path / "file"
 
     i = logger.add(file, retention=0)
     logger.debug("?")
-    check_dir(tmp_path, files=[("file", None)])
+    helpers.common.check_dir(tmp.path, files=[("file", None)])
     logger.remove(i)
-    check_dir(tmp_path, files=[])
+    helpers.common.check_dir(tmp.path, files=[])
 
 
-def test_manage_formatted_files_without_extension(tmp_path):
-    tmp_path.joinpath("file_8").touch()
-    tmp_path.joinpath("file_7").touch()
-    tmp_path.joinpath("file_6").touch()
+def test_manage_formatted_files_without_extension(tmp: TempDir) -> None:
+    tmp.path.joinpath("file_8").touch()
+    tmp.path.joinpath("file_7").touch()
+    tmp.path.joinpath("file_6").touch()
 
-    i = logger.add(tmp_path / "file_{time}", retention=0)
+    i = logger.add(tmp.path / "file_{time}", retention=0)
     logger.debug("1")
     logger.remove(i)
 
-    check_dir(tmp_path, size=0)
+    helpers.common.check_dir(tmp.path, size=0)
 
 
-@pytest.mark.parametrize("mode", ["a", "a+", "w", "x"])
-def test_retention_at_rotation(tmp_path, mode):
-    tmp_path.joinpath("test.log.1").touch()
-    tmp_path.joinpath("test.log.2").touch()
-    tmp_path.joinpath("test.log.3").touch()
+@oxitest.parametrize(**MODE_CASES)
+def test_retention_at_rotation(tmp: TempDir, mode: str) -> None:
+    tmp.path.joinpath("test.log.1").touch()
+    tmp.path.joinpath("test.log.2").touch()
+    tmp.path.joinpath("test.log.3").touch()
 
-    logger.add(tmp_path / "test.log", retention=1, rotation=0, mode=mode)
+    logger.add(tmp.path / "test.log", retention=1, rotation=0, mode=mode)
     logger.debug("test")
 
-    check_dir(tmp_path, size=2)
+    helpers.common.check_dir(tmp.path, size=2)
 
 
-@pytest.mark.parametrize("mode", ["a", "a+", "w", "x"])
-def test_retention_at_remove_without_rotation(tmp_path, mode):
-    i = logger.add(tmp_path / "file.log", retention=0, mode=mode)
+@oxitest.parametrize(**MODE_CASES)
+def test_retention_at_remove_without_rotation(tmp: TempDir, mode: str) -> None:
+    i = logger.add(tmp.path / "file.log", retention=0, mode=mode)
     logger.debug("1")
-    check_dir(tmp_path, size=1)
+    helpers.common.check_dir(tmp.path, size=1)
     logger.remove(i)
-    check_dir(tmp_path, size=0)
+    helpers.common.check_dir(tmp.path, size=0)
 
 
-@pytest.mark.parametrize("mode", ["w", "x", "a", "a+"])
-def test_no_retention_at_remove_with_rotation(tmp_path, mode):
-    i = logger.add(tmp_path / "file.log", retention=0, rotation="100 MB", mode=mode)
+@oxitest.parametrize(**MODE_CASES)
+def test_no_retention_at_remove_with_rotation(tmp: TempDir, mode: str) -> None:
+    i = logger.add(tmp.path / "file.log", retention=0, rotation="100 MB", mode=mode)
     logger.debug("1")
-    check_dir(tmp_path, size=1)
+    helpers.common.check_dir(tmp.path, size=1)
     logger.remove(i)
-    check_dir(tmp_path, size=1)
+    helpers.common.check_dir(tmp.path, size=1)
 
 
-def test_no_renaming(tmp_path):
-    i = logger.add(tmp_path / "test.log", format="{message}", retention=10)
+def test_no_renaming(tmp: TempDir) -> None:
+    i = logger.add(tmp.path / "test.log", format="{message}", retention=10)
     logger.debug("test")
     logger.remove(i)
 
-    check_dir(tmp_path, files=[("test.log", "test\n")])
+    helpers.common.check_dir(tmp.path, files=[("test.log", "test\n")])
 
 
-@pytest.mark.parametrize("delay", [True, False])
-def test_exception_during_retention_at_rotation(freeze_time, tmp_path, capsys, delay):
+@oxitest.parametrize(**DELAY_CASES)
+def test_exception_during_retention_at_rotation(
+    freeze_time: Fixture[FreezeTime], tmp: TempDir, cap: StdCapture, delay: bool
+) -> None:
     with freeze_time("2022-02-22") as frozen:
         logger.add(
-            tmp_path / "test.log",
+            tmp.path / "test.log",
             format="{message}",
             retention=Mock(side_effect=[Exception("Retention error"), None]),
             rotation=0,
@@ -277,8 +352,8 @@ def test_exception_during_retention_at_rotation(freeze_time, tmp_path, capsys, d
         frozen.tick()
         logger.debug("BBB")
 
-    check_dir(
-        tmp_path,
+    helpers.common.check_dir(
+        tmp.path,
         files=[
             ("test.2022-02-22_00-00-00_000000.log", ""),
             ("test.2022-02-22_00-00-01_000000.log", ""),
@@ -286,30 +361,37 @@ def test_exception_during_retention_at_rotation(freeze_time, tmp_path, capsys, d
         ],
     )
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err.count("Logging error in Loguru Handler") == 1
-    assert err.count("Exception: Retention error") == 1
+    captured = cap.readouterr()
+    assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
+    assert captured.err.count("Logging error in Loguru Handler") == 1, (
+        "a failing retention must be reported once and must not prevent the following "
+        "rotation from succeeding"
+    )
+    assert captured.err.count("Exception: Retention error") == 1, (
+        "the report must name the original error so the user knows why old logs remain"
+    )
 
 
-@pytest.mark.parametrize("delay", [True, False])
-def test_exception_during_retention_at_rotation_not_caught(freeze_time, tmp_path, capsys, delay):
+@oxitest.parametrize(**DELAY_CASES)
+def test_exception_during_retention_at_rotation_not_caught(
+    freeze_time: Fixture[FreezeTime], tmp: TempDir, cap: StdCapture, delay: bool
+) -> None:
     with freeze_time("2022-02-22") as frozen:
         logger.add(
-            tmp_path / "test.log",
+            tmp.path / "test.log",
             format="{message}",
             retention=Mock(side_effect=[OSError("Retention error"), None]),
             rotation=0,
             catch=False,
             delay=delay,
         )
-        with pytest.raises(OSError, match=r"^Retention error$"):
+        with oxitest.raises(OSError, match=r"^Retention error$"):
             logger.debug("AAA")
         frozen.tick()
         logger.debug("BBB")
 
-    check_dir(
-        tmp_path,
+    helpers.common.check_dir(
+        tmp.path,
         files=[
             ("test.2022-02-22_00-00-00_000000.log", ""),
             ("test.2022-02-22_00-00-01_000000.log", ""),
@@ -317,14 +399,19 @@ def test_exception_during_retention_at_rotation_not_caught(freeze_time, tmp_path
         ],
     )
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "with catch=False the error propagates to the caller, so loguru must not also print "
+        "a report of its own"
+    )
 
 
-@pytest.mark.parametrize("delay", [True, False])
-def test_exception_during_retention_at_remove(tmp_path, capsys, delay):
+@oxitest.parametrize(**DELAY_CASES)
+def test_exception_during_retention_at_remove(
+    tmp: TempDir, cap: StdCapture, delay: bool
+) -> None:
     i = logger.add(
-        tmp_path / "test.log",
+        tmp.path / "test.log",
         format="{message}",
         retention=Mock(side_effect=[OSError("Retention error"), None]),
         catch=False,
@@ -332,32 +419,49 @@ def test_exception_during_retention_at_remove(tmp_path, capsys, delay):
     )
     logger.debug("AAA")
 
-    with pytest.raises(OSError, match=r"^Retention error$"):
+    with oxitest.raises(OSError, match=r"^Retention error$"):
         logger.remove(i)
 
     logger.debug("Nope")
 
-    check_dir(tmp_path, files=[("test.log", "AAA\n")])
+    helpers.common.check_dir(tmp.path, files=[("test.log", "AAA\n")])
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
-
-
-@pytest.mark.parametrize("retention", [datetime.time(12, 12, 12), os, object()])
-def test_invalid_retention_type(retention):
-    with pytest.raises(TypeError):
-        logger.add("test.log", retention=retention)
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "the error reaches the caller through remove(), so nothing may be printed as well"
+    )
 
 
-@pytest.mark.parametrize(
-    "retention", ["W5", "monday at 14:00", "sunday", "nope", "d", "H", "__dict__"]
+@oxitest.parametrize(
+    time_of_day=RetentionCase(retention=datetime.time(12, 12, 12)),
+    module=RetentionCase(retention=os),
+    object_instance=RetentionCase(retention=object()),
 )
-def test_unparsable_retention(retention):
-    with pytest.raises(ValueError, match=r"^Cannot parse retention from: '[^']+'$"):
+def test_invalid_retention_type(retention: Any) -> None:
+    with oxitest.raises(TypeError):
         logger.add("test.log", retention=retention)
 
 
-@pytest.mark.parametrize("retention", ["5 MB", "3 hours 2 dayz"])
-def test_invalid_value_retention_duration(retention):
-    with pytest.raises(ValueError, match=r"^Invalid unit value while parsing duration: '[^']+'$"):
+@oxitest.parametrize(
+    week_number=RetentionCase(retention="W5"),
+    weekday_at_time=RetentionCase(retention="monday at 14:00"),
+    weekday=RetentionCase(retention="sunday"),
+    nonsense=RetentionCase(retention="nope"),
+    unit_only_lower=RetentionCase(retention="d"),
+    unit_only_upper=RetentionCase(retention="H"),
+    dunder=RetentionCase(retention="__dict__"),
+)
+def test_unparsable_retention(retention: str) -> None:
+    with oxitest.raises(ValueError, match=r"^Cannot parse retention from: '[^']+'$"):
+        logger.add("test.log", retention=retention)
+
+
+@oxitest.parametrize(
+    size_unit=RetentionCase(retention="5 MB"),
+    misspelled_unit=RetentionCase(retention="3 hours 2 dayz"),
+)
+def test_invalid_value_retention_duration(retention: str) -> None:
+    with oxitest.raises(
+        ValueError, match=r"^Invalid unit value while parsing duration: '[^']+'$"
+    ):
         logger.add("test.log", retention=retention)
