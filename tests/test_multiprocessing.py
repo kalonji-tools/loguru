@@ -645,9 +645,7 @@ def test_not_picklable_sinks_inheritance(tmp: TempDir, cap: StdCapture) -> None:
     deepcopied=oxitest.partial(DeadlockCase, deepcopied=True),
     original=oxitest.partial(DeadlockCase, deepcopied=False),
 )
-def test_no_deadlock_if_internal_lock_in_use(
-    tmp: TempDir, enqueue: bool, deepcopied: bool
-) -> None:
+def test_no_deadlock_if_internal_lock_in_use(tmp: TempDir, enqueue: bool, deepcopied: bool) -> None:
     fork_context = multiprocessing.get_context("fork")
     if deepcopied:
         logger_ = copy.deepcopy(logger)
@@ -689,9 +687,10 @@ def test_no_deadlock_if_internal_lock_in_use(
 
         logger_.remove()
 
-    assert output.read_text() in ("Main\nChild\n", "Child\nMain\n"), (
-        "both messages must be written; only their order may vary"
-    )
+    assert output.read_text() in (
+        "Main\nChild\n",
+        "Child\nMain\n",
+    ), "both messages must be written; only their order may vary"
 
 
 @oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
@@ -716,15 +715,13 @@ def test_no_deadlock_if_external_lock_in_use(enqueue: bool, cap: StdCapture) -> 
 
     captured = cap.readouterr()
     assert captured.out == "", "the sink targets stderr, so stdout must stay empty"
-    assert captured.err == "".join("This is a message: %d\n" % i for i in range(num)), (
-        "every message must be written exactly once and in order despite the interleaved forks"
-    )
+    assert captured.err == "".join(
+        "This is a message: %d\n" % i for i in range(num)
+    ), "every message must be written exactly once and in order despite the interleaved forks"
 
 
 @oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
-@oxitest.mark.skip(
-    when=platform.python_implementation() == "PyPy", reason="PyPy is too slow"
-)
+@oxitest.mark.skip(when=platform.python_implementation() == "PyPy", reason="PyPy is too slow")
 def test_complete_from_multiple_child_processes(cap: StdCapture) -> None:
     fork_context = multiprocessing.get_context("fork")
     logger.add(lambda _: None, context=fork_context, enqueue=True, catch=False)
@@ -751,6 +748,6 @@ def test_complete_from_multiple_child_processes(cap: StdCapture) -> None:
         )
 
     captured = cap.readouterr()
-    assert captured.out == captured.err == "", (
-        "with catch=False any failure in a child would surface on the standard streams"
-    )
+    assert (
+        captured.out == captured.err == ""
+    ), "with catch=False any failure in a child would surface on the standard streams"

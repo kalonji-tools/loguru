@@ -99,9 +99,9 @@ def test_enqueue_with_exception() -> None:
     lines = x[0].splitlines()
 
     assert lines[0] == "Error", "the message must precede the traceback it describes"
-    assert lines[-1] == "ZeroDivisionError: division by zero", (
-        "a traceback object cannot be pickled, so it must be rendered before being queued"
-    )
+    assert (
+        lines[-1] == "ZeroDivisionError: division by zero"
+    ), "a traceback object cannot be pickled, so it must be rendered before being queued"
 
 
 def test_caught_exception_queue_put(writer: Fixture[Writer], cap: StdCapture) -> None:
@@ -351,7 +351,7 @@ def test_logging_not_unpicklable_exception(exception_value: Any) -> None:
         "the exception type must survive even when the instance cannot be unpickled, so the "
         "record still says what went wrong"
     )
-    assert value is None, (
-        "a value that fails to unpickle must be dropped rather than crash the queue thread"
-    )
+    assert (
+        value is None
+    ), "a value that fails to unpickle must be dropped rather than crash the queue thread"
     assert traceback_ is None, "traceback objects are never picklable, so they are dropped"

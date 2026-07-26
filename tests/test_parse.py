@@ -55,9 +55,9 @@ def test_parse_pathlib(tmp: TempDir) -> None:
     file = tmp.path / "test.log"
     file.write_text(TEXT)
     result, *_ = list(logger.parse(pathlib.Path(str(file)), r"(?P<r>Random)"))
-    assert result == dict(r="Random"), (
-        "parse() must accept a pathlib.Path, which is the idiomatic way to name a file"
-    )
+    assert result == dict(
+        r="Random"
+    ), "parse() must accept a pathlib.Path, which is the idiomatic way to name a file"
 
 
 def test_parse_string_pattern() -> None:
@@ -189,9 +189,9 @@ def test_cast_with_irrelevant_value(tmp: TempDir) -> None:
     regex = r"\[(?P<a>\d+)\] (?P<b>.*)"
     caster = dict(a=int)
     result = next(logger.parse(file, regex, cast=caster))
-    assert result == dict(a=123, b="Blabla"), (
-        "groups with no cast entry must be returned untouched rather than dropped"
-    )
+    assert result == dict(
+        a=123, b="Blabla"
+    ), "groups with no cast entry must be returned untouched rather than dropped"
 
 
 @oxitest.parametrize(**INVALID_VALUE_CASES)

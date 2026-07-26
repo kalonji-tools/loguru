@@ -93,9 +93,9 @@ def test_safe_adding_while_logging(writer: Fixture[Writer]) -> None:
         "adding a sink while another thread is mid-write must not disturb the existing "
         "sink, which has to receive both messages intact"
     )
-    assert sink_2.written == "ccc1ddd\n", (
-        "a sink added later must receive only what is logged after it was added"
-    )
+    assert (
+        sink_2.written == "ccc1ddd\n"
+    ), "a sink added later must receive only what is logged after it was added"
 
 
 def test_safe_removing_while_logging(cap: StdCapture) -> None:

@@ -4,7 +4,7 @@ import datetime
 import logging
 import pickle
 from dataclasses import dataclass
-from typing import Any, Callable, Union
+from typing import Any, Callable
 
 import oxitest
 from conftest import Writer
@@ -177,9 +177,9 @@ def test_pickling_coroutine_function_handler(cap: StdCapture) -> None:
         asyncio.run(async_debug())
 
     captured = cap.readouterr()
-    assert captured.out == "DEBUG - async_debug - A message\n", (
-        "an async sink must survive pickling and still be awaitable afterwards"
-    )
+    assert (
+        captured.out == "DEBUG - async_debug - A message\n"
+    ), "an async sink must survive pickling and still be awaitable afterwards"
     assert captured.err == "", NO_STDERR_EXPECTED
 
 
@@ -197,15 +197,15 @@ def test_pickling_stream_handler(flushable: bool, stoppable: bool) -> None:
     with copied_logger_though_pickle(logger) as dupe_logger:
         dupe_logger.debug("A message")
         stream = next(iter(dupe_logger._core.handlers.values()))._sink._stream
-    assert stream.wrote == "DEBUG - test_pickling_stream_handler - A message\n", (
-        "a stream sink must survive pickling and keep receiving records"
-    )
-    assert stream.flushed == flushable, (
-        "whether the sink has a flush() must be re-detected after unpickling, not assumed"
-    )
-    assert stream.stopped == stoppable, (
-        "whether the sink has a stop() must be re-detected after unpickling, not assumed"
-    )
+    assert (
+        stream.wrote == "DEBUG - test_pickling_stream_handler - A message\n"
+    ), "a stream sink must survive pickling and keep receiving records"
+    assert (
+        stream.flushed == flushable
+    ), "whether the sink has a flush() must be re-detected after unpickling, not assumed"
+    assert (
+        stream.stopped == stoppable
+    ), "whether the sink has a stop() must be re-detected after unpickling, not assumed"
 
 
 def test_pickling_standard_handler() -> None:
@@ -239,9 +239,9 @@ def test_pickling_standard_handler_root_logger_not_picklable(cap: StdCapture) ->
                 "a root logger that refuses to pickle must not break handler pickling, "
                 "otherwise a single unpicklable global would make logging unusable"
             )
-            assert handler.written == "=> Ok", (
-                "both the original and the unpickled logger must reach the same handler"
-            )
+            assert (
+                handler.written == "=> Ok"
+            ), "both the original and the unpickled logger must reach the same handler"
 
 
 def test_pickling_file_handler(tmp: TempDir) -> None:
@@ -270,9 +270,7 @@ def test_pickling_file_handler_rotation(tmp: TempDir, rotation: Any) -> None:
     logger.add(file, format="{level} - {function} - {message}", delay=True, rotation=rotation)
     with copied_logger_though_pickle(logger) as dupe_logger:
         dupe_logger.debug("A message")
-        assert (
-            file.read_text() == "DEBUG - test_pickling_file_handler_rotation - A message\n"
-        ), (
+        assert file.read_text() == "DEBUG - test_pickling_file_handler_rotation - A message\n", (
             "every accepted spelling of the rotation option must survive pickling, since "
             "each is parsed into a different internal object"
         )
@@ -289,9 +287,7 @@ def test_pickling_file_handler_retention(tmp: TempDir, retention: Any) -> None:
     logger.add(file, format="{level} - {function} - {message}", delay=True, retention=retention)
     with copied_logger_though_pickle(logger) as dupe_logger:
         dupe_logger.debug("A message")
-        assert (
-            file.read_text() == "DEBUG - test_pickling_file_handler_retention - A message\n"
-        ), (
+        assert file.read_text() == "DEBUG - test_pickling_file_handler_retention - A message\n", (
             "every accepted spelling of the retention option must survive pickling, since "
             "each is parsed into a different internal object"
         )
@@ -305,14 +301,10 @@ def test_pickling_file_handler_retention(tmp: TempDir, retention: Any) -> None:
 )
 def test_pickling_file_handler_compression(tmp: TempDir, compression: Any) -> None:
     file = tmp.path / "test.log"
-    logger.add(
-        file, format="{level} - {function} - {message}", delay=True, compression=compression
-    )
+    logger.add(file, format="{level} - {function} - {message}", delay=True, compression=compression)
     with copied_logger_though_pickle(logger) as dupe_logger:
         dupe_logger.debug("A message")
-        assert (
-            file.read_text() == "DEBUG - test_pickling_file_handler_compression - A message\n"
-        ), (
+        assert file.read_text() == "DEBUG - test_pickling_file_handler_compression - A message\n", (
             "every accepted spelling of the compression option must survive pickling, since "
             "each is parsed into a different internal object"
         )
@@ -322,9 +314,9 @@ def test_pickling_no_handler(writer: Fixture[Writer]) -> None:
     with copied_logger_though_pickle(logger) as dupe_logger:
         dupe_logger.add(writer, format="{level} - {function} - {message}")
         dupe_logger.debug("A message")
-        assert writer.read() == "DEBUG - test_pickling_no_handler - A message\n", (
-            "a logger with no handler must pickle to a usable logger, not to a broken shell"
-        )
+        assert (
+            writer.read() == "DEBUG - test_pickling_no_handler - A message\n"
+        ), "a logger with no handler must pickle to a usable logger, not to a broken shell"
 
 
 def test_pickling_handler_not_serializable() -> None:
@@ -429,9 +421,9 @@ def test_remove_after_pickling(cap: StdCapture) -> None:
         dupe_logger.remove(i)
         dupe_logger.info("B")
     captured = cap.readouterr()
-    assert captured.out == "A\n", (
-        "handler ids must survive pickling, so the copy can remove a handler it inherited"
-    )
+    assert (
+        captured.out == "A\n"
+    ), "handler ids must survive pickling, so the copy can remove a handler it inherited"
     assert captured.err == "", NO_STDERR_EXPECTED
 
 
@@ -454,9 +446,9 @@ def test_pickling_log_method(cap: StdCapture) -> None:
     func = pickle.loads(pickled)
     func(19, "A message")
     captured = cap.readouterr()
-    assert captured.out == "Level 19 - test_pickling_log_method - A message\n", (
-        "the generic log() method must be picklable on its own, like the level shortcuts"
-    )
+    assert (
+        captured.out == "Level 19 - test_pickling_log_method - A message\n"
+    ), "the generic log() method must be picklable on its own, like the level shortcuts"
     assert captured.err == "", NO_STDERR_EXPECTED
 
 

@@ -56,9 +56,9 @@ def test_file_line_buffering(tmp: TempDir) -> None:
     filepath = tmp.path / "test.log"
     logger.add(filepath, format=lambda _: "{message}", buffering=1)
     logger.debug("Without newline")
-    assert filepath.read_text() == "", (
-        "buffering=1 must be forwarded to open(), so output is held until a newline arrives"
-    )
+    assert (
+        filepath.read_text() == ""
+    ), "buffering=1 must be forwarded to open(), so output is held until a newline arrives"
     logger.debug("With newline\n")
     assert filepath.read_text() != "", (
         "a newline must flush a line-buffered file, otherwise the option gives no guarantee "

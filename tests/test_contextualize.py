@@ -74,9 +74,12 @@ def test_contextualize_reset() -> None:
         "the context must be restored on exit, otherwise it would leak into every later "
         "record in the process"
     )
-    assert output == ["INFO A\n", "DEBUG B\n", "WARNING C\n", "INFO D\n"], (
-        "contextualize() must not alter the messages themselves, only the extra dict"
-    )
+    assert output == [
+        "INFO A\n",
+        "DEBUG B\n",
+        "WARNING C\n",
+        "INFO D\n",
+    ], "contextualize() must not alter the messages themselves, only the extra dict"
 
 
 def test_contextualize_async(writer: Fixture[Writer]) -> None:

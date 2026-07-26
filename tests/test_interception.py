@@ -40,14 +40,16 @@ def test_formatting(writer: Fixture[Writer]) -> None:
         "{level.no} - {line} - {module} - {message}"
     )
 
-    expected = (
-        "tests.test_interception - test_interception.py - test_formatting - DEBUG - "
-        "10 - 50 - test_interception - This is the message\n"
-    )
-
     with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format=fmt)
+        # Read from the call site itself so reformatting this file cannot break the test.
+        lineno = inspect.currentframe().f_lineno + 1
         logging_logger.debug("This is the %s", "message")
+
+    expected = (
+        "tests.test_interception - test_interception.py - test_formatting - DEBUG - "
+        "10 - %d - test_interception - This is the message\n" % lineno
+    )
 
     result = writer.read()
     assert result == expected, (
@@ -113,9 +115,7 @@ def test_intercept_too_low(writer: Fixture[Writer]) -> None:
 
 def test_multiple_intercept(writer: Fixture[Writer]) -> None:
     with helpers.common.make_logging_logger("test_1", InterceptHandler()) as logging_logger_1:
-        with helpers.common.make_logging_logger(
-            "test_2", InterceptHandler()
-        ) as logging_logger_2:
+        with helpers.common.make_logging_logger("test_2", InterceptHandler()) as logging_logger_2:
             logger.add(writer, format="{message}")
             logging_logger_1.info("1")
             logging_logger_2.info("2")
@@ -206,12 +206,15 @@ def test_level_exists_custom(writer: Fixture[Writer]) -> None:
 def test_using_logging_function(writer: Fixture[Writer]) -> None:
     with helpers.common.make_logging_logger(None, InterceptHandler()):
         logger.add(writer, format="{function} {line} {module} {file.name} {message}")
+        # Read from the call site itself so reformatting this file cannot break the test.
+        lineno = inspect.currentframe().f_lineno + 1
         logging.warning("ABC")
 
     result = writer.read()
-    assert result == (
-        "test_using_logging_function 209 test_interception test_interception.py ABC\n"
-    ), (
+    expected = (
+        "test_using_logging_function %d test_interception test_interception.py ABC\n" % lineno
+    )
+    assert result == expected, (
         "the module-level logging.warning() shortcut must be attributed to its caller too, "
         "not to the logging module that implements it"
     )

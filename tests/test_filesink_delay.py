@@ -29,9 +29,9 @@ def test_file_delayed(tmp: TempDir) -> None:
         "run leaves empty files behind for sinks that are never used"
     )
     logger.debug("Delayed")
-    assert file.read_text() == "Delayed\n", (
-        "the first message must trigger the deferred open, otherwise delay would drop records"
-    )
+    assert (
+        file.read_text() == "Delayed\n"
+    ), "the first message must trigger the deferred open, otherwise delay would drop records"
 
 
 def test_compression(tmp: TempDir) -> None:
@@ -110,9 +110,7 @@ def test_rotation_and_retention(freeze_time: Fixture[FreezeTime], tmp: TempDir) 
     )
 
 
-def test_rotation_and_retention_timed_file(
-    freeze_time: Fixture[FreezeTime], tmp: TempDir
-) -> None:
+def test_rotation_and_retention_timed_file(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
     with freeze_time("1999-12-12") as frozen:
         filepath = tmp.path / "file.{time}.log"
         logger.add(filepath, rotation=30, retention=2, delay=True, format="{message}")

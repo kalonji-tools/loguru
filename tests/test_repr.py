@@ -85,9 +85,9 @@ def test_stream_object_without_name_attr() -> None:
             return "MyStream()"
 
     logger.add(MyStream())
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=MyStream())]>", (
-        "a stream with no 'name' must fall back to its repr rather than raise AttributeError"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=MyStream())]>"
+    ), "a stream with no 'name' must fall back to its repr rather than raise AttributeError"
 
 
 def test_stream_object_with_empty_name() -> None:
@@ -102,9 +102,9 @@ def test_stream_object_with_empty_name() -> None:
             return "MyStream2()"
 
     logger.add(MyStream2())
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=MyStream2())]>", (
-        "an empty 'name' carries no information, so the repr must be used instead"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=MyStream2())]>"
+    ), "an empty 'name' carries no information, so the repr must be used instead"
 
 
 def test_function() -> None:
@@ -112,9 +112,9 @@ def test_function() -> None:
         pass
 
     logger.add(my_function)
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=my_function)]>", (
-        "a function sink must be identified by its name, which is what the reader recognises"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=my_function)]>"
+    ), "a function sink must be identified by its name, which is what the reader recognises"
 
 
 def test_callable_without_name() -> None:
@@ -142,9 +142,9 @@ def test_callable_with_empty_name() -> None:
             return "<FunctionEmpty>"
 
     logger.add(Function())
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=<FunctionEmpty>)]>", (
-        "an empty __name__ carries no information, so the repr must be used instead"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=<FunctionEmpty>)]>"
+    ), "an empty __name__ carries no information, so the repr must be used instead"
 
 
 def test_coroutine_function() -> None:
@@ -182,9 +182,9 @@ def test_coroutine_function_with_empty_name() -> None:
             return "<AsyncFunctionEmpty>"
 
     logger.add(CoroutineFunction())
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=<AsyncFunctionEmpty>)]>", (
-        "an empty __name__ carries no information, so the repr must be used instead"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=10, sink=<AsyncFunctionEmpty>)]>"
+    ), "an empty __name__ carries no information, so the repr must be used instead"
 
 
 def test_standard_handler() -> None:
@@ -206,9 +206,9 @@ def test_multiple_handlers() -> None:
         "(id=1, level=10, sink=<stderr>)"
         "]>"
     )
-    assert repr(logger) == r, (
-        "every handler must be listed with its id, since that id is what remove() takes"
-    )
+    assert (
+        repr(logger) == r
+    ), "every handler must be listed with its id, since that id is what remove() takes"
 
 
 def test_handler_removed() -> None:
@@ -231,6 +231,6 @@ def test_handler_level_name() -> None:
 
 def test_handler_level_num() -> None:
     logger.add(sys.__stderr__, level=33)
-    assert repr(logger) == "<loguru.logger handlers=[(id=0, level=33, sink=<stderr>)]>", (
-        "a numeric level must be shown verbatim, including values with no registered name"
-    )
+    assert (
+        repr(logger) == "<loguru.logger handlers=[(id=0, level=33, sink=<stderr>)]>"
+    ), "a numeric level must be shown verbatim, including values with no registered name"

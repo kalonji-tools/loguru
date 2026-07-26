@@ -71,9 +71,7 @@ def test_colorized_format(
     markup_in_message=FormatCase(
         format="{message}", message="<red>Baz</red>", expected="<red>Baz</red>\n"
     ),
-    escaped_braces=FormatCase(
-        format="{{<red>{message:}</red>}}", message="A", expected="{A}\n"
-    ),
+    escaped_braces=FormatCase(format="{{<red>{message:}</red>}}", message="A", expected="{A}\n"),
 )
 def test_decolorized_format(
     format: Union[str, Callable[[Any], str]],
@@ -115,9 +113,9 @@ def test_automatic_detection_when_stream_is_a_tty() -> None:
     stream = StreamIsattyTrue()
     logger.add(stream, format="<blue>{message}</blue>", colorize=None)
     logger.debug("Message")
-    assert stream.getvalue() == parse("<blue>Message</blue>\n"), (
-        "colorize=None must colorize a tty, since that is the whole point of auto-detection"
-    )
+    assert stream.getvalue() == parse(
+        "<blue>Message</blue>\n"
+    ), "colorize=None must colorize a tty, since that is the whole point of auto-detection"
 
 
 def test_automatic_detection_when_stream_is_not_a_tty() -> None:

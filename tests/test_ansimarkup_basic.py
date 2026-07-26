@@ -21,8 +21,7 @@ class ErrorCase:
 def _error_cases(*texts: str) -> dict:
     """One partial case per markup snippet, to be crossed with the strip dimension."""
     return {
-        "case_%d" % index: oxitest.partial(ErrorCase, text=text)
-        for index, text in enumerate(texts)
+        "case_%d" % index: oxitest.partial(ErrorCase, text=text) for index, text in enumerate(texts)
     }
 
 

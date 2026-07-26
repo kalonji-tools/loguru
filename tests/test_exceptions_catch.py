@@ -134,9 +134,9 @@ def test_file_sink_ascii_encoding(tmp: TempDir) -> None:
 
     logger.remove()
     result = file.read_text("ascii")
-    assert result.count('"\\u5929" * a') == 1, (
-        "the offending source line must be written once, escaped to fit the sink's encoding"
-    )
+    assert (
+        result.count('"\\u5929" * a') == 1
+    ), "the offending source line must be written once, escaped to fit the sink's encoding"
     assert result.count("-> '\\u5929'") == 1, (
         "the ASCII fallback must use '->' instead of the box-drawing character, since the "
         "latter cannot be encoded"
@@ -155,12 +155,12 @@ def test_file_sink_utf8_encoding(tmp: TempDir) -> None:
 
     logger.remove()
     result = file.read_text("utf8")
-    assert result.count('"天" * a') == 1, (
-        "with utf8 the source line must be written verbatim, not escaped"
-    )
-    assert result.count("└ '天'") == 1, (
-        "with utf8 the box-drawing decoration must be used, since the sink can encode it"
-    )
+    assert (
+        result.count('"天" * a') == 1
+    ), "with utf8 the source line must be written verbatim, not escaped"
+    assert (
+        result.count("└ '天'") == 1
+    ), "with utf8 the box-drawing decoration must be used, since the sink can encode it"
 
 
 def test_has_sys_real_prefix(writer: Fixture[Writer]) -> None:
@@ -313,9 +313,9 @@ def test_exception_is_none() -> None:
 
     logger.error("No exception")
 
-    assert err is None, (
-        "a record with no exception must carry None, so sinks can test for it directly"
-    )
+    assert (
+        err is None
+    ), "a record with no exception must carry None, so sinks can test for it directly"
 
 
 def test_exception_is_tuple() -> None:
@@ -398,9 +398,7 @@ def test_exception_raising(writer: Fixture[Writer], exception: Any) -> None:
     base_type=oxitest.partial(ExcludeCase, exclude=ArithmeticError),
     tuple_of_types=oxitest.partial(ExcludeCase, exclude=(ValueError, ZeroDivisionError)),
 )
-def test_exclude_exception_raising(
-    writer: Fixture[Writer], exclude: Any, exception: Any
-) -> None:
+def test_exclude_exception_raising(writer: Fixture[Writer], exclude: Any, exception: Any) -> None:
     logger.add(writer)
 
     @logger.catch(exception, exclude=exclude)
@@ -431,9 +429,9 @@ def test_exclude_exception_not_raising(
         1 / 0  # noqa: B018
 
     a()
-    assert writer.read().endswith("ZeroDivisionError: division by zero\n"), (
-        "an exclude that does not match must leave the caught type in effect"
-    )
+    assert writer.read().endswith(
+        "ZeroDivisionError: division by zero\n"
+    ), "an exclude that does not match must leave the caught type in effect"
 
 
 def test_reraise(writer: Fixture[Writer]) -> None:
@@ -681,9 +679,9 @@ def test_unprintable_but_decorated_repr_with_enqueue(writer: Fixture[Writer]) ->
 
     logger.complete()
 
-    assert writer.read().endswith("ValueError: Something went wrong\n"), (
-        "the same protection must hold when the record is rendered on the queue thread"
-    )
+    assert writer.read().endswith(
+        "ValueError: Something went wrong\n"
+    ), "the same protection must hold when the record is rendered on the queue thread"
 
 
 def test_unprintable_but_decorated_repr_twice(writer: Fixture[Writer]) -> None:
@@ -700,9 +698,9 @@ def test_unprintable_but_decorated_repr_twice(writer: Fixture[Writer]) -> None:
     with oxitest.raises(ValueError, match=r"^Something went wrong$"):
         repr(foo)
 
-    assert writer.read().endswith("ValueError: Something went wrong\n"), (
-        "nesting two catchers must not double the recursion guard's work or defeat it"
-    )
+    assert writer.read().endswith(
+        "ValueError: Something went wrong\n"
+    ), "nesting two catchers must not double the recursion guard's work or defeat it"
 
 
 def test_unprintable_with_catch_context_manager(writer: Fixture[Writer]) -> None:
@@ -718,9 +716,9 @@ def test_unprintable_with_catch_context_manager(writer: Fixture[Writer]) -> None
     with oxitest.raises(ValueError, match=r"^Something went wrong$"):
         repr(foo)
 
-    assert writer.read().endswith("ValueError: Something went wrong\n"), (
-        "the recursion guard must cover the context-manager form as well as the decorator"
-    )
+    assert writer.read().endswith(
+        "ValueError: Something went wrong\n"
+    ), "the recursion guard must cover the context-manager form as well as the decorator"
 
 
 def test_unprintable_with_catch_context_manager_reused(writer: Fixture[Writer]) -> None:
@@ -793,6 +791,6 @@ def test_unprintable_but_decorated_repr_multiple_threads(writer: Fixture[Writer]
         "the recursion guard must be per-thread: a thread blocked mid-repr must not stop "
         "another thread from logging its own error"
     )
-    assert writer.read().endswith("ValueError: Something went wrong\n"), (
-        "the blocked thread must still finish reporting once it is released"
-    )
+    assert writer.read().endswith(
+        "ValueError: Something went wrong\n"
+    ), "the blocked thread must still finish reporting once it is released"

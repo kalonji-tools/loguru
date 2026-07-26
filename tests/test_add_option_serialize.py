@@ -150,12 +150,12 @@ def test_serialize_with_catch_decorator() -> None:
         "the @catch decorator must prepend its own explanatory message, otherwise the log "
         "does not say why an error was recorded instead of raised"
     )
-    assert lines[-1] == "ZeroDivisionError: division by zero", (
-        "the caught exception must be rendered into the serialized text like any other"
-    )
-    assert bool(sink.json["record"]["exception"]), (
-        "the structured exception fields must be populated for caught errors too"
-    )
+    assert (
+        lines[-1] == "ZeroDivisionError: division by zero"
+    ), "the caught exception must be rendered into the serialized text like any other"
+    assert bool(
+        sink.json["record"]["exception"]
+    ), "the structured exception fields must be populated for caught errors too"
 
 
 def test_serialize_with_record_option() -> None:

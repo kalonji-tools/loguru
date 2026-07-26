@@ -93,9 +93,9 @@ def test_function_format_with_exception(writer: Fixture[Writer]) -> None:
     except ZeroDivisionError:
         logger.exception("Error!")
     lines = writer.read().splitlines()
-    assert lines[0] == "Error!", (
-        "the message must come first, matching the order the callable format declares"
-    )
+    assert (
+        lines[0] == "Error!"
+    ), "the message must come first, matching the order the callable format declares"
     assert lines[-1] == "ZeroDivisionError: division by zero", (
         "a callable format including {exception} must append the traceback, otherwise the "
         "error detail the user asked for is dropped"

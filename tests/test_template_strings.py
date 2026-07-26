@@ -43,17 +43,17 @@ def test_template_string_is_lazy(writer: Fixture[Writer]) -> None:
     logger.info(Template("info = ", Interpolation(info_tracker)))
 
     result = writer.read()
-    assert len(result.strip().split("\n")) == 1, (
-        "the message filtered out by level must not be emitted at all"
-    )
+    assert (
+        len(result.strip().split("\n")) == 1
+    ), "the message filtered out by level must not be emitted at all"
     assert result == "info = xxx\n", "the message above the level must still be rendered"
     assert not debug_tracker.__str__.called, (
         "interpolations must not be stringified for a record no sink will accept — that "
         "laziness is the main reason to log a t-string rather than an f-string"
     )
-    assert info_tracker.__str__.called, (
-        "interpolations must be stringified once the record is actually emitted"
-    )
+    assert (
+        info_tracker.__str__.called
+    ), "interpolations must be stringified once the record is actually emitted"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -102,9 +102,9 @@ def test_template_string_with_two_consecutive_strings(writer: Fixture[Writer]) -
     logger.info(Template("2**8", " = ", Interpolation(2**8)))
 
     result = writer.read()
-    assert result == "2**8 = 256\n", (
-        "adjacent literal parts must be concatenated verbatim, without an implicit separator"
-    )
+    assert (
+        result == "2**8 = 256\n"
+    ), "adjacent literal parts must be concatenated verbatim, without an implicit separator"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -114,9 +114,9 @@ def test_template_string_without_string(writer: Fixture[Writer]) -> None:
     logger.info(Template(Interpolation(2**8)))
 
     result = writer.read()
-    assert result == "256\n", (
-        "a template made only of an interpolation must render to just that value"
-    )
+    assert (
+        result == "256\n"
+    ), "a template made only of an interpolation must render to just that value"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -126,9 +126,9 @@ def test_template_string_without_interpolation(writer: Fixture[Writer]) -> None:
     logger.info(Template("256"))
 
     result = writer.read()
-    assert result == "256\n", (
-        "a template with no interpolation must behave like the plain string it contains"
-    )
+    assert (
+        result == "256\n"
+    ), "a template with no interpolation must behave like the plain string it contains"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -199,9 +199,9 @@ def test_template_string_with_raw_and_args(writer: Fixture[Writer]) -> None:
     )
 
     result = writer.read()
-    assert result == parse("2**8 = 256"), (
-        "raw mode must still apply the logging kwargs to the template's literal parts"
-    )
+    assert result == parse(
+        "2**8 = 256"
+    ), "raw mode must still apply the logging kwargs to the template's literal parts"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -211,9 +211,9 @@ def test_template_string_with_raw_and_colors(writer: Fixture[Writer]) -> None:
     logger.opt(raw=True, colors=True).info(Template("<red>2**8 = ", Interpolation(2**8), "</red>"))
 
     result = writer.read()
-    assert result == parse("<red>2**8 = 256</red>"), (
-        "raw and colors must compose for templates as they do for strings"
-    )
+    assert result == parse(
+        "<red>2**8 = 256</red>"
+    ), "raw and colors must compose for templates as they do for strings"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)
@@ -226,9 +226,9 @@ def test_template_string_with_raw_and_colors_and_args(writer: Fixture[Writer]) -
     )
 
     result = writer.read()
-    assert result == parse("<red>2**8 = 256</red>"), (
-        "raw, colors and kwargs must all compose for templates as they do for strings"
-    )
+    assert result == parse(
+        "<red>2**8 = 256</red>"
+    ), "raw, colors and kwargs must all compose for templates as they do for strings"
 
 
 @oxitest.mark.skip(when=BEFORE_314, reason=NO_TEMPLATE_STRINGS)

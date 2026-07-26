@@ -116,9 +116,9 @@ def test_unprintable_record(writer: Fixture[Writer], cap: StdCapture) -> None:
         "it must still be delivered"
     )
     assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
-    assert lines[0] == "--- Logging error in Loguru Handler #0 ---", (
-        "the report must keep its banner even when the record itself cannot be shown"
-    )
+    assert (
+        lines[0] == "--- Logging error in Loguru Handler #0 ---"
+    ), "the report must keep its banner even when the record itself cannot be shown"
     assert lines[1] == "Record was: /!\\ Unprintable record /!\\", (
         "a record whose repr() raises must degrade to a placeholder, otherwise reporting the "
         "error would raise a second error"

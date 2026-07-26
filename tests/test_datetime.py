@@ -303,9 +303,9 @@ def test_stdout_formatting(freeze_time: Fixture[FreezeTime], cap: StdCapture) ->
         logger.add(sys.stdout, format="{time:YYYY [MM] DD HHmmss Z} {message}")
         logger.debug("Y")
         captured = cap.readouterr()
-        assert captured.out == "2015 MM 25 191318 +01:30 Y\n", (
-            "the time format must be applied identically for a stream sink as for any other"
-        )
+        assert (
+            captured.out == "2015 MM 25 191318 +01:30 Y\n"
+        ), "the time format must be applied identically for a stream sink as for any other"
         assert captured.err == "", "the sink targets stdout, so stderr must stay empty"
 
 

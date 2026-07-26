@@ -52,9 +52,9 @@ def test_log_str_level(writer: Fixture[Writer]) -> None:
     logger.add(writer, format="{level.name} -> {level.no} -> {message}", colorize=False)
     logger.log("DEBUG", "test")
 
-    assert writer.read() == "DEBUG -> 10 -> test\n", (
-        "a level named in log() must resolve to its registered severity number"
-    )
+    assert (
+        writer.read() == "DEBUG -> 10 -> test\n"
+    ), "a level named in log() must resolve to its registered severity number"
 
 
 def test_add_level(writer: Fixture[Writer]) -> None:
@@ -78,9 +78,7 @@ def test_add_level(writer: Fixture[Writer]) -> None:
     plain=ColorizeCase(colorize=False, expected="foo | 10 | a"),
     colorized=ColorizeCase(colorize=True, expected="<red>foo | 10 | a</red>"),
 )
-def test_add_level_after_add(
-    writer: Fixture[Writer], colorize: bool, expected: str
-) -> None:
+def test_add_level_after_add(writer: Fixture[Writer], colorize: bool, expected: str) -> None:
     fmt = "<level>{level.name} | {level.no} | {message}</level>"
     logger.add(writer, level="DEBUG", format=fmt, colorize=colorize)
     logger.level("foo", 10, color="<red>")
@@ -114,9 +112,7 @@ def test_add_malicious_level(writer: Fixture[Writer]) -> None:
     logger.log(15, " A ")
     logger.log(name, " B ")
 
-    assert writer.read() == parse(
-        "Level 15 & 15 &  A \x1b[0m\nLevel 15 & 45 & <red> B </red>\n"
-    ), (
+    assert writer.read() == parse("Level 15 & 15 &  A \x1b[0m\nLevel 15 & 45 & <red> B </red>\n"), (
         "a level whose name looks like the generated 'Level N' placeholder must not be "
         "matched by number, so the two records keep their own severities and colors"
     )
@@ -181,9 +177,9 @@ def test_edit_existing_level(writer: Fixture[Writer]) -> None:
     fmt = "{level.no}, <level>{level.name}</level>, {level.icon}, {message}"
     logger.add(writer, format=fmt, colorize=False)
     logger.debug("a")
-    assert writer.read() == "10, DEBUG, !, a\n", (
-        "built-in levels must be editable, so an application can replace the default icons"
-    )
+    assert (
+        writer.read() == "10, DEBUG, !, a\n"
+    ), "built-in levels must be editable, so an application can replace the default icons"
 
 
 def test_get_level() -> None:

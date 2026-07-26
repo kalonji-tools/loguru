@@ -177,8 +177,7 @@ def test_file_object_sink(rep: int) -> None:
     a = A()
     log(a, rep)
     assert a.out == expected * rep, (
-        "any object with write() must be usable as a sink, so custom file-likes need no "
-        "adapter"
+        "any object with write() must be usable as a sink, so custom file-likes need no " "adapter"
     )
 
 

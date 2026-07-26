@@ -3,7 +3,7 @@ import contextlib
 import os
 import sys
 from dataclasses import dataclass
-from typing import Any, Iterator, Tuple, Type
+from typing import Any, Iterator, Type
 from unittest.mock import MagicMock
 
 import oxitest
@@ -136,9 +136,9 @@ def test_stream_is_none() -> None:
 
 def test_is_a_tty() -> None:
     with isolated_environment():
-        assert should_colorize(StreamIsattyTrue()), (
-            "a terminal is the case colors exist for, so detection must say yes"
-        )
+        assert should_colorize(
+            StreamIsattyTrue()
+        ), "a terminal is the case colors exist for, so detection must say yes"
 
 
 def test_is_not_a_tty() -> None:
@@ -208,7 +208,7 @@ def test_dumb_term_not_colored(patched: str, expected: bool) -> None:
         context.setitem(os.environ, "TERM", "dumb")
         context.setattr(sys, patched, stream, raising=False)
         assert should_colorize(stream) is expected, (
-            'TERM=dumb declares a terminal that cannot render escape sequences, so the '
+            "TERM=dumb declares a terminal that cannot render escape sequences, so the "
             "standard streams must not be colorized even though isatty() is True"
         )
 
@@ -305,18 +305,10 @@ def test_mintty_not_fixed_linux(patched: str, expected: bool) -> None:
 @oxitest.parametrize(
     stdout_is_outstream=JupyterCase(patched="stdout", out_class=StreamIsattyFalse, expected=True),
     stderr_is_outstream=JupyterCase(patched="stderr", out_class=StreamIsattyFalse, expected=True),
-    original_stdout=JupyterCase(
-        patched="__stdout__", out_class=StreamIsattyFalse, expected=False
-    ),
-    original_stderr=JupyterCase(
-        patched="__stderr__", out_class=StreamIsattyFalse, expected=False
-    ),
-    stdout_not_outstream=JupyterCase(
-        patched="stdout", out_class=StreamIsattyTrue, expected=False
-    ),
-    stderr_not_outstream=JupyterCase(
-        patched="stderr", out_class=StreamIsattyTrue, expected=False
-    ),
+    original_stdout=JupyterCase(patched="__stdout__", out_class=StreamIsattyFalse, expected=False),
+    original_stderr=JupyterCase(patched="__stderr__", out_class=StreamIsattyFalse, expected=False),
+    stdout_not_outstream=JupyterCase(patched="stdout", out_class=StreamIsattyTrue, expected=False),
+    stderr_not_outstream=JupyterCase(patched="stderr", out_class=StreamIsattyTrue, expected=False),
     unrelated_stream=JupyterCase(patched="", out_class=StreamIsattyFalse, expected=False),
 )
 def test_jupyter_fixed(patched: str, out_class: Type[StubStream], expected: bool) -> None:
@@ -363,9 +355,9 @@ def test_dont_wrap_on_linux(patched: str) -> None:
     with isolated_environment() as context, patched_colorama(context) as colorama:
         context.setattr(sys, patched, stream, raising=False)
         assert not should_wrap(stream), "colorama is only needed on Windows"
-        assert not colorama.win32.winapi_test.called, (
-            "the Windows API must not even be consulted on other platforms"
-        )
+        assert (
+            not colorama.win32.winapi_test.called
+        ), "the Windows API must not even be consulted on other platforms"
 
 
 @oxitest.mark.skip(when=os.name != "nt", reason=ONLY_WINDOWS_NEEDS_COLORAMA)
@@ -382,9 +374,9 @@ def test_dont_wrap_if_not_original_stdout_or_stderr(patched: str) -> None:
             "only the console attached to the process needs wrapping; a redirected stream "
             "is not a Windows console"
         )
-        assert not colorama.win32.winapi_test.called, (
-            "the Windows API must not be consulted for a stream that cannot be a console"
-        )
+        assert (
+            not colorama.win32.winapi_test.called
+        ), "the Windows API must not be consulted for a stream that cannot be a console"
 
 
 @oxitest.mark.skip(when=os.name != "nt", reason=ONLY_WINDOWS_NEEDS_COLORAMA)
@@ -399,9 +391,9 @@ def test_dont_wrap_if_terminal_has_vt_support(patched: str) -> None:
             "a console with VT processing enabled renders ANSI itself, so wrapping would "
             "only add overhead"
         )
-        assert colorama.winterm.enable_vt_processing.called, (
-            "VT support must actually be probed rather than assumed"
-        )
+        assert (
+            colorama.winterm.enable_vt_processing.called
+        ), "VT support must actually be probed rather than assumed"
 
 
 @oxitest.mark.skip(when=os.name != "nt", reason=ONLY_WINDOWS_NEEDS_COLORAMA)
@@ -412,12 +404,12 @@ def test_dont_wrap_if_winapi_false(patched: str) -> None:
         context.setattr(sys, patched, stream, raising=False)
         colorama.win32.winapi_test.return_value = False
         colorama.winterm.enable_vt_processing.return_value = False
-        assert not should_wrap(stream), (
-            "without the Windows console API there is nothing for colorama to wrap"
-        )
-        assert colorama.win32.winapi_test.called, (
-            "availability of the console API must actually be probed rather than assumed"
-        )
+        assert not should_wrap(
+            stream
+        ), "without the Windows console API there is nothing for colorama to wrap"
+        assert (
+            colorama.win32.winapi_test.called
+        ), "availability of the console API must actually be probed rather than assumed"
 
 
 @oxitest.mark.skip(when=os.name != "nt", reason=ONLY_WINDOWS_NEEDS_COLORAMA)
@@ -428,9 +420,9 @@ def test_wrap_if_winapi_true_and_no_vt_support(patched: str) -> None:
         context.setattr(sys, patched, stream, raising=False)
         colorama.win32.winapi_test.return_value = True
         colorama.winterm.enable_vt_processing.return_value = False
-        assert should_wrap(stream), (
-            "a legacy console needs colorama to translate ANSI into console API calls"
-        )
+        assert should_wrap(
+            stream
+        ), "a legacy console needs colorama to translate ANSI into console API calls"
         assert colorama.winterm.enable_vt_processing.called, "VT support must be probed"
         assert colorama.win32.winapi_test.called, "the console API must be probed"
 

@@ -108,3 +108,6 @@ ENV/
 
 # oxitest evaluation artifacts (per T7 baseline #1667 — force-committed at brief-finalize by T8f)
 results/
+
+# oxitest run-to-run timing cache, used to schedule parallel workers.
+.oxitest_cache/

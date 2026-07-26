@@ -136,9 +136,9 @@ def test_exception_boolean(writer: Fixture[Writer]) -> None:
         "opt(exception=True) must not disturb message formatting, 'record' as a plain kwarg "
         "included"
     )
-    assert lines[-1] == "ZeroDivisionError: division by zero", (
-        "opt(exception=True) must attach the exception currently being handled"
-    )
+    assert (
+        lines[-1] == "ZeroDivisionError: division by zero"
+    ), "opt(exception=True) must attach the exception currently being handled"
 
 
 def test_exception_exc_info(writer: Fixture[Writer]) -> None:
@@ -173,9 +173,9 @@ def test_exception_class(writer: Fixture[Writer]) -> None:
     lines = writer.read().strip().splitlines()
 
     assert lines[0] == "test", "the message must come first"
-    assert lines[-1] == "ZeroDivisionError: division by zero", (
-        "a bare exception value must be accepted too, rendering without a traceback"
-    )
+    assert (
+        lines[-1] == "ZeroDivisionError: division by zero"
+    ), "a bare exception value must be accepted too, rendering without a traceback"
 
 
 def test_exception_log_function(writer: Fixture[Writer]) -> None:
@@ -189,9 +189,9 @@ def test_exception_log_function(writer: Fixture[Writer]) -> None:
     lines = writer.read().strip().splitlines()
 
     assert lines[0] == "50 Error", "the message must come first"
-    assert lines[-1] == "ZeroDivisionError: division by zero", (
-        "opt() must apply to log() exactly as it does to the level shortcuts"
-    )
+    assert (
+        lines[-1] == "ZeroDivisionError: division by zero"
+    ), "opt() must apply to log() exactly as it does to the level shortcuts"
 
 
 def test_lazy(writer: Fixture[Writer]) -> None:
@@ -323,9 +323,9 @@ def test_colors(writer: Fixture[Writer]) -> None:
 def test_colors_not_colorize(writer: Fixture[Writer]) -> None:
     logger.add(writer, format="<red>a</red> {message}", colorize=False)
     logger.opt(colors=True).debug("<blue>b</blue>")
-    assert writer.read() == parse("<red>a</red> <blue>b</blue>\n", strip=True), (
-        "with colorize=False the markup must be stripped rather than left in the output"
-    )
+    assert writer.read() == parse(
+        "<red>a</red> <blue>b</blue>\n", strip=True
+    ), "with colorize=False the markup must be stripped rather than left in the output"
 
 
 def test_colors_doesnt_color_unrelated(writer: Fixture[Writer]) -> None:
@@ -340,9 +340,9 @@ def test_colors_doesnt_color_unrelated(writer: Fixture[Writer]) -> None:
 def test_colors_doesnt_strip_unrelated(writer: Fixture[Writer]) -> None:
     logger.add(writer, format="{message} {extra[trap]}", colorize=False)
     logger.bind(trap="<red>B</red>").opt(colors=True).debug("<red>A</red>")
-    assert writer.read() == parse("<red>A</red>", strip=True) + " <red>B</red>\n", (
-        "stripping must apply to the message only; a bound value must survive unchanged"
-    )
+    assert (
+        writer.read() == parse("<red>A</red>", strip=True) + " <red>B</red>\n"
+    ), "stripping must apply to the message only; a bound value must survive unchanged"
 
 
 def test_colors_doesnt_raise_unrelated_colorize(writer: Fixture[Writer]) -> None:
@@ -366,17 +366,17 @@ def test_colors_doesnt_raise_unrelated_not_colorize(writer: Fixture[Writer]) -> 
 def test_colors_doesnt_raise_unrelated_colorize_dynamic(writer: Fixture[Writer]) -> None:
     logger.add(writer, format=lambda x: "{message} {extra[trap]}", colorize=True, catch=False)
     logger.bind(trap="</red>").opt(colors=True).debug("A")
-    assert writer.read() == "A </red>", (
-        "the same protection must hold with a callable format, which is resolved per record"
-    )
+    assert (
+        writer.read() == "A </red>"
+    ), "the same protection must hold with a callable format, which is resolved per record"
 
 
 def test_colors_doesnt_raise_unrelated_not_colorize_dynamic(writer: Fixture[Writer]) -> None:
     logger.add(writer, format=lambda x: "{message} {extra[trap]}", colorize=False, catch=False)
     logger.bind(trap="</red>").opt(colors=True).debug("A")
-    assert writer.read() == "A </red>", (
-        "the same protection must hold with a callable format, which is resolved per record"
-    )
+    assert (
+        writer.read() == "A </red>"
+    ), "the same protection must hold with a callable format, which is resolved per record"
 
 
 @oxitest.parametrize(**COLORIZE_CASES)
@@ -424,9 +424,7 @@ def test_colors_stripped_in_message_record(colorize: bool) -> None:
     unopened=oxitest.partial(InvalidMarkupCase, message="</red>"),
     crossed=oxitest.partial(InvalidMarkupCase, message="X </red> <red> Y"),
 )
-def test_invalid_markup_in_message(
-    writer: Fixture[Writer], message: str, colorize: bool
-) -> None:
+def test_invalid_markup_in_message(writer: Fixture[Writer], message: str, colorize: bool) -> None:
     logger.add(writer, format="<red>{message}</red>", colorize=colorize, catch=False)
     with oxitest.raises(
         ValueError,
@@ -484,9 +482,7 @@ def test_colors_multiple_calls(writer: Fixture[Writer], colorize: bool) -> None:
 
 
 @oxitest.parametrize(**COLORIZE_CASES)
-def test_colors_multiple_calls_level_color_changed(
-    writer: Fixture[Writer], colorize: bool
-) -> None:
+def test_colors_multiple_calls_level_color_changed(writer: Fixture[Writer], colorize: bool) -> None:
     logger.add(writer, format="{message}", colorize=colorize)
     logger.level("INFO", color="<blue>")
     logger.opt(colors=True).info("a <level>foo</level> b")
@@ -501,9 +497,9 @@ def test_colors_multiple_calls_level_color_changed(
 def test_colors_with_dynamic_formatter(writer: Fixture[Writer], colorize: bool) -> None:
     logger.add(writer, format=lambda r: "<red>{message}</red>", colorize=colorize)
     logger.opt(colors=True).debug("<b>a</b> <y>b</y>")
-    assert writer.read() == parse("<red><b>a</b> <y>b</y></red>", strip=not colorize), (
-        "markup returned by a callable format must be honoured like a static one"
-    )
+    assert writer.read() == parse(
+        "<red><b>a</b> <y>b</y></red>", strip=not colorize
+    ), "markup returned by a callable format must be honoured like a static one"
 
 
 @oxitest.parametrize(**COLORIZE_CASES)
@@ -585,18 +581,18 @@ def test_colors_with_recursion_depth_exceeded_in_message(
 def test_colors_with_auto_indexing(writer: Fixture[Writer], colorize: bool) -> None:
     logger.add(writer, format="{message}", colorize=colorize)
     logger.opt(colors=True).info("<red>{}</red> <green>{}</green>", "foo", "bar")
-    assert writer.read() == parse("<red>foo</red> <green>bar</green>\n", strip=not colorize), (
-        "automatic field numbering must keep counting across markup boundaries"
-    )
+    assert writer.read() == parse(
+        "<red>foo</red> <green>bar</green>\n", strip=not colorize
+    ), "automatic field numbering must keep counting across markup boundaries"
 
 
 @oxitest.parametrize(**COLORIZE_CASES)
 def test_colors_with_manual_indexing(writer: Fixture[Writer], colorize: bool) -> None:
     logger.add(writer, format="{message}", colorize=colorize)
     logger.opt(colors=True).info("<red>{1}</red> <green>{0}</green>", "foo", "bar")
-    assert writer.read() == parse("<red>bar</red> <green>foo</green>\n", strip=not colorize), (
-        "manual field numbering must keep working across markup boundaries"
-    )
+    assert writer.read() == parse(
+        "<red>bar</red> <green>foo</green>\n", strip=not colorize
+    ), "manual field numbering must keep working across markup boundaries"
 
 
 @oxitest.parametrize(**_flag_layer(InvalidIndexingCase, "colorize"))
@@ -629,9 +625,9 @@ def test_raw(writer: Fixture[Writer]) -> None:
 def test_raw_with_format_function(writer: Fixture[Writer]) -> None:
     logger.add(writer, format=lambda _: "{time} \n")
     logger.opt(raw=True).debug("Raw {message} bis", message="message")
-    assert writer.read() == "Raw message bis", (
-        "raw mode must bypass a callable format too, not only a static one"
-    )
+    assert (
+        writer.read() == "Raw message bis"
+    ), "raw mode must bypass a callable format too, not only a static one"
 
 
 @oxitest.parametrize(**COLORIZE_CASES)
@@ -798,9 +794,7 @@ def test_deprecated_ansi_argument(writer: Fixture[Writer]) -> None:
 
 
 @oxitest.parametrize(**COLORS_CASES)
-def test_message_update_not_overridden_by_patch(
-    writer: Fixture[Writer], colors: bool
-) -> None:
+def test_message_update_not_overridden_by_patch(writer: Fixture[Writer], colors: bool) -> None:
     def patcher(record):
         record["message"] += " [Patched]"
 
@@ -814,9 +808,7 @@ def test_message_update_not_overridden_by_patch(
 
 
 @oxitest.parametrize(**COLORS_CASES)
-def test_message_update_not_overridden_by_format(
-    writer: Fixture[Writer], colors: bool
-) -> None:
+def test_message_update_not_overridden_by_format(writer: Fixture[Writer], colors: bool) -> None:
     def formatter(record):
         record["message"] += " [Formatted]"
         return "{level} {message}\n"
@@ -831,9 +823,7 @@ def test_message_update_not_overridden_by_format(
 
 
 @oxitest.parametrize(**COLORS_CASES)
-def test_message_update_not_overridden_by_filter(
-    writer: Fixture[Writer], colors: bool
-) -> None:
+def test_message_update_not_overridden_by_filter(writer: Fixture[Writer], colors: bool) -> None:
     def filter(record):
         record["message"] += " [Filtered]"
         return True

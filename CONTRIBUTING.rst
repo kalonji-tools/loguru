@@ -5,6 +5,7 @@ Thank you for considering improving `Loguru`, any contribution is much welcome!
 .. _open a pull request: https://github.com/Delgan/loguru/compare
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008/
 .. _Loguru: https://github.com/Delgan/loguru
+.. _oxitest: https://github.com/kalonji-tools/oxitest
 
 
 Automated Contributions Policy
@@ -78,6 +79,11 @@ Prefer using a relatively recent Python version as some dependencies required fo
 8. Add unit tests (don't hesitate to be exhaustive!) and ensure none are failing using::
 
     $ tox -e tests
+
+   The test suite runs on `oxitest`_, which requires Python 3.11 or later even though
+   `Loguru` itself supports older interpreters. Note that it runs in strict mode: every
+   ``assert`` needs a message explaining *why* it matters, and ``@oxitest.parametrize``
+   cases are frozen dataclasses rather than plain tuples.
 
 9. Remember to update documentation if required.
 10. If your development modifies `Loguru` behavior, update the ``CHANGELOG.rst`` file with what you improved.

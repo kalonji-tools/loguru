@@ -149,9 +149,7 @@ INVALID_KEY_COLORS = {
         format="{process.name}",
         validator=lambda r: isinstance(r, str) and r != "",
     ),
-    message=oxitest.partial(
-        FormatterCase, format="{message}", validator=lambda r: r == "Message"
-    ),
+    message=oxitest.partial(FormatterCase, format="{message}", validator=lambda r: r == "Message"),
     escaped_specifiers=oxitest.partial(
         FormatterCase,
         format="%s {{a}} 天 {{1}} %d",
@@ -423,14 +421,10 @@ def test_non_string_message_is_str_in_record(writer: Fixture[Writer], colors: bo
 
 
 @oxitest.parametrize(**COLORS_CASES)
-def test_missing_positional_field_during_formatting(
-    writer: Fixture[Writer], colors: bool
-) -> None:
+def test_missing_positional_field_during_formatting(writer: Fixture[Writer], colors: bool) -> None:
     logger.add(writer)
 
-    with oxitest.raises(
-        ValueError, match=r"^The logging message could not be formatted"
-    ) as e:
+    with oxitest.raises(ValueError, match=r"^The logging message could not be formatted") as e:
         logger.opt(colors=colors).info("Foo {} {}", 123)
 
     assert isinstance(e.value.__cause__, IndexError), (
@@ -443,9 +437,7 @@ def test_missing_positional_field_during_formatting(
 def test_missing_named_field_during_formatting(writer: Fixture[Writer], colors: bool) -> None:
     logger.add(writer)
 
-    with oxitest.raises(
-        ValueError, match=r"^The logging message could not be formatted"
-    ) as e:
+    with oxitest.raises(ValueError, match=r"^The logging message could not be formatted") as e:
         logger.opt(colors=colors).info("Foo {bar}", baz=123)
 
     assert isinstance(e.value.__cause__, KeyError), (
@@ -455,14 +447,10 @@ def test_missing_named_field_during_formatting(writer: Fixture[Writer], colors: 
 
 
 @oxitest.parametrize(**COLORS_CASES)
-def test_malformed_curly_braces_during_formatting(
-    writer: Fixture[Writer], colors: bool
-) -> None:
+def test_malformed_curly_braces_during_formatting(writer: Fixture[Writer], colors: bool) -> None:
     logger.add(writer)
 
-    with oxitest.raises(
-        ValueError, match=r"^The logging message could not be formatted"
-    ) as e:
+    with oxitest.raises(ValueError, match=r"^The logging message could not be formatted") as e:
         logger.opt(colors=colors).info("This is a curly bracket: {", foo="bar")
 
     assert isinstance(e.value.__cause__, ValueError), (
@@ -475,9 +463,7 @@ def test_malformed_curly_braces_during_formatting(
 def test_not_formattable_message(writer: Fixture[Writer], colors: bool) -> None:
     logger.add(writer)
 
-    with oxitest.raises(
-        ValueError, match=r"^The logging message could not be formatted"
-    ) as e:
+    with oxitest.raises(ValueError, match=r"^The logging message could not be formatted") as e:
         logger.opt(colors=colors).info(123, baz=456)
 
     assert isinstance(e.value.__cause__, TypeError if colors else AttributeError), (
@@ -506,9 +492,7 @@ def test_invalid_format_key_emits_helpful_error_with_catch(
     logger.opt(colors=colors).info("Hello")
     captured = cap.readouterr()
     assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
-    assert (
-        "ValueError: Failed to format log record: key 'missing' not found" in captured.err
-    ), (
+    assert "ValueError: Failed to format log record: key 'missing' not found" in captured.err, (
         "the report must name the offending key on every code path, since a bare KeyError "
         "would not say which format was wrong"
     )
@@ -521,7 +505,5 @@ def test_invalid_format_key_raises_enhanced_error_without_catch(
     format_: Union[str, Callable[[Any], str]], colorize: bool, colors: bool
 ) -> None:
     logger.add(lambda msg: None, format=format_, catch=False, colorize=colorize)
-    with oxitest.raises(
-        ValueError, match=r"Failed to format log record: key 'missing' not found."
-    ):
+    with oxitest.raises(ValueError, match=r"Failed to format log record: key 'missing' not found."):
         logger.opt(colors=colors).info("Hello")

@@ -64,9 +64,9 @@ def test_async_callable_sink(cap: StdCapture) -> None:
 
     captured = cap.readouterr()
     assert captured.err == "", NO_STDERR_EXPECTED
-    assert captured.out == "A message\n", (
-        "an object with an async __call__ must be accepted like a bare coroutine function"
-    )
+    assert (
+        captured.out == "A message\n"
+    ), "an object with an async __call__ must be accepted like a bare coroutine function"
 
 
 def test_concurrent_execution(cap: StdCapture) -> None:
@@ -122,9 +122,9 @@ def test_using_another_event_loop(cap: StdCapture) -> None:
 
     captured = cap.readouterr()
     assert captured.err == "", NO_STDERR_EXPECTED
-    assert captured.out == "A message\n", (
-        "an explicitly supplied loop must be the one the sink is scheduled on"
-    )
+    assert (
+        captured.out == "A message\n"
+    ), "an explicitly supplied loop must be the one the sink is scheduled on"
 
 
 def test_run_multiple_different_loops(cap: StdCapture) -> None:
@@ -158,9 +158,9 @@ def test_run_multiple_same_loop(cap: StdCapture) -> None:
 
     captured = cap.readouterr()
     assert captured.err == "", NO_STDERR_EXPECTED
-    assert captured.out == "Message 1\nMessage 2\n", (
-        "a bound loop must stay usable across successive run_until_complete() calls"
-    )
+    assert (
+        captured.out == "Message 1\nMessage 2\n"
+    ), "a bound loop must stay usable across successive run_until_complete() calls"
 
 
 def test_using_sink_without_running_loop_not_none(cap: StdCapture) -> None:
@@ -270,9 +270,9 @@ def test_remove_without_tasks(cap: StdCapture) -> None:
     asyncio.run(foo())
 
     captured = cap.readouterr()
-    assert captured.out == captured.err == "", (
-        "removing a sink that never ran must be a no-op rather than raise"
-    )
+    assert (
+        captured.out == captured.err == ""
+    ), "removing a sink that never ran must be a no-op rather than raise"
 
 
 def test_complete_without_tasks(cap: StdCapture) -> None:
@@ -284,9 +284,9 @@ def test_complete_without_tasks(cap: StdCapture) -> None:
     asyncio.run(worker())
 
     captured = cap.readouterr()
-    assert captured.out == captured.err == "", (
-        "complete() with nothing pending must return immediately rather than raise"
-    )
+    assert (
+        captured.out == captured.err == ""
+    ), "complete() with nothing pending must return immediately rather than raise"
 
 
 def test_complete_stream_noop(cap: StdCapture) -> None:
@@ -305,8 +305,7 @@ def test_complete_stream_noop(cap: StdCapture) -> None:
     captured = cap.readouterr()
     assert captured.out == "", "the sink targets stderr, so stdout must stay empty"
     assert captured.err == "A\nB\nC\nD\n", (
-        "complete() must be a no-op for a synchronous sink, leaving it fully usable "
-        "afterwards"
+        "complete() must be a no-op for a synchronous sink, leaving it fully usable " "afterwards"
     )
 
 
@@ -325,9 +324,9 @@ def test_complete_file_noop(tmp: TempDir) -> None:
 
     logger.info("D")
 
-    assert filepath.read_text() == "A\nB\nC\nD\n", (
-        "complete() must be a no-op for a file sink, leaving it open and usable afterwards"
-    )
+    assert (
+        filepath.read_text() == "A\nB\nC\nD\n"
+    ), "complete() must be a no-op for a file sink, leaving it open and usable afterwards"
 
 
 def test_complete_function_noop() -> None:
@@ -349,9 +348,9 @@ def test_complete_function_noop() -> None:
 
     logger.info("D")
 
-    assert out == "A\nB\nC\nD\n", (
-        "complete() must be a no-op for a plain function sink, leaving it usable afterwards"
-    )
+    assert (
+        out == "A\nB\nC\nD\n"
+    ), "complete() must be a no-op for a plain function sink, leaving it usable afterwards"
 
 
 def test_complete_standard_noop(cap: StdCapture) -> None:
@@ -370,8 +369,7 @@ def test_complete_standard_noop(cap: StdCapture) -> None:
     captured = cap.readouterr()
     assert captured.out == "", "the handler targets stderr, so stdout must stay empty"
     assert captured.err == "A\nB\nC\nD\n", (
-        "complete() must be a no-op for a standard logging handler, leaving it usable "
-        "afterwards"
+        "complete() must be a no-op for a standard logging handler, leaving it usable " "afterwards"
     )
 
 
@@ -427,9 +425,9 @@ def test_exception_in_coroutine_not_caught(cap: StdCapture, log: LogCapture) -> 
     record = records[0]
 
     message = record.getMessage()
-    assert "Logging error in Loguru Handler" not in message, (
-        "the report must come from asyncio, not from loguru's own error handling"
-    )
+    assert (
+        "Logging error in Loguru Handler" not in message
+    ), "the report must come from asyncio, not from loguru's own error handling"
     assert "was never retrieved" not in message, (
         "the task's exception must be retrieved rather than surface later as a "
         "'never retrieved' warning at garbage-collection time"
@@ -494,9 +492,9 @@ def test_exception_in_coroutine_during_complete_not_caught(
     record = records[0]
 
     message = record.getMessage()
-    assert "Logging error in Loguru Handler" not in message, (
-        "the report must come from asyncio, not from loguru's own error handling"
-    )
+    assert (
+        "Logging error in Loguru Handler" not in message
+    ), "the report must come from asyncio, not from loguru's own error handling"
     assert "was never retrieved" not in message, (
         "the task's exception must be retrieved rather than surface later as a "
         "'never retrieved' warning at garbage-collection time"

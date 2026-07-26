@@ -9,16 +9,14 @@ on:
 jobs:
   tests:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    # The test suite runs on oxitest, which requires Python 3.11 or later. The library
+    # itself still supports older interpreters, but they can no longer be exercised here.
     strategy:
       fail-fast: false
       matrix:
         os:
         - ubuntu-22.04
         python-version:
-        - '3.7'
-        - '3.8'
-        - '3.9'
-        - '3.10'
         - '3.11'
         - '3.12'
         - '3.13'
@@ -27,14 +25,6 @@ jobs:
         allow-failure:
         - false
         include:
-        - os: ubuntu-22.04
-          python-version: '3.5'
-          allow-failure: false
-          container: python:3.5-slim
-        - os: ubuntu-22.04
-          python-version: '3.6'
-          allow-failure: false
-          container: python:3.6-slim
         - os: windows-2022
           python-version: '3.12'
           allow-failure: false
@@ -42,15 +32,10 @@ jobs:
           python-version: '3.12'
           allow-failure: false
     runs-on: ${{ matrix.os }}
-    # Some versions of Python are not longer supported by GitHub Actions.
-    # For those, we use a container image and skip the setup-python step.
-    # It will be empty and ignored for the other matrix entries.
-    container: ${{ matrix.container }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
     - name: Set up Python
-      if: ${{ matrix.container == null }}
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
@@ -68,6 +53,25 @@ jobs:
         name: coverage-${{ matrix.python-version }}-${{ matrix.os }}
         path: coverage.xml
       continue-on-error: ${{ matrix.allow-failure }}
+  typesafety:
+    # The stub is checked against mypy by "pytest-mypy-plugins", which asserts on mypy
+    # output from YAML cases and therefore still runs under pytest.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tox
+    - name: Check type stub
+      run: |
+        tox -e typesafety
   push-coverage-to-codecov:
     runs-on: ubuntu-22.04
     needs: tests

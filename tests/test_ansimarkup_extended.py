@@ -39,8 +39,7 @@ class LayerHexCase:
 def _error_cases(*texts: str) -> dict:
     """One partial case per markup snippet, to be crossed with the strip dimension."""
     return {
-        "case_%d" % index: oxitest.partial(ErrorCase, text=text)
-        for index, text in enumerate(texts)
+        "case_%d" % index: oxitest.partial(ErrorCase, text=text) for index, text in enumerate(texts)
     }
 
 
@@ -73,9 +72,7 @@ def test_background_colors(text: str, expected: str) -> None:
 
 @oxitest.parametrize(
     named=MarkupCase(text="<fg yellow>1</fg yellow>", expected=Fore.YELLOW + "1" + Style.RESET_ALL),
-    named_upper=MarkupCase(
-        text="<fg BLUE>1</fg BLUE>", expected=Fore.BLUE + "1" + Style.RESET_ALL
-    ),
+    named_upper=MarkupCase(text="<fg BLUE>1</fg BLUE>", expected=Fore.BLUE + "1" + Style.RESET_ALL),
     light=MarkupCase(
         text="<fg light-white>1</fg light-white>",
         expected=Fore.LIGHTWHITE_EX + "1" + Style.RESET_ALL,
@@ -152,7 +149,9 @@ def test_hex_short_code_equals_long_code(layer: str, short_code: str, long_code:
 
 
 @oxitest.parametrize(
-    foreground=MarkupCase(text="<fg 200>1</fg 200>", expected="\x1b[38;5;200m" "1" + Style.RESET_ALL),
+    foreground=MarkupCase(
+        text="<fg 200>1</fg 200>", expected="\x1b[38;5;200m" "1" + Style.RESET_ALL
+    ),
     background=MarkupCase(text="<bg 49>1</bg 49>", expected="\x1b[48;5;49m" "1" + Style.RESET_ALL),
 )
 def test_rgb_colors(text: str, expected: str) -> None:
@@ -180,12 +179,20 @@ def test_rgb_colors(text: str, expected: str) -> None:
     ),
     hex_values=MarkupCase(
         text="<bg #00a000><fg #FF0000>1</fg #FF0000></bg #00a000>",
-        expected="\x1b[48;2;0;160;0m" "\x1b[38;2;255;0;0m" "1" "\x1b[0m" "\x1b[48;2;0;160;0m"
+        expected="\x1b[48;2;0;160;0m"
+        "\x1b[38;2;255;0;0m"
+        "1"
+        "\x1b[0m"
+        "\x1b[48;2;0;160;0m"
         "\x1b[0m",
     ),
     rgb_triplets=MarkupCase(
         text="<bg 0,160,0><fg 255,0,0>1</fg 255,0,0></bg 0,160,0>",
-        expected="\x1b[48;2;0;160;0m" "\x1b[38;2;255;0;0m" "1" "\x1b[0m" "\x1b[48;2;0;160;0m"
+        expected="\x1b[48;2;0;160;0m"
+        "\x1b[38;2;255;0;0m"
+        "1"
+        "\x1b[0m"
+        "\x1b[48;2;0;160;0m"
         "\x1b[0m",
     ),
 )

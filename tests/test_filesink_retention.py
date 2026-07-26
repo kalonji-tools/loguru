@@ -57,9 +57,7 @@ DELAY_CASES = {
     padded=RetentionCase(retention=" 1 h "),
     timedelta=RetentionCase(retention=datetime.timedelta(hours=1)),
 )
-def test_retention_time(
-    freeze_time: Fixture[FreezeTime], tmp: TempDir, retention: Any
-) -> None:
+def test_retention_time(freeze_time: Fixture[FreezeTime], tmp: TempDir, retention: Any) -> None:
     i = logger.add(tmp.path / "test.log.x", retention=retention)
     logger.debug("test")
     logger.remove(i)
@@ -367,9 +365,9 @@ def test_exception_during_retention_at_rotation(
         "a failing retention must be reported once and must not prevent the following "
         "rotation from succeeding"
     )
-    assert captured.err.count("Exception: Retention error") == 1, (
-        "the report must name the original error so the user knows why old logs remain"
-    )
+    assert (
+        captured.err.count("Exception: Retention error") == 1
+    ), "the report must name the original error so the user knows why old logs remain"
 
 
 @oxitest.parametrize(**DELAY_CASES)
@@ -407,9 +405,7 @@ def test_exception_during_retention_at_rotation_not_caught(
 
 
 @oxitest.parametrize(**DELAY_CASES)
-def test_exception_during_retention_at_remove(
-    tmp: TempDir, cap: StdCapture, delay: bool
-) -> None:
+def test_exception_during_retention_at_remove(tmp: TempDir, cap: StdCapture, delay: bool) -> None:
     i = logger.add(
         tmp.path / "test.log",
         format="{message}",
@@ -427,9 +423,9 @@ def test_exception_during_retention_at_remove(
     helpers.common.check_dir(tmp.path, files=[("test.log", "AAA\n")])
 
     captured = cap.readouterr()
-    assert captured.out == captured.err == "", (
-        "the error reaches the caller through remove(), so nothing may be printed as well"
-    )
+    assert (
+        captured.out == captured.err == ""
+    ), "the error reaches the caller through remove(), so nothing may be printed as well"
 
 
 @oxitest.parametrize(
@@ -461,7 +457,5 @@ def test_unparsable_retention(retention: str) -> None:
     misspelled_unit=RetentionCase(retention="3 hours 2 dayz"),
 )
 def test_invalid_value_retention_duration(retention: str) -> None:
-    with oxitest.raises(
-        ValueError, match=r"^Invalid unit value while parsing duration: '[^']+'$"
-    ):
+    with oxitest.raises(ValueError, match=r"^Invalid unit value while parsing duration: '[^']+'$"):
         logger.add("test.log", retention=retention)

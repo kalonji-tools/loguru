@@ -2,9 +2,8 @@ from dataclasses import dataclass
 from typing import Any
 
 import oxitest
-from oxitest import Fixture, helpers
-
 from conftest import Writer
+from oxitest import Fixture, helpers
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -153,9 +152,7 @@ def test_multiple_activations() -> None:
 
 
 @oxitest.parametrize(**INCOMPLETE_FRAME_CASES)
-def test_log_before_enable_incomplete_frame_context(
-    writer: Fixture[Writer], simulate: str
-) -> None:
+def test_log_before_enable_incomplete_frame_context(writer: Fixture[Writer], simulate: str) -> None:
     with getattr(helpers.common, simulate)():
         logger.add(writer, format="{message}")
         logger.disable(None)

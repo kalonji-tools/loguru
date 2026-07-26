@@ -255,12 +255,8 @@ def test_exception_others(filename: str) -> None:
     positional_only_argument=ModernOutputCase(
         filename="positional_only_argument", minimum_python_version=(3, 8)
     ),
-    walrus_operator=ModernOutputCase(
-        filename="walrus_operator", minimum_python_version=(3, 8)
-    ),
-    match_statement=ModernOutputCase(
-        filename="match_statement", minimum_python_version=(3, 10)
-    ),
+    walrus_operator=ModernOutputCase(filename="walrus_operator", minimum_python_version=(3, 8)),
+    match_statement=ModernOutputCase(filename="match_statement", minimum_python_version=(3, 10)),
     exception_group_catch=ModernOutputCase(
         filename="exception_group_catch", minimum_python_version=(3, 11)
     ),
@@ -306,8 +302,8 @@ def test_group_exception_using_backport(writer: Fixture[Writer]) -> None:
     except Exception:
         logger.exception("")
 
-    assert writer.read().strip().startswith(
-        "+ Exception Group Traceback (most recent call last):"
+    assert (
+        writer.read().strip().startswith("+ Exception Group Traceback (most recent call last):")
     ), (
         "the backported ExceptionGroup must be rendered with the same grouped layout as the "
         "built-in one, so output does not depend on the Python version"

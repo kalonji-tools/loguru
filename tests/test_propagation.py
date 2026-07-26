@@ -1,3 +1,4 @@
+import inspect
 import logging
 import sys
 from dataclasses import dataclass
@@ -30,16 +31,18 @@ def test_formatting(cap: StdCapture) -> None:
         "%(levelno)s - %(lineno)d - %(module)s - %(message)s"
     )
 
-    expected = (
-        "tests.test_propagation - test_propagation.py - test_formatting - DEBUG - "
-        "10 - 42 - test_propagation - This is my message\n"
-    )
-
     with helpers.common.make_logging_logger(
         "tests.test_propagation", StreamHandler(sys.stderr), fmt
     ):
         logger.add(PropagateHandler(), format="{message}")
+        # Read from the call site itself so reformatting this file cannot break the test.
+        lineno = inspect.currentframe().f_lineno + 1
         logger.debug("This {verb} my {}", "message", verb="is")
+
+    expected = (
+        "tests.test_propagation - test_propagation.py - test_formatting - DEBUG - "
+        "10 - %d - test_propagation - This is my message\n" % lineno
+    )
 
     captured = cap.readouterr()
     assert captured.out == "", "propagation targets stderr only, so stdout must stay empty"
@@ -50,9 +53,7 @@ def test_formatting(cap: StdCapture) -> None:
 
 
 def test_propagate(cap: StdCapture) -> None:
-    with helpers.common.make_logging_logger(
-        "tests", StreamHandler(sys.stderr)
-    ) as logging_logger:
+    with helpers.common.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
         logging_logger.debug("1")
         logger.debug("2")
 
@@ -70,9 +71,7 @@ def test_propagate(cap: StdCapture) -> None:
 
 
 def test_remove_propagation(cap: StdCapture) -> None:
-    with helpers.common.make_logging_logger(
-        "tests", StreamHandler(sys.stderr)
-    ) as logging_logger:
+    with helpers.common.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
         i = logger.add(PropagateHandler(), format="{message}")
 
         logger.debug("1")

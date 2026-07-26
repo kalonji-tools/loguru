@@ -119,7 +119,10 @@ class FreezeTime:
 
     def __init__(self) -> None:
         self._ctimes: dict = {}
+        # Captured once, before any patching: nested "with freeze_time(...)" blocks must all
+        # delegate to the genuine originals rather than to an already-installed fake.
         self._builtins_open = builtins.open
+        self._freezegun_localtime = freezegun.api.fake_localtime
         self._fakes: dict = {
             "zone": "UTC",
             "offset": 0,
@@ -201,9 +204,6 @@ class FreezeTime:
         tzinfo = datetime.timezone(tz_offset, zone)
         date = date.replace(tzinfo=tzinfo)
 
-        self._builtins_open = builtins.open
-        self._freezegun_localtime = freezegun.api.fake_localtime
-
         with patch_context() as context:
             context.setitem(self._fakes, "zone", zone)
             context.setitem(self._fakes, "offset", offset)
@@ -244,9 +244,9 @@ def check_dir(dir: Any, *, files: Any = None, size: Any = None) -> None:
                 "the sink must have created this file, otherwise its naming or rotation "
                 "scheme resolved to an unexpected path"
             )
-            assert filepath not in seen, (
-                "the same file is expected twice, so the expectation itself is malformed"
-            )
+            assert (
+                filepath not in seen
+            ), "the same file is expected twice, so the expectation itself is malformed"
             if content is not None:
                 assert filepath.read_text() == content, (
                     "the file must hold exactly these messages, otherwise records were lost, "

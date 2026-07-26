@@ -162,9 +162,9 @@ def test_reset_previous_handlers(writer: Fixture[Writer]) -> None:
 
     logger.debug("Test")
 
-    assert writer.read() == "", (
-        "passing handlers replaces the existing ones, so an empty list must remove them all"
-    )
+    assert (
+        writer.read() == ""
+    ), "passing handlers replaces the existing ones, so an empty list must remove them all"
 
 
 def test_reset_previous_extra(writer: Fixture[Writer]) -> None:

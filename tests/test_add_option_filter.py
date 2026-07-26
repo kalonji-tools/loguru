@@ -31,7 +31,8 @@ def _incomplete_frame_cases(**filters: Any) -> dict:
         "no_frame": "simulate_no_frame_available",
     }
     return {
-        "%s-%s" % (filter_name, simulation_name): IncompleteFrameFilterCase(
+        "%s-%s"
+        % (filter_name, simulation_name): IncompleteFrameFilterCase(
             filter=filter_value, simulate=helper_name
         )
         for filter_name, filter_value in filters.items()
@@ -51,12 +52,8 @@ def _incomplete_frame_cases(**filters: Any) -> dict:
     package_enabled=FilterCase(filter={"tests": True}),
     module_level_number=FilterCase(filter={"tests.test_add_option_filter": 10}),
     package_overrides_root=FilterCase(filter={"": "WARNING", "tests": 0}),
-    module_overrides_package=FilterCase(
-        filter={"tests.test_add_option_filter": 5, "tests": False}
-    ),
-    unrelated_submodule_disabled=FilterCase(
-        filter={"tests.test_add_option_filter.foobar": False}
-    ),
+    module_overrides_package=FilterCase(filter={"tests.test_add_option_filter": 5, "tests": False}),
+    unrelated_submodule_disabled=FilterCase(filter={"tests.test_add_option_filter.foobar": False}),
     package_with_trailing_dot=FilterCase(filter={"tests.": False}),
     module_with_trailing_dot=FilterCase(filter={"tests.test_add_option_filter.": False}),
 )
@@ -81,9 +78,7 @@ def test_filtered_in(filter: Any, writer: Fixture[Writer]) -> None:
     package_level_too_high=FilterCase(filter={"": True, "tests": 50}),
     module_disabled=FilterCase(filter={"tests.test_add_option_filter": False}),
     package_level_name_too_high=FilterCase(filter={"tests": "WARNING"}),
-    module_overrides_package=FilterCase(
-        filter={"tests": 5, "tests.test_add_option_filter": 40}
-    ),
+    module_overrides_package=FilterCase(filter={"tests": 5, "tests.test_add_option_filter": 40}),
     unrelated_submodule_enabled=FilterCase(
         filter={"": 100, "tests.test_add_option_filter.foobar": True}
     ),
@@ -178,9 +173,7 @@ def test_invalid_filter_dict_module_types(writer: Fixture[Writer], filter: Any) 
     unknown_name=FilterCase(filter={"foo": "UNKNOWN_LEVEL"}),
     empty_name=FilterCase(filter={"tests.test_add_option_filter": ""}),
 )
-def test_invalid_filter_dict_values_unknown_level(
-    writer: Fixture[Writer], filter: Any
-) -> None:
+def test_invalid_filter_dict_values_unknown_level(writer: Fixture[Writer], filter: Any) -> None:
     with oxitest.raises(
         ValueError,
         match=(

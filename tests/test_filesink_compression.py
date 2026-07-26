@@ -75,9 +75,7 @@ def test_compression_function(tmp: TempDir) -> None:
 
 
 @oxitest.parametrize(**MODE_CASES)
-def test_compression_at_rotation(
-    tmp: TempDir, mode: str, freeze_time: Fixture[FreezeTime]
-) -> None:
+def test_compression_at_rotation(tmp: TempDir, mode: str, freeze_time: Fixture[FreezeTime]) -> None:
     with freeze_time("2010-10-09 11:30:59"):
         logger.add(
             tmp.path / "file.log", format="{message}", rotation=0, compression="gz", mode=mode
@@ -111,9 +109,7 @@ def test_no_compression_at_remove_with_rotation(tmp: TempDir, mode: str) -> None
     helpers.common.check_dir(tmp.path, files=[("test.log", None)])
 
 
-def test_rename_existing_with_creation_time(
-    tmp: TempDir, freeze_time: Fixture[FreezeTime]
-) -> None:
+def test_rename_existing_with_creation_time(tmp: TempDir, freeze_time: Fixture[FreezeTime]) -> None:
     with freeze_time("2018-01-01") as frozen:
         i = logger.add(tmp.path / "test.log", compression="tar.gz")
         logger.debug("test")
@@ -129,9 +125,7 @@ def test_rename_existing_with_creation_time(
     )
 
 
-def test_renaming_compression_dest_exists(
-    freeze_time: Fixture[FreezeTime], tmp: TempDir
-) -> None:
+def test_renaming_compression_dest_exists(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
     with freeze_time("2019-01-02 03:04:05.000006"):
         for i in range(4):
             logger.add(tmp.path / "rotate.log", compression=".tar.gz", format="{message}")
@@ -264,8 +258,7 @@ def test_exception_during_compression_at_rotation(
         "rotation from succeeding"
     )
     assert captured.err.count("Exception: Compression error") == 1, (
-        "the report must name the original error so the user knows why the archive is "
-        "missing"
+        "the report must name the original error so the user knows why the archive is " "missing"
     )
 
 
@@ -305,9 +298,7 @@ def test_exception_during_compression_at_rotation_not_caught(
 
 
 @oxitest.parametrize(**DELAY_CASES)
-def test_exception_during_compression_at_remove(
-    tmp: TempDir, cap: StdCapture, delay: bool
-) -> None:
+def test_exception_during_compression_at_remove(tmp: TempDir, cap: StdCapture, delay: bool) -> None:
     i = logger.add(
         tmp.path / "test.log",
         format="{message}",
