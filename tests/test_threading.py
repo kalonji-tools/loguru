@@ -2,7 +2,15 @@ import itertools
 import time
 from threading import Barrier, Thread
 
+from conftest import Writer
+from oxitest import Fixture, StdCapture
+
 from loguru import logger
+
+NO_OUTPUT_EXPECTED = (
+    "nothing may reach the standard streams: with catch=False any concurrency error would "
+    "surface there as a traceback"
+)
 
 
 class NonSafeSink:
@@ -26,7 +34,7 @@ class NonSafeSink:
         self.stopped = True
 
 
-def test_safe_logging():
+def test_safe_logging() -> None:
     barrier = Barrier(2)
     counter = itertools.count()
 
@@ -47,10 +55,13 @@ def test_safe_logging():
 
     logger.remove()
 
-    assert sink.written in ("___0___\n___1___\n", "___1___\n___0___\n")
+    assert sink.written in ("___0___\n___1___\n", "___1___\n___0___\n"), (
+        "the sink sleeps mid-write, so without a handler lock the two messages would "
+        "interleave into a corrupted line; only the order between them may vary"
+    )
 
 
-def test_safe_adding_while_logging(writer):
+def test_safe_adding_while_logging(writer: Fixture[Writer]) -> None:
     barrier = Barrier(2)
     counter = itertools.count()
 
@@ -78,11 +89,16 @@ def test_safe_adding_while_logging(writer):
 
     logger.remove()
 
-    assert sink_1.written == "aaa0bbb\nccc1ddd\n"
-    assert sink_2.written == "ccc1ddd\n"
+    assert sink_1.written == "aaa0bbb\nccc1ddd\n", (
+        "adding a sink while another thread is mid-write must not disturb the existing "
+        "sink, which has to receive both messages intact"
+    )
+    assert sink_2.written == "ccc1ddd\n", (
+        "a sink added later must receive only what is logged after it was added"
+    )
 
 
-def test_safe_removing_while_logging(capsys):
+def test_safe_removing_while_logging(cap: StdCapture) -> None:
     barrier = Barrier(2)
     counter = itertools.count()
 
@@ -107,13 +123,16 @@ def test_safe_removing_while_logging(capsys):
     for thread in threads:
         thread.join()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == ""
-    assert sink.written == "aaa0bbb\n"
+    captured = cap.readouterr()
+    assert captured.out == "", NO_OUTPUT_EXPECTED
+    assert captured.err == "", NO_OUTPUT_EXPECTED
+    assert sink.written == "aaa0bbb\n", (
+        "remove() must wait for the in-flight write to finish and then stop delivery, so the "
+        "first message is complete and the second never arrives"
+    )
 
 
-def test_safe_removing_all_while_logging(capsys):
+def test_safe_removing_all_while_logging(cap: StdCapture) -> None:
     barrier = Barrier(2)
 
     for _ in range(1000):
@@ -136,12 +155,12 @@ def test_safe_removing_all_while_logging(capsys):
     for thread in threads:
         thread.join()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "", NO_OUTPUT_EXPECTED
+    assert captured.err == "", NO_OUTPUT_EXPECTED
 
 
-def test_safe_slow_removing_all_while_logging(capsys):
+def test_safe_slow_removing_all_while_logging(cap: StdCapture) -> None:
     barrier = Barrier(2)
 
     for _ in range(10):
@@ -165,12 +184,12 @@ def test_safe_slow_removing_all_while_logging(capsys):
     for thread in threads:
         thread.join()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "", NO_OUTPUT_EXPECTED
+    assert captured.err == "", NO_OUTPUT_EXPECTED
 
 
-def test_safe_writing_after_removing(capsys):
+def test_safe_writing_after_removing(cap: StdCapture) -> None:
     barrier = Barrier(2)
 
     logger.add(NonSafeSink(1), format="{message}", catch=False)
@@ -195,12 +214,12 @@ def test_safe_writing_after_removing(capsys):
 
     logger.remove()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "", NO_OUTPUT_EXPECTED
+    assert captured.err == "", NO_OUTPUT_EXPECTED
 
 
-def test_heavily_threaded_logging(capsys):
+def test_heavily_threaded_logging(cap: StdCapture) -> None:
     logger.remove()
 
     def function():
@@ -220,6 +239,6 @@ def test_heavily_threaded_logging(capsys):
 
     logger.remove()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "", NO_OUTPUT_EXPECTED
+    assert captured.err == "", NO_OUTPUT_EXPECTED

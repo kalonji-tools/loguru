@@ -1,572 +1,146 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_autoclose[interleaved_with_text]": {
-      "duration_ms": 0.344042,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string": {
+      "duration_ms": 22.303676000000003,
       "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_autoclose[nested]": {
-      "duration_ms": 0.36828,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_autoclose[single]": {
-      "duration_ms": 0.457665,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_background_colors[light_green]": {
-      "duration_ms": 0.38520699999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_background_colors[light_green_short]": {
-      "duration_ms": 0.417162,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_background_colors[red]": {
-      "duration_ms": 0.46516599999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_background_colors[red_short]": {
-      "duration_ms": 0.616996,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[backslashes_before_letters]": {
-      "duration_ms": 0.422213,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_autoclose]": {
-      "duration_ms": 0.357267,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_backslash]": {
-      "duration_ms": 0.31723599999999996,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_backslash_then_tag]": {
-      "duration_ms": 0.344664,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_closing_inside]": {
-      "duration_ms": 0.331427,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_empty_pair]": {
-      "duration_ms": 0.38792699999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_opening_inside]": {
-      "duration_ms": 0.430332,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[escaped_tags]": {
-      "duration_ms": 0.456231,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_escaping[two_escaped_backslashes]": {
-      "duration_ms": 0.348714,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_foreground_colors[light_white]": {
-      "duration_ms": 0.441259,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_foreground_colors[light_white_short]": {
-      "duration_ms": 0.30508199999999996,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_foreground_colors[yellow]": {
-      "duration_ms": 0.411221,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_foreground_colors[yellow_short]": {
-      "duration_ms": 0.336806,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_0]": {
-      "duration_ms": 0.353742,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_10]": {
-      "duration_ms": 0.40535,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_11]": {
-      "duration_ms": 0.322867,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_1]": {
-      "duration_ms": 0.312485,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_2]": {
-      "duration_ms": 0.29714599999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_3]": {
-      "duration_ms": 0.354637,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_4]": {
-      "duration_ms": 0.348659,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_5]": {
-      "duration_ms": 0.33306399999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_6]": {
-      "duration_ms": 0.86054,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_7]": {
-      "duration_ms": 0.428617,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_8]": {
-      "duration_ms": 0.33524,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[colorized-case_9]": {
-      "duration_ms": 0.353847,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_0]": {
-      "duration_ms": 0.6271169999999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_10]": {
-      "duration_ms": 0.388065,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_11]": {
-      "duration_ms": 0.312324,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_1]": {
-      "duration_ms": 0.40642100000000003,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_2]": {
-      "duration_ms": 0.35183000000000003,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_3]": {
-      "duration_ms": 0.333973,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_4]": {
-      "duration_ms": 0.413548,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_5]": {
-      "duration_ms": 0.341548,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_6]": {
-      "duration_ms": 0.310149,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_7]": {
-      "duration_ms": 0.464276,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_8]": {
-      "duration_ms": 0.345137,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_invalid_color[stripped-case_9]": {
-      "duration_ms": 0.363443,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_0]": {
-      "duration_ms": 0.3031,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_1]": {
-      "duration_ms": 0.39522500000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_2]": {
-      "duration_ms": 0.348748,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_3]": {
-      "duration_ms": 0.325389,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_4]": {
-      "duration_ms": 0.390347,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_5]": {
-      "duration_ms": 0.331957,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_6]": {
-      "duration_ms": 0.391569,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[colorized-case_7]": {
-      "duration_ms": 0.358694,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_0]": {
-      "duration_ms": 0.596223,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_1]": {
-      "duration_ms": 0.406937,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_2]": {
-      "duration_ms": 0.329233,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_3]": {
-      "duration_ms": 0.427311,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_4]": {
-      "duration_ms": 0.358035,
-      "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_5]": {
-      "duration_ms": 0.30237800000000004,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_in_catch_message": {
+      "duration_ms": 0.371715,
       "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_6]": {
-      "duration_ms": 0.46458099999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_mismatched_error[stripped-case_7]": {
-      "duration_ms": 0.33760399999999996,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_nested[nested_once]": {
-      "duration_ms": 0.36127400000000004,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_nested[nested_twice]": {
-      "duration_ms": 0.410338,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_nested[separated_by_text]": {
-      "duration_ms": 0.369031,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_nested[sequential]": {
-      "duration_ms": 0.46405399999999997,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_permissive_parsing[unclosed]": {
-      "duration_ms": 0.407333,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_permissive_parsing[unclosed_duplicate]": {
-      "duration_ms": 0.342101,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_permissive_parsing[unclosed_outer]": {
-      "duration_ms": 0.432571,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strict_parsing[unclosed]": {
-      "duration_ms": 0.5463720000000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strict_parsing[unclosed_duplicate]": {
-      "duration_ms": 0.340453,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strict_parsing[unclosed_outer]": {
-      "duration_ms": 0.42214900000000005,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strip[autoclose]": {
-      "duration_ms": 0.441086,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strip[background]": {
-      "duration_ms": 0.37919400000000003,
-      "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strip[foreground]": {
-      "duration_ms": 0.416795,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_is_lazy": {
+      "duration_ms": 0.537925,
       "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strip[several_tags]": {
-      "duration_ms": 0.319101,
-      "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_strip[style]": {
-      "duration_ms": 0.329591,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_nested": {
+      "duration_ms": 0.483901,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[bold]": {
-      "duration_ms": 22.098717,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_colors": {
+      "duration_ms": 0.5823010000000001,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[bold_short]": {
-      "duration_ms": 0.559912,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_colors_and_args": {
+      "duration_ms": 1.645395,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[dim]": {
-      "duration_ms": 0.712286,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_conversion_spec": {
+      "duration_ms": 0.414908,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[dim_short]": {
-      "duration_ms": 0.399903,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_format_spec": {
+      "duration_ms": 0.44182200000000005,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[normal]": {
-      "duration_ms": 0.482537,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_interpolated_colors": {
+      "duration_ms": 0.44967999999999997,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_styles[normal_short]": {
-      "duration_ms": 0.44870899999999997,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_raw": {
+      "duration_ms": 0.483974,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[colorized-case_0]": {
-      "duration_ms": 0.420447,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_raw_and_args": {
+      "duration_ms": 0.431041,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[colorized-case_1]": {
-      "duration_ms": 0.32274400000000003,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_raw_and_colors": {
+      "duration_ms": 0.422206,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[colorized-case_2]": {
-      "duration_ms": 0.344335,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_raw_and_colors_and_args": {
+      "duration_ms": 0.5933489999999999,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[stripped-case_0]": {
-      "duration_ms": 0.544915,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_two_consecutive_interpolations": {
+      "duration_ms": 0.378283,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[stripped-case_1]": {
-      "duration_ms": 0.46644399999999997,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_with_two_consecutive_strings": {
+      "duration_ms": 0.40723000000000004,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unbalanced_error[stripped-case_2]": {
-      "duration_ms": 0.327806,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_without_interpolation": {
+      "duration_ms": 0.421327,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[colorized-case_0]": {
-      "duration_ms": 0.34566600000000003,
+    "/home/user/loguru/tests/test_template_strings.py::test_template_string_without_string": {
+      "duration_ms": 0.45763899999999996,
       "age": 0,
-      "last_outcome": "passed",
+      "last_outcome": "skipped",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[colorized-case_1]": {
-      "duration_ms": 0.47095200000000004,
+    "/home/user/loguru/tests/test_threading.py::test_heavily_threaded_logging": {
+      "duration_ms": 3930.260907,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[colorized-case_2]": {
-      "duration_ms": 0.353411,
+    "/home/user/loguru/tests/test_threading.py::test_safe_adding_while_logging": {
+      "duration_ms": 3009.978744,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[colorized-case_3]": {
-      "duration_ms": 0.40539200000000003,
+    "/home/user/loguru/tests/test_threading.py::test_safe_logging": {
+      "duration_ms": 2008.239433,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[stripped-case_0]": {
-      "duration_ms": 0.474541,
+    "/home/user/loguru/tests/test_threading.py::test_safe_removing_all_while_logging": {
+      "duration_ms": 5744.1823540000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[stripped-case_1]": {
-      "duration_ms": 0.36299,
+    "/home/user/loguru/tests/test_threading.py::test_safe_removing_while_logging": {
+      "duration_ms": 1009.083596,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[stripped-case_2]": {
-      "duration_ms": 0.40485,
+    "/home/user/loguru/tests/test_threading.py::test_safe_slow_removing_all_while_logging": {
+      "duration_ms": 1163.965198,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_ansimarkup_basic.py::test_unclosed_error[stripped-case_3]": {
-      "duration_ms": 0.368843,
+    "/home/user/loguru/tests/test_threading.py::test_safe_writing_after_removing": {
+      "duration_ms": 1013.731335,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
