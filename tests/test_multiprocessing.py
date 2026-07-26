@@ -5,22 +5,37 @@ import platform
 import sys
 import threading
 import time
+from dataclasses import dataclass
 
-import pytest
+import oxitest
+from oxitest import StdCapture, TempDir
 
 from loguru import logger
+from tests._naming import pin_module_name
+from tests._utils import new_event_loop_context
 
-from .conftest import new_event_loop_context
+# "spawn" re-imports this module in the child to unpickle the worker functions below, so
+# the module has to be reachable under an importable name.
+pin_module_name(globals(), "tests.test_multiprocessing")
+
+WINDOWS_HAS_NO_FORK = "Windows does not support forking"
 
 
-@pytest.fixture
-def fork_context():
-    return multiprocessing.get_context("fork")
+@dataclass
+class DeadlockCase:
+    enqueue: bool
+    deepcopied: bool
 
 
-@pytest.fixture
-def spawn_context():
-    return multiprocessing.get_context("spawn")
+@dataclass(frozen=True)
+class EnqueueCase:
+    enqueue: bool
+
+
+ENQUEUE_CASES = {
+    "enqueued": EnqueueCase(enqueue=True),
+    "direct": EnqueueCase(enqueue=False),
+}
 
 
 def do_something(i):
@@ -95,7 +110,19 @@ class Writer:
         return self._output
 
 
-def test_apply_spawn(spawn_context):
+CHILD_MUST_REACH_PARENT_SINK = (
+    "records logged in the child must travel over the queue to the parent's sink, in order, "
+    "otherwise logs from worker processes are lost or interleaved"
+)
+
+CHILD_MUST_EXIT_CLEANLY = (
+    "the child must exit cleanly; a non-zero code means it raised before reaching the "
+    "assertions below"
+)
+
+
+def test_apply_spawn() -> None:
+    spawn_context = multiprocessing.get_context("spawn")
     writer = Writer()
 
     logger.add(writer, context=spawn_context, format="{message}", enqueue=True, catch=False)
@@ -109,11 +136,12 @@ def test_apply_spawn(spawn_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_apply_fork(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_apply_fork() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -127,11 +155,12 @@ def test_apply_fork(fork_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_apply_inheritance(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_apply_inheritance() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -145,10 +174,14 @@ def test_apply_inheritance(fork_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", (
+        "a forked child inherits the configured logger, so it must reach the parent's sink "
+        "without the logger being passed explicitly"
+    )
 
 
-def test_apply_async_spawn(spawn_context):
+def test_apply_async_spawn() -> None:
+    spawn_context = multiprocessing.get_context("spawn")
     writer = Writer()
 
     logger.add(writer, context=spawn_context, format="{message}", enqueue=True, catch=False)
@@ -163,11 +196,12 @@ def test_apply_async_spawn(spawn_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_apply_async_fork(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_apply_async_fork() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -182,11 +216,12 @@ def test_apply_async_fork(fork_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_apply_async_inheritance(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_apply_async_inheritance() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -201,10 +236,14 @@ def test_apply_async_inheritance(fork_context):
     logger.info("Done!")
     logger.remove()
 
-    assert writer.read() == "#0\n#1\n#2\nDone!\n"
+    assert writer.read() == "#0\n#1\n#2\nDone!\n", (
+        "a forked child inherits the configured logger, so it must reach the parent's sink "
+        "without the logger being passed explicitly"
+    )
 
 
-def test_process_spawn(spawn_context):
+def test_process_spawn() -> None:
+    spawn_context = multiprocessing.get_context("spawn")
     writer = Writer()
 
     logger.add(writer, context=spawn_context, format="{message}", enqueue=True, catch=False)
@@ -213,16 +252,17 @@ def test_process_spawn(spawn_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_process_fork(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_process_fork() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -231,16 +271,17 @@ def test_process_fork(fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", CHILD_MUST_REACH_PARENT_SINK
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_process_inheritance(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_process_inheritance() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -249,15 +290,19 @@ def test_process_inheritance(fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "a forked child inherits the configured logger, so it must reach the parent's sink "
+        "without the logger being passed explicitly"
+    )
 
 
-def test_remove_in_child_process_spawn(spawn_context):
+def test_remove_in_child_process_spawn() -> None:
+    spawn_context = multiprocessing.get_context("spawn")
     writer = Writer()
 
     logger.add(writer, context=spawn_context, format="{message}", enqueue=True, catch=False)
@@ -266,16 +311,20 @@ def test_remove_in_child_process_spawn(spawn_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the child must detach only the child's view of the sink, leaving the "
+        "parent free to keep logging"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_remove_in_child_process_fork(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_remove_in_child_process_fork() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -284,16 +333,20 @@ def test_remove_in_child_process_fork(fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the child must detach only the child's view of the sink, leaving the "
+        "parent free to keep logging"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_remove_in_child_process_inheritance(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_remove_in_child_process_inheritance() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
 
     logger.add(writer, context=fork_context, format="{message}", enqueue=True, catch=False)
@@ -302,18 +355,22 @@ def test_remove_in_child_process_inheritance(fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the child must detach only the child's view of the sink, leaving the "
+        "parent free to keep logging"
+    )
 
 
-def test_remove_in_main_process_spawn(spawn_context):
+def test_remove_in_main_process_spawn() -> None:
     # Actually, this test may fail if sleep time in main process is too small (and no barrier used)
     # In such situation, it seems the child process has not enough time to initialize itself
     # It may fail with an "EOFError" during unpickling of the (garbage collected / closed) Queue
+    spawn_context = multiprocessing.get_context("spawn")
     writer = Writer()
     barrier = spawn_context.Barrier(2)
 
@@ -326,13 +383,17 @@ def test_remove_in_main_process_spawn(spawn_context):
     logger.remove()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the parent must stop accepting records from the child, and must do so "
+        "without the child's later logging call raising"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_remove_in_main_process_fork(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_remove_in_main_process_fork() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
     barrier = fork_context.Barrier(2)
 
@@ -345,13 +406,17 @@ def test_remove_in_main_process_fork(fork_context):
     logger.remove()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the parent must stop accepting records from the child, and must do so "
+        "without the child's later logging call raising"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_remove_in_main_process_inheritance(fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_remove_in_main_process_inheritance() -> None:
+    fork_context = multiprocessing.get_context("fork")
     writer = Writer()
     barrier = fork_context.Barrier(2)
 
@@ -364,12 +429,17 @@ def test_remove_in_main_process_inheritance(fork_context):
     logger.remove()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
-    assert writer.read() == "Child\nMain\n"
+    assert writer.read() == "Child\nMain\n", (
+        "remove() in the parent must stop accepting records from the child, and must do so "
+        "without the child's later logging call raising"
+    )
 
 
-def test_await_complete_spawn(capsys, spawn_context):
+def test_await_complete_spawn(cap: StdCapture) -> None:
+    spawn_context = multiprocessing.get_context("spawn")
+
     async def writer(msg):
         print(msg, end="")
 
@@ -382,20 +452,25 @@ def test_await_complete_spawn(capsys, spawn_context):
         process.start()
         process.join()
 
-        assert process.exitcode == 0
+        assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
         async def local():
             await logger.complete()
 
         loop.run_until_complete(local())
 
-    out, err = capsys.readouterr()
-    assert out == "Child\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "Child\n", (
+        "complete() in the child must not block on the parent's loop; the record still has "
+        "to reach the async sink once the parent awaits complete()"
+    )
+    assert captured.err == "", "the sink writes to stdout, so stderr must stay empty"
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_await_complete_fork(capsys, fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_await_complete_fork(cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
+
     async def writer(msg):
         print(msg, end="")
 
@@ -408,20 +483,25 @@ def test_await_complete_fork(capsys, fork_context):
         process.start()
         process.join()
 
-        assert process.exitcode == 0
+        assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
         async def local():
             await logger.complete()
 
         loop.run_until_complete(local())
 
-    out, err = capsys.readouterr()
-    assert out == "Child\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "Child\n", (
+        "complete() in the child must not block on the parent's loop; the record still has "
+        "to reach the async sink once the parent awaits complete()"
+    )
+    assert captured.err == "", "the sink writes to stdout, so stderr must stay empty"
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_await_complete_inheritance(capsys, fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_await_complete_inheritance(cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
+
     async def writer(msg):
         print(msg, end="")
 
@@ -434,20 +514,24 @@ def test_await_complete_inheritance(capsys, fork_context):
         process.start()
         process.join()
 
-        assert process.exitcode == 0
+        assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
         async def local():
             await logger.complete()
 
         loop.run_until_complete(local())
 
-    out, err = capsys.readouterr()
-    assert out == "Child\n"
-    assert err == ""
+    captured = cap.readouterr()
+    assert captured.out == "Child\n", (
+        "complete() in the child must not block on the parent's loop; the record still has "
+        "to reach the async sink once the parent awaits complete()"
+    )
+    assert captured.err == "", "the sink writes to stdout, so stderr must stay empty"
 
 
-def test_not_picklable_sinks_spawn(spawn_context, tmp_path, capsys):
-    filepath = tmp_path / "test.log"
+def test_not_picklable_sinks_spawn(tmp: TempDir, cap: StdCapture) -> None:
+    spawn_context = multiprocessing.get_context("spawn")
+    filepath = tmp.path / "test.log"
     stream = sys.stderr
     output = []
 
@@ -459,22 +543,27 @@ def test_not_picklable_sinks_spawn(spawn_context, tmp_path, capsys):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    out, err = capsys.readouterr()
+    captured = cap.readouterr()
 
-    assert filepath.read_text() == "Child\nMain\n"
-    assert out == ""
-    assert err == "Child\nMain\n"
-    assert output == ["Child\n", "Main\n"]
+    why = (
+        "with enqueue the sink itself stays in the parent and only the record is pickled, so "
+        "even an unpicklable sink must keep working across processes"
+    )
+    assert filepath.read_text() == "Child\nMain\n", why
+    assert captured.out == "", "no sink targets stdout here"
+    assert captured.err == "Child\nMain\n", why
+    assert output == ["Child\n", "Main\n"], why
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_not_picklable_sinks_fork(capsys, tmp_path, fork_context):
-    filepath = tmp_path / "test.log"
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_not_picklable_sinks_fork(tmp: TempDir, cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
+    filepath = tmp.path / "test.log"
     stream = sys.stderr
     output = []
 
@@ -492,22 +581,27 @@ def test_not_picklable_sinks_fork(capsys, tmp_path, fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    out, err = capsys.readouterr()
+    captured = cap.readouterr()
 
-    assert filepath.read_text() == "Child\nMain\n"
-    assert out == ""
-    assert err == "Child\nMain\n"
-    assert output == ["Child\n", "Main\n"]
+    why = (
+        "with enqueue the sink itself stays in the parent and only the record is pickled, so "
+        "even an unpicklable sink must keep working across processes"
+    )
+    assert filepath.read_text() == "Child\nMain\n", why
+    assert captured.out == "", "no sink targets stdout here"
+    assert captured.err == "Child\nMain\n", why
+    assert output == ["Child\n", "Main\n"], why
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-def test_not_picklable_sinks_inheritance(capsys, tmp_path, fork_context):
-    filepath = tmp_path / "test.log"
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+def test_not_picklable_sinks_inheritance(tmp: TempDir, cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
+    filepath = tmp.path / "test.log"
     stream = sys.stderr
     output = []
 
@@ -525,30 +619,42 @@ def test_not_picklable_sinks_inheritance(capsys, tmp_path, fork_context):
     process.start()
     process.join()
 
-    assert process.exitcode == 0
+    assert process.exitcode == 0, CHILD_MUST_EXIT_CLEANLY
 
     logger.info("Main")
     logger.remove()
 
-    out, err = capsys.readouterr()
+    captured = cap.readouterr()
 
-    assert filepath.read_text() == "Child\nMain\n"
-    assert out == ""
-    assert err == "Child\nMain\n"
-    assert output == ["Child\n", "Main\n"]
+    why = (
+        "with enqueue the sink itself stays in the parent and only the record is pickled, so "
+        "even an unpicklable sink must keep working across processes"
+    )
+    assert filepath.read_text() == "Child\nMain\n", why
+    assert captured.out == "", "no sink targets stdout here"
+    assert captured.err == "Child\nMain\n", why
+    assert output == ["Child\n", "Main\n"], why
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-@pytest.mark.skipif(sys.version_info < (3, 7), reason="No 'os.register_at_fork()' function")
-@pytest.mark.parametrize("enqueue", [True, False])
-@pytest.mark.parametrize("deepcopied", [True, False])
-def test_no_deadlock_if_internal_lock_in_use(tmp_path, enqueue, deepcopied, fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+@oxitest.parametrize(
+    enqueued=oxitest.partial(DeadlockCase, enqueue=True),
+    direct=oxitest.partial(DeadlockCase, enqueue=False),
+)
+@oxitest.parametrize(
+    deepcopied=oxitest.partial(DeadlockCase, deepcopied=True),
+    original=oxitest.partial(DeadlockCase, deepcopied=False),
+)
+def test_no_deadlock_if_internal_lock_in_use(
+    tmp: TempDir, enqueue: bool, deepcopied: bool
+) -> None:
+    fork_context = multiprocessing.get_context("fork")
     if deepcopied:
         logger_ = copy.deepcopy(logger)
     else:
         logger_ = logger
 
-    output = tmp_path / "stdout.txt"
+    output = tmp.path / "stdout.txt"
 
     with output.open("w") as stdout:
 
@@ -576,18 +682,23 @@ def test_no_deadlock_if_internal_lock_in_use(tmp_path, enqueue, deepcopied, fork
         thread.join()
         process.join(2)
 
-        assert process.exitcode == 0
+        assert process.exitcode == 0, (
+            "forking while another thread holds the handler lock must not leave the child "
+            "with a lock nobody will ever release — a non-zero exit code here means deadlock"
+        )
 
         logger_.remove()
 
-    assert output.read_text() in ("Main\nChild\n", "Child\nMain\n")
+    assert output.read_text() in ("Main\nChild\n", "Child\nMain\n"), (
+        "both messages must be written; only their order may vary"
+    )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason="No 'os.register_at_fork()' function")
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-@pytest.mark.parametrize("enqueue", [True, False])
-def test_no_deadlock_if_external_lock_in_use(enqueue, capsys, fork_context):
-    # Can't reproduce the bug on pytest (even if stderr is not wrapped), but let it anyway
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+@oxitest.parametrize(**ENQUEUE_CASES)
+def test_no_deadlock_if_external_lock_in_use(enqueue: bool, cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
+    # Can't reproduce the bug on the test runner (even if stderr is not wrapped), but let it anyway
     logger.add(sys.stderr, context=fork_context, enqueue=enqueue, catch=True, format="{message}")
     num = 100
 
@@ -596,18 +707,26 @@ def test_no_deadlock_if_external_lock_in_use(enqueue, capsys, fork_context):
         process = fork_context.Process(target=lambda: None)
         process.start()
         process.join(1)
-        assert process.exitcode == 0
+        assert process.exitcode == 0, (
+            "forking right after a logging call must not inherit a held stream lock; a "
+            "non-zero exit code here means the child deadlocked"
+        )
 
     logger.remove()
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == "".join("This is a message: %d\n" % i for i in range(num))
+    captured = cap.readouterr()
+    assert captured.out == "", "the sink targets stderr, so stdout must stay empty"
+    assert captured.err == "".join("This is a message: %d\n" % i for i in range(num)), (
+        "every message must be written exactly once and in order despite the interleaved forks"
+    )
 
 
-@pytest.mark.skipif(os.name == "nt", reason="Windows does not support forking")
-@pytest.mark.skipif(platform.python_implementation() == "PyPy", reason="PyPy is too slow")
-def test_complete_from_multiple_child_processes(capsys, fork_context):
+@oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_HAS_NO_FORK)
+@oxitest.mark.skip(
+    when=platform.python_implementation() == "PyPy", reason="PyPy is too slow"
+)
+def test_complete_from_multiple_child_processes(cap: StdCapture) -> None:
+    fork_context = multiprocessing.get_context("fork")
     logger.add(lambda _: None, context=fork_context, enqueue=True, catch=False)
     num = 100
 
@@ -626,7 +745,12 @@ def test_complete_from_multiple_child_processes(capsys, fork_context):
 
     for process in processes:
         process.join(5)
-        assert process.exitcode == 0
+        assert process.exitcode == 0, (
+            "many children calling complete() at once must not contend for a shared lock; a "
+            "non-zero exit code here means one of them deadlocked or timed out"
+        )
 
-    out, err = capsys.readouterr()
-    assert out == err == ""
+    captured = cap.readouterr()
+    assert captured.out == captured.err == "", (
+        "with catch=False any failure in a child would surface on the standard streams"
+    )

@@ -1,608 +1,170 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[chained_expression_direct]": {
-      "duration_ms": 155.795376,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_async_fork": {
+      "duration_ms": 24.802291,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[chained_expression_indirect]": {
-      "duration_ms": 128.772971,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_async_inheritance": {
+      "duration_ms": 22.375580999999997,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[chaining_first]": {
-      "duration_ms": 122.10480799999999,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_async_spawn": {
+      "duration_ms": 246.813494,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[chaining_second]": {
-      "duration_ms": 126.343659,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_fork": {
+      "duration_ms": 32.052675,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[chaining_third]": {
-      "duration_ms": 126.32773,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_inheritance": {
+      "duration_ms": 24.185513,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[enqueue]": {
-      "duration_ms": 133.091021,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_apply_spawn": {
+      "duration_ms": 246.674321,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[enqueue_with_others_handlers]": {
-      "duration_ms": 149.787677,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_await_complete_fork": {
+      "duration_ms": 19.478251,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[frame_values_backward]": {
-      "duration_ms": 122.927192,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_await_complete_inheritance": {
+      "duration_ms": 19.825457,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[frame_values_forward]": {
-      "duration_ms": 117.881411,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_await_complete_spawn": {
+      "duration_ms": 214.489394,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[function]": {
-      "duration_ms": 135.93728199999998,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_complete_from_multiple_child_processes": {
+      "duration_ms": 1995.586401,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[head_recursion]": {
-      "duration_ms": 156.010836,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_external_lock_in_use[direct]": {
+      "duration_ms": 891.134655,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[missing_attributes_traceback_objects]": {
-      "duration_ms": 128.181312,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_external_lock_in_use[enqueued]": {
+      "duration_ms": 676.7125179999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[missing_lineno_frame_objects]": {
-      "duration_ms": 123.80221,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_internal_lock_in_use[direct-deepcopied]": {
+      "duration_ms": 1017.4882670000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[nested]": {
-      "duration_ms": 133.499221,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_internal_lock_in_use[direct-original]": {
+      "duration_ms": 1017.402551,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[nested_chained_catch_up]": {
-      "duration_ms": 151.660381,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_internal_lock_in_use[enqueued-deepcopied]": {
+      "duration_ms": 1015.706215,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[nested_decorator_catch_up]": {
-      "duration_ms": 136.458525,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_no_deadlock_if_internal_lock_in_use[enqueued-original]": {
+      "duration_ms": 1044.428546,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[nested_explicit_catch_up]": {
-      "duration_ms": 125.341211,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_not_picklable_sinks_fork": {
+      "duration_ms": 33.803784,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[nested_wrapping]": {
-      "duration_ms": 131.294108,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_not_picklable_sinks_inheritance": {
+      "duration_ms": 33.788421,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[no_tb]": {
-      "duration_ms": 130.36562400000003,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_not_picklable_sinks_spawn": {
+      "duration_ms": 217.301026,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[not_enough_arguments]": {
-      "duration_ms": 125.935525,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_process_fork": {
+      "duration_ms": 16.735282,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[raising_recursion]": {
-      "duration_ms": 128.524773,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_process_inheritance": {
+      "duration_ms": 21.184982,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[suppressed_expression_direct]": {
-      "duration_ms": 136.697834,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_process_spawn": {
+      "duration_ms": 214.444806,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[suppressed_expression_indirect]": {
-      "duration_ms": 139.182633,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_child_process_fork": {
+      "duration_ms": 18.81673,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[tail_recursion]": {
-      "duration_ms": 132.85518599999997,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_child_process_inheritance": {
+      "duration_ms": 16.64578,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_backtrace[too_many_arguments]": {
-      "duration_ms": 134.496707,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_child_process_spawn": {
+      "duration_ms": 220.180739,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[assertion_error]": {
-      "duration_ms": 144.921834,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_main_process_fork": {
+      "duration_ms": 516.7693730000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[assertion_error_custom]": {
-      "duration_ms": 152.439372,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_main_process_inheritance": {
+      "duration_ms": 518.434434,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[assertion_error_in_string]": {
-      "duration_ms": 133.91460999999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[attributes]": {
-      "duration_ms": 133.588394,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[chained_both]": {
-      "duration_ms": 132.182784,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[encoding]": {
-      "duration_ms": 133.343036,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[global_variable]": {
-      "duration_ms": 127.086954,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[indentation_error]": {
-      "duration_ms": 145.231354,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[keyword_argument]": {
-      "duration_ms": 127.42491799999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[multilines_repr]": {
-      "duration_ms": 126.94840199999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[no_error_message]": {
-      "duration_ms": 126.817982,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[parenthesis]": {
-      "duration_ms": 130.51126299999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[source_multilines]": {
-      "duration_ms": 136.132428,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[source_strings]": {
-      "duration_ms": 131.863863,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[syntax_error]": {
-      "duration_ms": 132.227685,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[syntax_highlighting]": {
-      "duration_ms": 153.52425,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[truncating]": {
-      "duration_ms": 124.76105799999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_diagnose[unprintable_object]": {
-      "duration_ms": 127.178171,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[decorate_async_generator]": {
-      "duration_ms": 144.621989,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[exception_formatting_async_generator]": {
-      "duration_ms": 145.660636,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[exception_group_catch]": {
-      "duration_ms": 125.450229,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[f_string]": {
-      "duration_ms": 0.726251,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_as_cause_and_context]": {
-      "duration_ms": 136.072755,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_max_depth]": {
-      "duration_ms": 190.48014799999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_max_length]": {
-      "duration_ms": 123.50988,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_nested]": {
-      "duration_ms": 129.51454900000002,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_simple]": {
-      "duration_ms": 138.130829,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[grouped_with_cause_and_context]": {
-      "duration_ms": 130.78017499999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[match_statement]": {
-      "duration_ms": 127.99244000000002,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[notes]": {
-      "duration_ms": 138.376969,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[positional_only_argument]": {
-      "duration_ms": 128.399338,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[t_string]": {
-      "duration_ms": 0.376078,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[type_hints]": {
-      "duration_ms": 124.46731299999999,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_modern[walrus_operator]": {
-      "duration_ms": 127.46280800000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[assertionerror_without_traceback]": {
-      "duration_ms": 157.556942,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[broken_but_decorated_repr]": {
-      "duration_ms": 159.211024,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[catch_as_context_manager]": {
-      "duration_ms": 123.387284,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[catch_as_decorator_with_parentheses]": {
-      "duration_ms": 123.116003,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[catch_as_decorator_without_parentheses]": {
-      "duration_ms": 135.973126,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[catch_as_function]": {
-      "duration_ms": 130.550149,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[catch_message]": {
-      "duration_ms": 128.76335699999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[exception_formatting_coroutine]": {
-      "duration_ms": 194.659198,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[exception_formatting_function]": {
-      "duration_ms": 148.301342,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[exception_formatting_generator]": {
-      "duration_ms": 160.32963,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[exception_in_property]": {
-      "duration_ms": 162.69934999999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[handler_formatting_with_context_manager]": {
-      "duration_ms": 121.363266,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[handler_formatting_with_decorator]": {
-      "duration_ms": 124.552457,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[level_name]": {
-      "duration_ms": 122.745586,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[level_number]": {
-      "duration_ms": 125.120579,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[message_formatting_with_context_manager]": {
-      "duration_ms": 127.00968900000001,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[message_formatting_with_decorator]": {
-      "duration_ms": 192.091389,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[nested_with_reraise]": {
-      "duration_ms": 227.47988,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[one_liner_recursion]": {
-      "duration_ms": 228.895135,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[recursion_error]": {
-      "duration_ms": 225.065219,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[repeated_lines]": {
-      "duration_ms": 189.085266,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[syntaxerror_without_traceback]": {
-      "duration_ms": 155.415968,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[sys_tracebacklimit]": {
-      "duration_ms": 182.65310300000002,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[sys_tracebacklimit_negative]": {
-      "duration_ms": 139.946478,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[sys_tracebacklimit_none]": {
-      "duration_ms": 148.805933,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[sys_tracebacklimit_unset]": {
-      "duration_ms": 139.307436,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_others[zerodivisionerror_without_traceback]": {
-      "duration_ms": 135.911162,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[assertion_from_lib]": {
-      "duration_ms": 154.44044000000002,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[assertion_from_local]": {
-      "duration_ms": 199.698763,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[callback]": {
-      "duration_ms": 217.342348,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[catch_decorator]": {
-      "duration_ms": 236.572592,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[catch_decorator_from_lib]": {
-      "duration_ms": 207.490703,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[decorated_callback]": {
-      "duration_ms": 150.055757,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[direct]": {
-      "duration_ms": 182.831128,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[indirect]": {
-      "duration_ms": 145.12528999999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[string_lib]": {
-      "duration_ms": 151.30743099999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[string_source]": {
-      "duration_ms": 155.634528,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_exception_ownership[syntaxerror]": {
-      "duration_ms": 164.43731,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_group_exception_using_backport": {
-      "duration_ms": 0.674898,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_invalid_format_exception_only_indented_error_message": {
-      "duration_ms": 6.752337,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_invalid_format_exception_only_no_output": {
-      "duration_ms": 6.805936,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_exceptions_formatting.py::test_invalid_grouped_exception_no_exceptions": {
-      "duration_ms": 10.882048,
+    "/home/user/loguru/tests/test_multiprocessing.py::test_remove_in_main_process_spawn": {
+      "duration_ms": 718.748292,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0

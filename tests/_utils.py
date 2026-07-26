@@ -1,15 +1,36 @@
-"""Stateless utilities that test modules need at *import* time.
+"""Stateless utilities that test modules need outside a running session.
 
 Everything here is plain module-level code rather than a ``conftest.py`` helper
-because ``@oxitest.parametrize`` case values are built while the test module is
-being imported, and the ``oxitest.helpers`` proxy only resolves once a session is
-running. Utilities that are only ever called from inside a test body live in
-``conftest.py`` instead, registered on the ``common`` helper namespace.
+because the ``oxitest.helpers`` proxy only resolves while a session is running,
+and these are needed in two places where that is not true: ``@oxitest.parametrize``
+case values, which are built as the test module is imported, and worker functions
+executed in a child process. Utilities that are only ever called from inside a test
+body live in ``conftest.py`` instead, registered on the ``common`` helper namespace.
 """
 
+import asyncio
+import contextlib
 import io
 
 import loguru
+
+
+@contextlib.contextmanager
+def new_event_loop_context():
+    loop = asyncio.new_event_loop()
+    try:
+        yield loop
+    finally:
+        loop.close()
+
+
+@contextlib.contextmanager
+def set_event_loop_context(loop):
+    asyncio.set_event_loop(loop)
+    try:
+        yield
+    finally:
+        asyncio.set_event_loop(None)
 
 
 def parse(text, *, strip=False, strict=True):

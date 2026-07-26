@@ -1,4 +1,3 @@
-import asyncio
 import builtins
 import contextlib
 import datetime
@@ -219,26 +218,6 @@ class FreezeTime:
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
-
-
-@common.helper
-@contextlib.contextmanager
-def new_event_loop_context() -> Iterator[asyncio.AbstractEventLoop]:
-    loop = asyncio.new_event_loop()
-    try:
-        yield loop
-    finally:
-        loop.close()
-
-
-@common.helper
-@contextlib.contextmanager
-def set_event_loop_context(loop: asyncio.AbstractEventLoop) -> Iterator[None]:
-    asyncio.set_event_loop(loop)
-    try:
-        yield
-    finally:
-        asyncio.set_event_loop(None)
 
 
 @common.helper
