@@ -1,26 +1,482 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_reinstall.py::test_pool_fork": {
-      "duration_ms": 21.242606000000002,
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sink_caught_keep_working[direct]": {
+      "duration_ms": 108.316767,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_reinstall.py::test_pool_spawn": {
-      "duration_ms": 189.723393,
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sink_caught_keep_working[enqueued]": {
+      "duration_ms": 109.77290400000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_reinstall.py::test_process_fork": {
-      "duration_ms": 41.024441,
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sink_message[direct]": {
+      "duration_ms": 107.265793,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_reinstall.py::test_process_spawn": {
-      "duration_ms": 205.62440800000002,
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sink_message[enqueued]": {
+      "duration_ms": 116.154352,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sink_not_caught_enqueue": {
+      "duration_ms": 110.26918400000001,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_broken_sys_stderr": {
+      "duration_ms": 6.368816,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_catch_is_false": {
+      "duration_ms": 8.27426,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_catch_is_true": {
+      "duration_ms": 7.963754999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_encoding_error": {
+      "duration_ms": 6.72216,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_no_sys_stderr": {
+      "duration_ms": 6.524816,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_catch.py::test_unprintable_record": {
+      "duration_ms": 6.912623,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filter_dict_with_custom_level": {
+      "duration_ms": 6.366295,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[callable_always_true]": {
+      "duration_ms": 6.391165,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[callable_on_level]": {
+      "duration_ms": 6.588585,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[empty_dict]": {
+      "duration_ms": 6.633445,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[empty_string]": {
+      "duration_ms": 6.6341079999999994,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[module]": {
+      "duration_ms": 6.285448,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[module_level_number]": {
+      "duration_ms": 6.261524,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[module_overrides_package]": {
+      "duration_ms": 6.191405,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[module_with_trailing_dot]": {
+      "duration_ms": 7.374794,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[none]": {
+      "duration_ms": 30.095678,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[package]": {
+      "duration_ms": 6.252930999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[package_enabled]": {
+      "duration_ms": 6.165535,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[package_overrides_root]": {
+      "duration_ms": 6.250524,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[package_with_trailing_dot]": {
+      "duration_ms": 6.304335,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[root_level_name]": {
+      "duration_ms": 6.459972,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in[unrelated_submodule_disabled]": {
+      "duration_ms": 6.406496000000001,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[callable_always_true-no_frame]": {
+      "duration_ms": 6.591427,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[callable_always_true-no_globals_name]": {
+      "duration_ms": 6.7268170000000005,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[empty_dict-no_frame]": {
+      "duration_ms": 6.314288,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[empty_dict-no_globals_name]": {
+      "duration_ms": 6.3676829999999995,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none-no_frame]": {
+      "duration_ms": 6.457944,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none-no_globals_name]": {
+      "duration_ms": 6.678532,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_enabled-no_frame]": {
+      "duration_ms": 6.178958,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_enabled-no_globals_name]": {
+      "duration_ms": 6.1546639999999995,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_level_zero-no_frame]": {
+      "duration_ms": 6.272215999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_level_zero-no_globals_name]": {
+      "duration_ms": 6.55366,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_overrides_root-no_frame]": {
+      "duration_ms": 6.511315,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[none_key_overrides_root-no_globals_name]": {
+      "duration_ms": 6.322939,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[root_disabled-no_frame]": {
+      "duration_ms": 6.300579,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[root_disabled-no_globals_name]": {
+      "duration_ms": 6.51126,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[unrelated_module-no_frame]": {
+      "duration_ms": 6.386275,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_in_incomplete_frame_context[unrelated_module-no_globals_name]": {
+      "duration_ms": 6.349881,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[callable_always_false]": {
+      "duration_ms": 6.409083000000001,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[callable_on_level]": {
+      "duration_ms": 6.547957,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[dot]": {
+      "duration_ms": 6.193669,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[extended_package]": {
+      "duration_ms": 6.212172,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[module_disabled]": {
+      "duration_ms": 6.500763,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[module_overrides_package]": {
+      "duration_ms": 6.440599,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[module_with_trailing_dot]": {
+      "duration_ms": 6.080617,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[package_level_name_too_high]": {
+      "duration_ms": 7.234718,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[package_level_too_high]": {
+      "duration_ms": 6.242143,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[package_with_trailing_dot]": {
+      "duration_ms": 6.244531,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[root_disabled]": {
+      "duration_ms": 7.956055999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[truncated_package]": {
+      "duration_ms": 7.060735,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out[unrelated_submodule_enabled]": {
+      "duration_ms": 6.570811,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[callable_always_false-no_frame]": {
+      "duration_ms": 6.026215,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[callable_always_false-no_globals_name]": {
+      "duration_ms": 6.244418,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[empty_string-no_frame]": {
+      "duration_ms": 6.473182,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[empty_string-no_globals_name]": {
+      "duration_ms": 6.2369390000000005,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_disabled-no_frame]": {
+      "duration_ms": 5.95413,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_disabled-no_globals_name]": {
+      "duration_ms": 6.1787090000000005,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_level_too_high-no_frame]": {
+      "duration_ms": 5.941092,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_level_too_high-no_globals_name]": {
+      "duration_ms": 5.982107,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_overrides_package-no_frame]": {
+      "duration_ms": 6.109285,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[none_key_overrides_package-no_globals_name]": {
+      "duration_ms": 5.918292,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[package-no_frame]": {
+      "duration_ms": 6.184997,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_filtered_out_incomplete_frame_context[package-no_globals_name]": {
+      "duration_ms": 6.180815,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter[float_value]": {
+      "duration_ms": 0.391686,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter[integer]": {
+      "duration_ms": 0.639549,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter[object_instance]": {
+      "duration_ms": 0.377826,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_builtin": {
+      "duration_ms": 0.811602,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_level_types[float_level]": {
+      "duration_ms": 0.521986,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_level_types[none_level]": {
+      "duration_ms": 0.507835,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_level_types[object_level]": {
+      "duration_ms": 0.37699499999999997,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_module_types[integer_key]": {
+      "duration_ms": 0.5278149999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_module_types[object_key]": {
+      "duration_ms": 0.383288,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_values_unknown_level[empty_name]": {
+      "duration_ms": 0.374298,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_values_unknown_level[unknown_name]": {
+      "duration_ms": 0.729352,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_add_option_filter.py::test_invalid_filter_dict_values_wrong_integer_value": {
+      "duration_ms": 0.784684,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0

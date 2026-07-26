@@ -1,10 +1,13 @@
+import contextlib
 import gc
 import pickle
 import sys
 import threading
 import time
+from typing import Iterator
 
-import pytest
+import oxitest
+from oxitest import StdCapture
 
 from loguru import logger
 
@@ -28,8 +31,8 @@ class CyclicReference:
         logger.info("tearing down")
 
 
-@pytest.fixture
-def _remove_cyclic_references():
+@contextlib.contextmanager
+def removed_cyclic_references() -> Iterator[None]:
     """Prevent cyclic isolate finalizers bleeding into other tests."""
     try:
         yield
@@ -37,38 +40,41 @@ def _remove_cyclic_references():
         gc.collect()
 
 
-@pytest.mark.usefixtures("_remove_cyclic_references")
-def test_no_deadlock_on_generational_garbage_collection():
+def test_no_deadlock_on_generational_garbage_collection() -> None:
     """Regression test for https://github.com/Delgan/loguru/issues/712.
 
     Assert that deadlocks do not occur when a cyclic isolate containing log output in
     finalizers is collected by generational GC, during the output of another log message.
     """
-    # GIVEN a sink which assigns some memory
-    output = []
+    with removed_cyclic_references():
+        # GIVEN a sink which assigns some memory
+        output = []
 
-    def sink(message):
-        # The generational GC could be triggered here by any memory assignment, but we
-        # trigger it explicitly to avoid a flaky test.
-        # See https://github.com/Delgan/loguru/issues/712
-        gc.collect()
+        def sink(message):
+            # The generational GC could be triggered here by any memory assignment, but we
+            # trigger it explicitly to avoid a flaky test.
+            # See https://github.com/Delgan/loguru/issues/712
+            gc.collect()
 
-        # Actually write the message somewhere
-        output.append(message)
+            # Actually write the message somewhere
+            output.append(message)
 
-    logger.add(sink, colorize=False)
+        logger.add(sink, colorize=False)
 
-    # WHEN there are cyclic isolates in memory which log on GC
-    # AND logs are produced long enough to trigger generational GC
-    for _ in range(10):
-        CyclicReference()
-        logger.info("test")
+        # WHEN there are cyclic isolates in memory which log on GC
+        # AND logs are produced long enough to trigger generational GC
+        for _ in range(10):
+            CyclicReference()
+            logger.info("test")
 
     # THEN deadlock should not be reached
-    assert True
+    assert len(output) >= 10, (
+        "reaching this line at all is the real assertion — a re-entrant lock would have "
+        "deadlocked above — and every emitted message must have made it to the sink"
+    )
 
 
-def test_no_deadlock_if_logger_used_inside_sink_with_catch(capsys):
+def test_no_deadlock_if_logger_used_inside_sink_with_catch(cap: StdCapture) -> None:
     def sink(message):
         logger.info(message)
 
@@ -76,22 +82,25 @@ def test_no_deadlock_if_logger_used_inside_sink_with_catch(capsys):
 
     logger.info("Test")
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert "deadlock avoided" in err
+    captured = cap.readouterr()
+    assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
+    assert "deadlock avoided" in captured.err, (
+        "logging from inside a sink must be reported rather than blocking forever on the "
+        "handler lock the caller already holds"
+    )
 
 
-def test_no_deadlock_if_logger_used_inside_sink_without_catch():
+def test_no_deadlock_if_logger_used_inside_sink_without_catch() -> None:
     def sink(message):
         logger.info(message)
 
     logger.add(sink, colorize=False, catch=False)
 
-    with pytest.raises(RuntimeError, match=r".*deadlock avoided.*"):
+    with oxitest.raises(RuntimeError, match=r".*deadlock avoided.*"):
         logger.info("Test")
 
 
-def test_no_error_if_multithreading(capsys):
+def test_no_error_if_multithreading(cap: StdCapture) -> None:
     barrier = threading.Barrier(2)
 
     def sink(message):
@@ -110,9 +119,12 @@ def test_no_error_if_multithreading(capsys):
     barrier.wait()
     logger.info("Main message")
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == "Thread message\nMain message\n"
+    captured = cap.readouterr()
+    assert captured.out == "", "the sink writes to stderr, so stdout must stay empty"
+    assert captured.err == "Thread message\nMain message\n", (
+        "the handler lock must serialize concurrent writers, otherwise messages from two "
+        "threads interleave into corrupted lines"
+    )
 
 
 def _pickle_sink(message):
@@ -124,11 +136,14 @@ def _pickle_sink(message):
         new_logger.remove()
 
 
-def test_pickled_logger_does_not_inherit_acquired_local(capsys):
+def test_pickled_logger_does_not_inherit_acquired_local(cap: StdCapture) -> None:
     logger.add(_pickle_sink, colorize=False, catch=False, format="{message}")
 
     logger.bind(clone=True).info("From main")
 
-    out, err = capsys.readouterr()
-    assert out == ""
-    assert err == "From main\nFrom clone\n"
+    captured = cap.readouterr()
+    assert captured.out == "", "the sink writes to stderr, so stdout must stay empty"
+    assert captured.err == "From main\nFrom clone\n", (
+        "an unpickled logger must start with its re-entrancy flag cleared, otherwise it "
+        "inherits the 'lock already held' state and refuses to log"
+    )
