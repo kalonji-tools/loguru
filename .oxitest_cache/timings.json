@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "timings": {
+    "/home/user/loguru/tests/test_reinstall.py::test_pool_fork": {
+      "duration_ms": 21.242606000000002,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_reinstall.py::test_pool_spawn": {
+      "duration_ms": 189.723393,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_reinstall.py::test_process_fork": {
+      "duration_ms": 41.024441,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_reinstall.py::test_process_spawn": {
+      "duration_ms": 205.62440800000002,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    }
+  },
+  "modules": {}
+}

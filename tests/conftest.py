@@ -2,210 +2,129 @@ import asyncio
 import builtins
 import contextlib
 import datetime
-import io
 import logging
 import multiprocessing
 import os
-import pathlib
 import sys
 import threading
 import time
 import traceback
 import warnings
-from typing import NamedTuple
+from typing import Any, Callable, Iterator, List, NamedTuple, Type
 
 import freezegun
-import pytest
+from oxitest import Fixtures, Helpers, Yields
 
 import loguru
 
-if sys.version_info < (3, 5, 3):
-
-    def run(coro):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        res = loop.run_until_complete(coro)
-        loop.close()
-        asyncio.set_event_loop(None)
-        return res
-
-    asyncio.run = run
-elif sys.version_info < (3, 7):
-
-    def run(coro):
-        loop = asyncio.new_event_loop()
-        res = loop.run_until_complete(coro)
-        loop.close()
-        asyncio.set_event_loop(None)
-        return res
-
-    asyncio.run = run
-
-if sys.version_info < (3, 6):
-
-    @pytest.fixture
-    def tmp_path(tmp_path):
-        return pathlib.Path(str(tmp_path))
+fx = Fixtures()
+common = Helpers()
 
 
+# ── Scoped patching ─────────────────────────────────────────────────────────
+# oxitest's built-in "Patcher" reverts at the end of a test, but several helpers
+# below need patches scoped to an inner "with" block instead. This is the
+# equivalent of pytest's "monkeypatch.context()".
+
+
+class _PatchContext:
+    def __init__(self) -> None:
+        self._undos: List[Callable[[], None]] = []
+
+    def setattr(self, obj: Any, name: str, value: Any, *, raising: bool = True) -> None:
+        if hasattr(obj, name):
+            old = getattr(obj, name)
+            self._undos.append(lambda: setattr(obj, name, old))
+        elif raising:
+            raise AttributeError("%r has no attribute %r" % (obj, name))
+        else:
+            self._undos.append(lambda: delattr(obj, name))
+        setattr(obj, name, value)
+
+    def delattr(self, obj: Any, name: str) -> None:
+        old = getattr(obj, name)
+        self._undos.append(lambda: setattr(obj, name, old))
+        delattr(obj, name)
+
+    def setenv(self, name: str, value: str) -> None:
+        self.setitem(os.environ, name, value)
+
+    def delenv(self, name: str) -> None:
+        if name in os.environ:
+            self.delitem(os.environ, name)
+
+    def delitem(self, mapping: Any, key: Any) -> None:
+        old = mapping[key]
+        self._undos.append(lambda: mapping.__setitem__(key, old))
+        del mapping[key]
+
+    def setitem(self, mapping: Any, key: Any, value: Any) -> None:
+        if key in mapping:
+            old = mapping[key]
+            self._undos.append(lambda: mapping.__setitem__(key, old))
+        else:
+            self._undos.append(lambda: mapping.pop(key, None))
+        mapping[key] = value
+
+    def undo(self) -> None:
+        for undo in reversed(self._undos):
+            undo()
+        self._undos.clear()
+
+
+@common.helper
 @contextlib.contextmanager
-def new_event_loop_context():
-    loop = asyncio.new_event_loop()
+def patch_context() -> Iterator[_PatchContext]:
+    context = _PatchContext()
     try:
-        yield loop
+        yield context
     finally:
-        loop.close()
+        context.undo()
 
 
-@contextlib.contextmanager
-def set_event_loop_context(loop):
-    asyncio.set_event_loop(loop)
-    try:
-        yield
-    finally:
-        asyncio.set_event_loop(None)
+# ── Test doubles ────────────────────────────────────────────────────────────
 
 
-def parse(text, *, strip=False, strict=True):
-    parser = loguru._colorizer.AnsiParser()
-    parser.feed(text)
-    tokens = parser.done(strict=strict)
+class Writer:
+    """Callable sink recording every message written to it."""
 
-    if strip:
-        return parser.strip(tokens)
-    return parser.colorize(tokens, "")
+    def __init__(self) -> None:
+        self.written: List[Any] = []
 
+    def __call__(self, message: Any) -> None:
+        self.written.append(message)
 
-def check_dir(dir, *, files=None, size=None):
-    actual_files = set(dir.iterdir())
-    seen = set()
-    if size is not None:
-        assert len(actual_files) == size
-    if files is not None:
-        assert len(actual_files) == len(files)
-        for name, content in files:
-            filepath = dir / name
-            assert filepath in actual_files
-            assert filepath not in seen
-            if content is not None:
-                assert filepath.read_text() == content
-            seen.add(filepath)
+    def read(self) -> str:
+        return "".join(self.written)
+
+    def clear(self) -> None:
+        self.written.clear()
 
 
-class StubStream(io.StringIO):
-    def fileno(self):
-        return 1
+class SinkWithLogger:
+    def __init__(self, logger: Any) -> None:
+        self.logger = logger
+        self.out = ""
+
+    def write(self, message: str) -> None:
+        self.logger.info(message)
+        self.out += message
 
 
-class StreamIsattyTrue(StubStream):
-    def isatty(self):
-        return True
+class FreezeTime:
+    """Freezegun wrapper also faking the local timezone name and UTC offset."""
 
+    def __init__(self) -> None:
+        self._ctimes: dict = {}
+        self._builtins_open = builtins.open
+        self._fakes: dict = {
+            "zone": "UTC",
+            "offset": 0,
+            "include_tm_zone": True,
+            "tm_gmtoff_override": None,
+        }
 
-class StreamIsattyFalse(StubStream):
-    def isatty(self):
-        return False
-
-
-class StreamIsattyException(StubStream):
-    def isatty(self):
-        raise RuntimeError
-
-
-class StreamFilenoException(StreamIsattyTrue):
-    def fileno(self):
-        raise RuntimeError
-
-
-@contextlib.contextmanager
-def default_threading_excepthook():
-    if not hasattr(threading, "excepthook"):
-        yield
-        return
-
-    # Pytest added "PytestUnhandledThreadExceptionWarning", we need to
-    # remove it temporarily for some tests checking exceptions in threads.
-
-    def excepthook(args):
-        print("Exception in thread:", file=sys.stderr, flush=True)
-        traceback.print_exception(
-            args.exc_type, args.exc_value, args.exc_traceback, file=sys.stderr
-        )
-
-    old_excepthook = threading.excepthook
-    threading.excepthook = excepthook
-    yield
-    threading.excepthook = old_excepthook
-
-
-@pytest.fixture(scope="session", autouse=True)
-def check_env_variables():
-    for var in os.environ:
-        if var.startswith("LOGURU_"):
-            warnings.warn(
-                "A Loguru environment variable has been detected "
-                "and may interfere with the tests: '%s'" % var,
-                RuntimeWarning,
-                stacklevel=1,
-            )
-
-
-@pytest.fixture(autouse=True)
-def reset_logger():
-    def reset():
-        loguru.logger.remove()
-        loguru.logger.__init__(
-            loguru._logger.Core(), None, 0, False, False, False, False, True, [], {}
-        )
-        loguru._logger.context.set({})
-
-    reset()
-    yield
-    reset()
-
-
-@pytest.fixture
-def writer():
-    def w(message):
-        w.written.append(message)
-
-    w.written = []
-    w.read = lambda: "".join(w.written)
-    w.clear = lambda: w.written.clear()
-
-    return w
-
-
-@pytest.fixture
-def sink_with_logger():
-    class SinkWithLogger:
-        def __init__(self, logger):
-            self.logger = logger
-            self.out = ""
-
-        def write(self, message):
-            self.logger.info(message)
-            self.out += message
-
-    return SinkWithLogger
-
-
-@pytest.fixture
-def freeze_time(monkeypatch):
-    ctimes = {}
-    freezegun_localtime = freezegun.api.fake_localtime
-    builtins_open = builtins.open
-
-    fakes = {
-        "zone": "UTC",
-        "offset": 0,
-        "include_tm_zone": True,
-        "tm_gmtoff_override": None,
-    }
-
-    def fake_localtime(t=None):
-        fix_struct = os.name == "nt" and sys.version_info < (3, 6)
-
+    def _fake_localtime(self, t: Any = None) -> Any:
         struct_time_attributes = [
             ("tm_year", int),
             ("tm_mon", int),
@@ -220,20 +139,18 @@ def freeze_time(monkeypatch):
             ("tm_gmtoff", int),
         ]
 
-        if not fakes["include_tm_zone"]:
+        if self._fakes["include_tm_zone"]:
+            struct_time = time.struct_time
+        else:
             struct_time_attributes = struct_time_attributes[:-2]
             struct_time = NamedTuple("struct_time", struct_time_attributes)._make
-        elif fix_struct:
-            struct_time = NamedTuple("struct_time", struct_time_attributes)._make
-        else:
-            struct_time = time.struct_time
 
-        struct = freezegun_localtime(t)
-        override = {"tm_zone": fakes["zone"], "tm_gmtoff": fakes["offset"]}
+        struct = self._freezegun_localtime(t)
+        override = {"tm_zone": self._fakes["zone"], "tm_gmtoff": self._fakes["offset"]}
         attributes = []
 
-        if fakes["tm_gmtoff_override"] is not None:
-            override["tm_gmtoff"] = fakes["tm_gmtoff_override"]
+        if self._fakes["tm_gmtoff_override"] is not None:
+            override["tm_gmtoff"] = self._fakes["tm_gmtoff_override"]
 
         for attribute, _ in struct_time_attributes:
             if attribute in override:
@@ -244,14 +161,23 @@ def freeze_time(monkeypatch):
 
         return struct_time(attributes)
 
-    def patched_open(filepath, *args, **kwargs):
+    def _patched_open(self, filepath: Any, *args: Any, **kwargs: Any) -> Any:
         if not os.path.exists(filepath):
-            tz = datetime.timezone(datetime.timedelta(seconds=fakes["offset"]), name=fakes["zone"])
-            ctimes[filepath] = datetime.datetime.now().replace(tzinfo=tz).timestamp()
-        return builtins_open(filepath, *args, **kwargs)
+            tz = datetime.timezone(
+                datetime.timedelta(seconds=self._fakes["offset"]), name=self._fakes["zone"]
+            )
+            self._ctimes[filepath] = datetime.datetime.now().replace(tzinfo=tz).timestamp()
+        return self._builtins_open(filepath, *args, **kwargs)
 
     @contextlib.contextmanager
-    def freeze_time(date, timezone=("UTC", 0), *, include_tm_zone=True, tm_gmtoff_override=None):
+    def __call__(
+        self,
+        date: Any,
+        timezone: Any = ("UTC", 0),
+        *,
+        include_tm_zone: bool = True,
+        tm_gmtoff_override: Any = None,
+    ) -> Iterator[Any]:
         # Freezegun does not behave very well with UTC and timezones, see spulec/freezegun#348.
         # In particular, "now(tz=utc)" does not return the converted datetime.
         # For this reason, we re-implement date parsing here to properly handle aware date using
@@ -272,27 +198,107 @@ def freeze_time(monkeypatch):
         tzinfo = datetime.timezone(tz_offset, zone)
         date = date.replace(tzinfo=tzinfo)
 
-        with monkeypatch.context() as context:
-            context.setitem(fakes, "zone", zone)
-            context.setitem(fakes, "offset", offset)
-            context.setitem(fakes, "include_tm_zone", include_tm_zone)
-            context.setitem(fakes, "tm_gmtoff_override", tm_gmtoff_override)
+        self._builtins_open = builtins.open
+        self._freezegun_localtime = freezegun.api.fake_localtime
 
-            context.setattr(loguru._file_sink, "get_ctime", ctimes.__getitem__)
-            context.setattr(loguru._file_sink, "set_ctime", ctimes.__setitem__)
-            context.setattr(builtins, "open", patched_open)
+        with patch_context() as context:
+            context.setitem(self._fakes, "zone", zone)
+            context.setitem(self._fakes, "offset", offset)
+            context.setitem(self._fakes, "include_tm_zone", include_tm_zone)
+            context.setitem(self._fakes, "tm_gmtoff_override", tm_gmtoff_override)
+
+            context.setattr(loguru._file_sink, "get_ctime", self._ctimes.__getitem__)
+            context.setattr(loguru._file_sink, "set_ctime", self._ctimes.__setitem__)
+            context.setattr(builtins, "open", self._patched_open)
 
             # Freezegun does not permit to override timezone name.
-            context.setattr(freezegun.api, "fake_localtime", fake_localtime)
+            context.setattr(freezegun.api, "fake_localtime", self._fake_localtime)
 
             with freezegun.freeze_time(date, tz_offset=tz_offset) as frozen:
                 yield frozen
 
-    return freeze_time
+
+# ── Helpers ─────────────────────────────────────────────────────────────────
 
 
+@common.helper
 @contextlib.contextmanager
-def make_logging_logger(name, handler, fmt="%(message)s", level="DEBUG"):
+def new_event_loop_context() -> Iterator[asyncio.AbstractEventLoop]:
+    loop = asyncio.new_event_loop()
+    try:
+        yield loop
+    finally:
+        loop.close()
+
+
+@common.helper
+@contextlib.contextmanager
+def set_event_loop_context(loop: asyncio.AbstractEventLoop) -> Iterator[None]:
+    asyncio.set_event_loop(loop)
+    try:
+        yield
+    finally:
+        asyncio.set_event_loop(None)
+
+
+@common.helper
+def check_dir(dir: Any, *, files: Any = None, size: Any = None) -> None:
+    actual_files = set(dir.iterdir())
+    seen = set()
+    if size is not None:
+        assert len(actual_files) == size, (
+            "the sink must leave exactly this many files behind, otherwise rotation or "
+            "retention created or deleted more files than it was configured to"
+        )
+    if files is not None:
+        assert len(actual_files) == len(files), (
+            "the sink must leave exactly this many files behind, otherwise rotation or "
+            "retention created or deleted more files than it was configured to"
+        )
+        for name, content in files:
+            filepath = dir / name
+            assert filepath in actual_files, (
+                "the sink must have created this file, otherwise its naming or rotation "
+                "scheme resolved to an unexpected path"
+            )
+            assert filepath not in seen, (
+                "the same file is expected twice, so the expectation itself is malformed"
+            )
+            if content is not None:
+                assert filepath.read_text() == content, (
+                    "the file must hold exactly these messages, otherwise records were lost, "
+                    "duplicated, or written to the wrong file during rotation"
+                )
+            seen.add(filepath)
+
+
+@common.helper
+@contextlib.contextmanager
+def default_threading_excepthook() -> Iterator[None]:
+    if not hasattr(threading, "excepthook"):
+        yield
+        return
+
+    # Test runners install their own thread excepthook to surface unhandled thread
+    # exceptions. Restore a plain one for tests asserting on what a failing thread prints.
+
+    def excepthook(args: Any) -> None:
+        print("Exception in thread:", file=sys.stderr, flush=True)
+        traceback.print_exception(
+            args.exc_type, args.exc_value, args.exc_traceback, file=sys.stderr
+        )
+
+    old_excepthook = threading.excepthook
+    threading.excepthook = excepthook
+    yield
+    threading.excepthook = old_excepthook
+
+
+@common.helper
+@contextlib.contextmanager
+def make_logging_logger(
+    name: Any, handler: Any, fmt: str = "%(message)s", level: str = "DEBUG"
+) -> Iterator[logging.Logger]:
     original_logging_level = logging.getLogger().getEffectiveLevel()
     logging_logger = logging.getLogger(name)
     logging_logger.setLevel(level)
@@ -309,63 +315,126 @@ def make_logging_logger(name, handler, fmt="%(message)s", level="DEBUG"):
         logging_logger.removeHandler(handler)
 
 
-def _simulate_f_globals_name_absent(monkeypatch):
+@common.helper
+@contextlib.contextmanager
+def simulate_f_globals_name_absent() -> Iterator[None]:
     """Simulate execution in Dask environment, where "__name__" is not available in globals."""
     getframe_ = loguru._get_frame.load_get_frame_function()
 
-    def patched_getframe(*args, **kwargs):
+    def patched_getframe(*args: Any, **kwargs: Any) -> Any:
         frame = getframe_(*args, **kwargs)
         frame.f_globals.pop("__name__", None)
         return frame
 
-    with monkeypatch.context() as context:
+    with patch_context() as context:
         context.setattr(loguru._logger, "get_frame", patched_getframe)
         yield
 
 
-def _simulate_no_frame_available(monkeypatch):
+@common.helper
+@contextlib.contextmanager
+def simulate_no_frame_available() -> Iterator[None]:
     """Simulate execution in Cython, where there is no stack frame to retrieve."""
 
-    def patched_getframe(*args, **kwargs):
+    def patched_getframe(*args: Any, **kwargs: Any) -> Any:
         raise ValueError("Call stack is not deep enough (dummy)")
 
-    with monkeypatch.context() as context:
+    with patch_context() as context:
         context.setattr(loguru._logger, "get_frame", patched_getframe)
         yield
 
 
-@pytest.fixture(params=[_simulate_f_globals_name_absent, _simulate_no_frame_available])
-def incomplete_frame_context(request, monkeypatch):
-    """Simulate different scenarios where the stack frame is incomplete or entirely absent."""
-    yield from request.param(monkeypatch)
-
-
-@pytest.fixture
-def missing_frame_lineno_value(monkeypatch):
+@common.helper
+@contextlib.contextmanager
+def simulate_missing_frame_lineno() -> Iterator[None]:
     """Simulate corner case where the "f_lineno" value is not available in stack frames."""
     getframe_ = loguru._get_frame.load_get_frame_function()
 
     class MockedFrame:
-        def __init__(self, frame):
+        def __init__(self, frame: Any) -> None:
             self._frame = frame
 
-        def __getattribute__(self, name):
+        def __getattribute__(self, name: str) -> Any:
             if name == "f_lineno":
                 return None
             frame = object.__getattribute__(self, "_frame")
             return getattr(frame, name)
 
-    def patched_getframe(*args, **kwargs):
+    def patched_getframe(*args: Any, **kwargs: Any) -> Any:
         frame = getframe_(*args, **kwargs)
         return MockedFrame(frame)
 
-    with monkeypatch.context() as context:
+    with patch_context() as context:
         context.setattr(loguru._logger, "get_frame", patched_getframe)
         yield
 
 
-@pytest.fixture(autouse=True)
-def reset_multiprocessing_start_method():
+# ── Fixtures ────────────────────────────────────────────────────────────────
+
+
+@fx.fixture(autouse=True, shared=True)
+def check_env_variables() -> None:
+    for var in os.environ:
+        if var.startswith("LOGURU_"):
+            warnings.warn(
+                "A Loguru environment variable has been detected "
+                "and may interfere with the tests: '%s'" % var,
+                RuntimeWarning,
+                stacklevel=1,
+            )
+
+
+@fx.fixture(autouse=True)
+def strict_warnings() -> Yields[None]:
+    """Turn warnings into errors, replacing the former "filterwarnings" pytest config."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        # Mixing threads and "fork()" is deprecated, but we need to test it anyway.
+        warnings.filterwarnings(
+            "ignore",
+            message=r".*use of fork\(\) may lead to deadlocks in the child.*",
+            category=DeprecationWarning,
+        )
+        # Using "set_event_loop()" is deprecated, but no alternative is provided.
+        warnings.filterwarnings(
+            "ignore",
+            message=r".*'asyncio.set_event_loop' is deprecated.*",
+            category=DeprecationWarning,
+        )
+        yield
+
+
+@fx.fixture(autouse=True)
+def reset_logger() -> Yields[None]:
+    def reset() -> None:
+        loguru.logger.remove()
+        loguru.logger.__init__(
+            loguru._logger.Core(), None, 0, False, False, False, False, True, [], {}
+        )
+        loguru._logger.context.set({})
+
+    reset()
+    yield
+    reset()
+
+
+@fx.fixture(autouse=True)
+def reset_multiprocessing_start_method() -> Yields[None]:
     multiprocessing.set_start_method(None, force=True)
     yield
     multiprocessing.set_start_method(None, force=True)
+
+
+@fx.fixture
+def writer() -> Writer:
+    return Writer()
+
+
+@fx.fixture
+def sink_with_logger() -> Type[SinkWithLogger]:
+    return SinkWithLogger
+
+
+@fx.fixture
+def freeze_time() -> FreezeTime:
+    return FreezeTime()
