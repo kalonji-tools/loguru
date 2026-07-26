@@ -86,11 +86,46 @@ Oxitest has no equivalent. To match "warnings become errors" behavior, the migra
 
 **Above threshold.** Two options: (a) add `[tool.oxitest] filterwarnings = [...]` config parity, or (b) document the autouse-fixture pattern as a canonical migration recipe.
 
-#### N2 — No `Patcher.context()` for pytest-`monkeypatch.context()` parity
+#### N2 — Patcher ships in the wrong shape: fixture-only, but adopters need a block-scoped helper
 
-`oxitest.Patcher` auto-reverts at test end. Pytest's `monkeypatch.context()` reverts at block end — useful for helpers that install and remove multiple patches within a single test. The migration invented `patch_context()` in conftest (57 lines wrapping `Patcher`'s API). Every adopter with `monkeypatch.context()` usage will re-invent similar plumbing.
+**Original framing** (add `Patcher.context()` for pytest-`monkeypatch.context()` parity) was too narrow. Post-hoc code inspection revealed the deeper issue:
 
-**Above threshold.** Options: (a) add `Patcher.context()` (or `.scope()`) yielding a scoped patch handle, or (b) document the recipe.
+**Usage-data proof of shape mismatch:**
+```
+$ grep -rn "patch_context\|helpers.common.patch_context" tests/ | wc -l
+41
+$ grep -rn " Patcher\b\|Fixture\[Patcher\]\|patch:.*Patcher" tests/ | wc -l
+0
+```
+
+The `Patcher` fixture went **entirely unused** in the migrated codebase. Every one of 41 patching sites reached for the block-scoped `helpers.common.patch_context()` shape the migration invented.
+
+**Concrete API-surface gaps between built-in `Patcher` and the invented `patch_context()`:**
+
+| Concern | `Patcher` (built-in fixture) | `patch_context()` (invented helper) |
+|---|---|---|
+| Lifetime | Test-scoped (undone at teardown) | Block-scoped (undone at `with` exit) |
+| `setattr(raising=False)` | ❌ Always raises if attr missing | ✅ |
+| `delattr` | ❌ | ✅ |
+| `setitem` / `delitem` (arbitrary mappings) | ❌ | ✅ (and `setenv` is derived from `setitem`) |
+| `chdir` | ✅ | ❌ (unused in loguru) |
+
+The lifetime mismatch is dominant. Nested-block patching — install patch, verify with-patch, exit scope, verify without-patch, all within one test — is impossible with `Patcher`'s test-scoped API.
+
+**Design insight:** oxitest built-ins split cleanly by identity:
+- **Fixtures** carry state across a test's lifetime; injected as parameters; bound to teardown.
+- **Helpers** are inline callables/context-managers invoked in the test body; no lifecycle coupling.
+
+Pytest's `monkeypatch` is BOTH shapes — injected as fixture AND has `.context()` for scoping. Confusing but pragmatic. oxitest split the shapes but shipped only the fixture form.
+
+**Above threshold. Reframed options:**
+
+1. **Ship `patcher` as a built-in helper** (`with helpers.oxi.patcher() as p: ...`) — matches the dominant usage shape. Keep `Patcher` fixture for the whole-test-scoped case if it has adopters elsewhere.
+2. **Broaden the API surface** either way — `raising=` kwarg, `setitem`/`delitem`/`delattr` — matching pytest-monkeypatch parity.
+
+This isn't a missing method. It's the shape mismatch itself: **oxitest shipped the less-common shape as the only shape.**
+
+See also the follow-on wayfinder map on cross-cutting Fixture-vs-Helper identity audit (filed alongside this eval).
 
 Zero code-fix bugs surfaced by the migration itself. All 1579 items pass under oxitest with no xfails and no gap-marked tests.
 
