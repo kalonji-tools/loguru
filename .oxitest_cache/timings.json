@@ -1,200 +1,356 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_async_callable_sink": {
-      "duration_ms": 17.540993,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_async_context_manager": {
+      "duration_ms": 0.629595,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_and_contextualize_concurrency": {
-      "duration_ms": 7.104012,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_caret_not_masked[with_diagnose]": {
+      "duration_ms": 17.767242999999997,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_and_sink_write_concurrency": {
-      "duration_ms": 89.49703600000001,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_caret_not_masked[without_diagnose]": {
+      "duration_ms": 31.305635999999996,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_file_noop": {
-      "duration_ms": 7.673193,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_decorate_coroutine": {
+      "duration_ms": 8.630051,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_another_loop[loop_is_bound]": {
-      "duration_ms": 18.681394,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_decorate_function": {
+      "duration_ms": 8.0054,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_another_loop[loop_is_none]": {
-      "duration_ms": 18.415047,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_decorate_generator": {
+      "duration_ms": 0.783913,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_multiple_threads_loop_is_none": {
-      "duration_ms": 104.79034399999999,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_decorate_generator_with_error": {
+      "duration_ms": 0.426784,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_from_multiple_threads_loop_is_not_none": {
-      "duration_ms": 114.35269500000001,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_default_with_coroutine": {
+      "duration_ms": 0.764197,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_function_noop": {
-      "duration_ms": 6.495105000000001,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_default_with_function": {
+      "duration_ms": 0.489169,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_in_another_run": {
-      "duration_ms": 17.373245,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_default_with_generator": {
+      "duration_ms": 0.412093,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_standard_noop": {
-      "duration_ms": 6.849621,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_error_when_decorating_class_with_parentheses": {
+      "duration_ms": 0.368545,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_stream_noop": {
-      "duration_ms": 6.732101,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_error_when_decorating_class_without_parentheses": {
+      "duration_ms": 0.43355899999999997,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_with_sub_processes": {
-      "duration_ms": 210.518646,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_is_none": {
+      "duration_ms": 6.57247,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_complete_without_tasks": {
-      "duration_ms": 6.447037,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_is_tuple": {
+      "duration_ms": 7.083622,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_concurrent_execution": {
-      "duration_ms": 18.599112,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_not_raising[base_type]": {
+      "duration_ms": 7.299526,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_coroutine_function": {
-      "duration_ms": 40.886765,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_not_raising[exact_type]": {
+      "duration_ms": 7.24221,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_custom_complete_function": {
-      "duration_ms": 7.502199999999999,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_not_raising[tuple_of_types]": {
+      "duration_ms": 7.2753820000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_enqueue_coroutine_from_inside_coroutine_without_loop": {
-      "duration_ms": 21.902010999999998,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_raising[unrelated_tuple]": {
+      "duration_ms": 6.365523,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_enqueue_coroutine_loop": {
-      "duration_ms": 23.954676000000003,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exception_raising[unrelated_type]": {
+      "duration_ms": 6.856654,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_caught": {
-      "duration_ms": 108.356558,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_not_raising[base_exception-unrelated_tuple]": {
+      "duration_ms": 6.964220999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_during_complete_caught": {
-      "duration_ms": 108.033918,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_not_raising[base_exception-unrelated_type]": {
+      "duration_ms": 7.26506,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_during_complete_not_caught": {
-      "duration_ms": 108.068692,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_not_raising[specific_exception-unrelated_tuple]": {
+      "duration_ms": 7.309709,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_exception_in_coroutine_not_caught": {
-      "duration_ms": 110.43779400000001,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_not_raising[specific_exception-unrelated_type]": {
+      "duration_ms": 7.655498000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_global_loop_not_used": {
-      "duration_ms": 12.100717000000001,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[base_exception-base_type]": {
+      "duration_ms": 6.583254,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_invalid_coroutine_sink_if_no_loop_with_enqueue": {
-      "duration_ms": 0.9454049999999999,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[base_exception-exact_type]": {
+      "duration_ms": 6.935997,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_recursive_coroutine": {
-      "duration_ms": 18.485145000000003,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[base_exception-tuple_of_types]": {
+      "duration_ms": 6.503721,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_remove_without_tasks": {
-      "duration_ms": 6.654333,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[specific_exception-base_type]": {
+      "duration_ms": 6.61494,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_run_multiple_different_loops": {
-      "duration_ms": 28.843067,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[specific_exception-exact_type]": {
+      "duration_ms": 6.358906999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_run_multiple_same_loop": {
-      "duration_ms": 29.801261999999998,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_exclude_exception_raising[specific_exception-tuple_of_types]": {
+      "duration_ms": 6.6213299999999995,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_tasks_cancelled_on_remove": {
-      "duration_ms": 7.0572550000000005,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_file_sink_ascii_encoding": {
+      "duration_ms": 8.381974,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_another_event_loop": {
-      "duration_ms": 17.727895,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_file_sink_utf8_encoding": {
+      "duration_ms": 8.211293,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_sink_without_running_loop_none": {
-      "duration_ms": 12.325296,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_has_site_getsitepackages": {
+      "duration_ms": 6.609699999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_coroutine_sink.py::test_using_sink_without_running_loop_not_none": {
-      "duration_ms": 22.990274000000003,
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_has_sys_real_prefix": {
+      "duration_ms": 6.741942,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_no_caret_if_no_backtrace[with_diagnose]": {
+      "duration_ms": 6.75391,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_no_caret_if_no_backtrace[without_diagnose]": {
+      "duration_ms": 6.984064,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_no_exception": {
+      "duration_ms": 6.908385,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_no_site_getsitepackages": {
+      "duration_ms": 6.770054999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_no_sys_real_prefix": {
+      "duration_ms": 7.078526,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_onerror": {
+      "duration_ms": 7.154594,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_onerror_with_reraise": {
+      "duration_ms": 6.850779,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_reraise": {
+      "duration_ms": 9.06206,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[ascii_encoding]": {
+      "duration_ms": 7.375647,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[empty]": {
+      "duration_ms": 7.4404010000000005,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[none]": {
+      "duration_ms": 7.062920999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[not_a_string]": {
+      "duration_ms": 7.029836,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[unknown]": {
+      "duration_ms": 7.0910720000000005,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sink_encoding[utf8]": {
+      "duration_ms": 7.452138,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sysconfig_get_path_return_none": {
+      "duration_ms": 0.780643,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_sysconfig_get_path_return_path": {
+      "duration_ms": 0.9914649999999999,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_multiple_sinks": {
+      "duration_ms": 14.156486,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_repr": {
+      "duration_ms": 8.627573,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_repr_multiple_threads": {
+      "duration_ms": 8.858405,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_repr_twice": {
+      "duration_ms": 8.059046,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_repr_with_enqueue": {
+      "duration_ms": 12.772713,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_but_decorated_repr_without_reraise": {
+      "duration_ms": 8.139567,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_with_catch_context_manager": {
+      "duration_ms": 9.506958,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_unprintable_with_catch_context_manager_reused": {
+      "duration_ms": 13.626892,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_user_site_is_none": {
+      "duration_ms": 6.735695,
+      "age": 0,
+      "last_outcome": "passed",
+      "flaky_count": 0
+    },
+    "/home/user/loguru/tests/test_exceptions_catch.py::test_user_site_is_path": {
+      "duration_ms": 7.317648,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0

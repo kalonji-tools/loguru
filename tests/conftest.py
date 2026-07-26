@@ -40,7 +40,11 @@ class _PatchContext:
             self._undos.append(lambda: delattr(obj, name))
         setattr(obj, name, value)
 
-    def delattr(self, obj: Any, name: str) -> None:
+    def delattr(self, obj: Any, name: str, *, raising: bool = True) -> None:
+        if not hasattr(obj, name):
+            if raising:
+                raise AttributeError("%r has no attribute %r" % (obj, name))
+            return
         old = getattr(obj, name)
         self._undos.append(lambda: setattr(obj, name, old))
         delattr(obj, name)
