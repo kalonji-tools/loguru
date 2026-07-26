@@ -1,478 +1,322 @@
 {
   "version": 2,
   "timings": {
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_not_original_stdout_or_stderr[current_stderr]": {
-      "duration_ms": 0.293661,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_not_original_stdout_or_stderr[current_stdout]": {
-      "duration_ms": 0.42621899999999996,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_not_original_stdout_or_stderr[unrelated_stream]": {
-      "duration_ms": 0.35499400000000003,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_terminal_has_vt_support[original_stderr]": {
-      "duration_ms": 0.37146199999999996,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_terminal_has_vt_support[original_stdout]": {
-      "duration_ms": 0.47676199999999996,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_winapi_false[original_stderr]": {
-      "duration_ms": 0.28570100000000004,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_if_winapi_false[original_stdout]": {
-      "duration_ms": 0.369633,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_on_linux[original_stderr]": {
-      "duration_ms": 2.32922,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_bound_logger": {
+      "duration_ms": 6.641018,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dont_wrap_on_linux[original_stdout]": {
-      "duration_ms": 2.442134,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_coroutine_function_handler": {
+      "duration_ms": 7.879364999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dumb_term_not_colored[current_stderr]": {
-      "duration_ms": 1.129809,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler": {
+      "duration_ms": 8.190688999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dumb_term_not_colored[current_stdout]": {
-      "duration_ms": 1.0391370000000002,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_compression[function]": {
+      "duration_ms": 8.061525,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dumb_term_not_colored[original_stderr]": {
-      "duration_ms": 1.1507189999999998,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_compression[gzip]": {
+      "duration_ms": 8.728715999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dumb_term_not_colored[original_stdout]": {
-      "duration_ms": 1.211879,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_compression[tarball]": {
+      "duration_ms": 10.801207999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_dumb_term_not_colored[unrelated_stream]": {
-      "duration_ms": 1.083264,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_compression[zip_archive]": {
+      "duration_ms": 10.037534,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_github_actions_fixed[current_stderr]": {
-      "duration_ms": 1.051609,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_retention[count]": {
+      "duration_ms": 8.554948,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_github_actions_fixed[current_stdout]": {
-      "duration_ms": 1.138275,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_retention[function]": {
+      "duration_ms": 7.794803,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_github_actions_fixed[original_stderr]": {
-      "duration_ms": 1.247708,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_retention[human_interval]": {
+      "duration_ms": 8.006363,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_github_actions_fixed[original_stdout]": {
-      "duration_ms": 1.289552,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_retention[timedelta]": {
+      "duration_ms": 7.578028,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_github_actions_fixed[unrelated_stream]": {
-      "duration_ms": 0.997773,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[clock_time]": {
+      "duration_ms": 9.579001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[current_stderr_empty]": {
-      "duration_ms": 1.069256,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[function]": {
+      "duration_ms": 7.357953999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[current_stderr_set]": {
-      "duration_ms": 1.0660699999999999,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[human_interval]": {
+      "duration_ms": 8.134929000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[current_stdout_empty]": {
-      "duration_ms": 1.1337579999999998,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[human_size]": {
+      "duration_ms": 7.8201469999999995,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[current_stdout_set]": {
-      "duration_ms": 1.050802,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[named_interval]": {
+      "duration_ms": 8.473260999999999,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[original_stderr_empty]": {
-      "duration_ms": 1.081644,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[size_in_bytes]": {
+      "duration_ms": 7.641915,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[original_stderr_set]": {
-      "duration_ms": 1.056789,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[time_of_day]": {
+      "duration_ms": 8.81811,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[original_stdout_empty]": {
-      "duration_ms": 1.110662,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_file_handler_rotation[timedelta]": {
+      "duration_ms": 8.252853,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[original_stdout_set]": {
-      "duration_ms": 1.132117,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_filter_function": {
+      "duration_ms": 6.410192,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[unrelated_stream_empty]": {
-      "duration_ms": 1.041018,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_filter_function_not_serializable": {
+      "duration_ms": 6.1822680000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_force_color_standard[unrelated_stream_set]": {
-      "duration_ms": 1.217632,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_filter_name[package]": {
+      "duration_ms": 6.769078,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[current_stderr_empty]": {
-      "duration_ms": 1.0389119999999998,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_filter_name[root]": {
+      "duration_ms": 6.680861,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[current_stderr_set]": {
-      "duration_ms": 1.041092,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_format_function[colorized]": {
+      "duration_ms": 6.425951,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[current_stdout_empty]": {
-      "duration_ms": 1.11632,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_format_function[plain]": {
+      "duration_ms": 6.322816,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[current_stdout_set]": {
-      "duration_ms": 1.0307709999999999,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_format_function_not_serializable": {
+      "duration_ms": 6.299665,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[original_stderr_empty]": {
-      "duration_ms": 1.1018189999999999,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_format_string[colorized]": {
+      "duration_ms": 6.8230770000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[original_stderr_set]": {
-      "duration_ms": 1.052842,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_format_string[plain]": {
+      "duration_ms": 6.741959,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[original_stdout_empty]": {
-      "duration_ms": 1.065984,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_function_handler": {
+      "duration_ms": 29.900778,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[original_stdout_set]": {
-      "duration_ms": 1.2300900000000001,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_handler_not_serializable": {
+      "duration_ms": 6.374149,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[unrelated_stream_empty]": {
-      "duration_ms": 1.011179,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_log_method": {
+      "duration_ms": 6.997674,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_honor_no_color_standard[unrelated_stream_set]": {
-      "duration_ms": 1.117855,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_logging_method": {
+      "duration_ms": 8.008552,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_is_a_tty": {
-      "duration_ms": 2.0060350000000002,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[add]": {
+      "duration_ms": 0.726975,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_is_a_tty_exception": {
-      "duration_ms": 1.2267409999999999,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[bind]": {
+      "duration_ms": 0.481507,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_is_not_a_tty": {
-      "duration_ms": 1.791766,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[catch]": {
+      "duration_ms": 0.44082000000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[original_stderr]": {
-      "duration_ms": 2.296685,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[configure]": {
+      "duration_ms": 0.387391,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[original_stdout]": {
-      "duration_ms": 2.2217589999999996,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[disable]": {
+      "duration_ms": 0.417642,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[stderr_is_outstream]": {
-      "duration_ms": 2.267781,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[enable]": {
+      "duration_ms": 0.363618,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[stderr_not_outstream]": {
-      "duration_ms": 2.288719,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[exception]": {
+      "duration_ms": 0.39144199999999996,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[stdout_is_outstream]": {
-      "duration_ms": 2.610734,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[level]": {
+      "duration_ms": 0.37029100000000004,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[stdout_not_outstream]": {
-      "duration_ms": 2.3983339999999997,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[opt]": {
+      "duration_ms": 0.427478,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_fixed[unrelated_stream]": {
-      "duration_ms": 2.276587,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[parse]": {
+      "duration_ms": 0.31248000000000004,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_jupyter_missing_lib": {
-      "duration_ms": 1.2829359999999999,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[patch]": {
+      "duration_ms": 0.38091200000000003,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_fixed_windows[current_stderr]": {
-      "duration_ms": 0.28750200000000004,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_fixed_windows[current_stdout]": {
-      "duration_ms": 0.337887,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_fixed_windows[original_stderr]": {
-      "duration_ms": 0.331073,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_fixed_windows[original_stdout]": {
-      "duration_ms": 0.554948,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_fixed_windows[unrelated_stream]": {
-      "duration_ms": 0.28340800000000005,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_not_fixed_linux[current_stderr]": {
-      "duration_ms": 1.044583,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_error[remove]": {
+      "duration_ms": 0.453463,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_not_fixed_linux[current_stdout]": {
-      "duration_ms": 1.0476260000000002,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_no_handler": {
+      "duration_ms": 6.597103,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_not_fixed_linux[original_stderr]": {
-      "duration_ms": 1.12463,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_patched_logger": {
+      "duration_ms": 6.497204,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_not_fixed_linux[original_stdout]": {
-      "duration_ms": 1.113038,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_standard_handler": {
+      "duration_ms": 6.898364,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_mintty_not_fixed_linux[unrelated_stream]": {
-      "duration_ms": 1.0652229999999998,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_standard_handler_root_logger_not_picklable": {
+      "duration_ms": 7.1584270000000005,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_no_color_takes_precedence_over_force_color": {
-      "duration_ms": 1.083746,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_stream_handler[flushable-not_stoppable]": {
+      "duration_ms": 8.117617000000001,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_pycharm_fixed[current_stderr]": {
-      "duration_ms": 1.363495,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_stream_handler[flushable-stoppable]": {
+      "duration_ms": 7.350383,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_pycharm_fixed[current_stdout]": {
-      "duration_ms": 1.0812840000000001,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_stream_handler[not_flushable-not_stoppable]": {
+      "duration_ms": 7.344976,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_pycharm_fixed[original_stderr]": {
-      "duration_ms": 1.068953,
+    "/home/user/loguru/tests/test_pickling.py::test_pickling_stream_handler[not_flushable-stoppable]": {
+      "duration_ms": 7.088171,
       "age": 0,
       "last_outcome": "passed",
       "flaky_count": 0
     },
-    "/home/user/loguru/tests/test_colorama.py::test_pycharm_fixed[original_stdout]": {
-      "duration_ms": 1.24501,
+    "/home/user/loguru/tests/test_pickling.py::test_remove_after_pickling": {
+      "duration_ms": 6.44271,
       "age": 0,
       "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_pycharm_fixed[unrelated_stream]": {
-      "duration_ms": 1.1041379999999998,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_stream_is_none": {
-      "duration_ms": 2.128308,
-      "age": 0,
-      "last_outcome": "passed",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_stream_not_wrapped_on_windows_if_vt_support[original_stderr]": {
-      "duration_ms": 0.639483,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_stream_not_wrapped_on_windows_if_vt_support[original_stdout]": {
-      "duration_ms": 0.8090350000000001,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_stream_wrapped_on_windows_if_no_vt_support[original_stderr]": {
-      "duration_ms": 0.73077,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_stream_wrapped_on_windows_if_no_vt_support[original_stdout]": {
-      "duration_ms": 39.889479,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_no_vt_support[original_stderr]": {
-      "duration_ms": 0.292817,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_no_vt_support[original_stdout]": {
-      "duration_ms": 0.371915,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_old_colorama_version[original_stderr]": {
-      "duration_ms": 0.28625599999999995,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_old_colorama_version[original_stdout]": {
-      "duration_ms": 0.371557,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_stream_has_no_fileno[original_stderr]": {
-      "duration_ms": 0.26638999999999996,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_stream_has_no_fileno[original_stdout]": {
-      "duration_ms": 0.345635,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_vt_check_fails[original_stderr]": {
-      "duration_ms": 0.304916,
-      "age": 0,
-      "last_outcome": "skipped",
-      "flaky_count": 0
-    },
-    "/home/user/loguru/tests/test_colorama.py::test_wrap_if_winapi_true_and_vt_check_fails[original_stdout]": {
-      "duration_ms": 0.36306499999999997,
-      "age": 0,
-      "last_outcome": "skipped",
       "flaky_count": 0
     }
   },
