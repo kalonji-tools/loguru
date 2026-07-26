@@ -55,6 +55,7 @@ dev = [
   "pytest-cov==5.0.0 ; python_version>='3.8' and python_version<'3.9'",
   "pytest-cov==6.2.1 ; python_version>='3.9'",
   "pytest-mypy-plugins==3.2.0 ; python_version>='3.12'",
+  "oxitest==3.0.0 ; python_version>='3.11'",
   # Testing utils.
   "colorama==0.4.5 ; python_version<'3.8'",
   "colorama==0.4.6 ; python_version>='3.8'",
@@ -95,6 +96,13 @@ typeCheckingMode = "off"
 
 [tool.flit.module]
 name = "loguru"
+
+[tool.oxitest]
+# ── Mandatory floor (T7 baseline #1667) ─────────────
+strict = "abort"
+testpaths = ["tests"]
+# Reporters: TTY default + CTRF JSON via CLI flag
+# --report json --report-file results/oxitest-last.ctrf.json
 
 [tool.pytest.ini_options]
 addopts = "-l"

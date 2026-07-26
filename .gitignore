@@ -105,3 +105,6 @@ ENV/
 
 # Idea IDE
 .idea/
+
+# oxitest evaluation artifacts (per T7 baseline #1667 — force-committed at brief-finalize by T8f)
+results/
