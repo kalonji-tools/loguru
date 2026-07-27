@@ -99,7 +99,7 @@ strict = "abort"
 testpaths = ["tests"]
 show_locals = true
 # Reporters: TTY default + CTRF JSON via CLI flag
-# --report json --report-file results/oxitest-last.ctrf.json
+# oxitest --json results/oxitest-last.ctrf.json
 
 # Warnings are turned into errors by the autouse "strict_warnings" fixture in
 # "tests/conftest.py" rather than by configuration, since oxitest has no equivalent of
