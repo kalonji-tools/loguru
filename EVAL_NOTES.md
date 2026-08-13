@@ -341,3 +341,95 @@ Docs fix is cheaper and probably enough — the pattern is fine once you know it
 **One architectural constraint is under-documented** — the session-time-only nature of `helpers` forces a plain-module split (see N5).
 
 All three findings converge on the same theme: **oxitest's Fixture-vs-Helper identity distinction has under-explored edges**. The wayfinder map [`Wayfinder: fixture-vs-helper identity for oxitest built-ins` #1697](https://github.com/kalonji-tools/oxitest/issues/1697) is the right place to grill these — N4 and N5 should be added to its "Not yet specified" fog as evidence.
+
+---
+
+## T8 conclusion — re-verified against oxitest 4.0.0 (2026-08-13)
+
+The fork was migrated and concluded against **oxitest 3.0.0**. This section
+re-runs it against **4.0.0**, the release carrying the fixes for the two
+findings this showcase filed and that were closed `COMPLETED`
+([#1680](https://github.com/kalonji-tools/oxitest/issues/1680),
+[#1684](https://github.com/kalonji-tools/oxitest/issues/1684)).
+
+### Result parity
+
+| oxitest | Result |
+|---|---|
+| `3.0.0` (as concluded) | **1579 passed · 46 skipped · 20 warnings** |
+| `4.0.0` (after the changes below) | **1579 passed · 46 skipped · 20 warnings** |
+
+Identical. The pin in `pyproject.toml` is now `oxitest==4.0.0`.
+
+### N6 — 3.0.0 → 4.0.0 removed the helper surface, and the suite did not load
+
+**Above threshold.**
+
+`oxitest 4.0.0` no longer exports `Helpers` or the `helpers` proxy. The first
+run on 4.0.0 did not reach a single test:
+
+```
+Failed to load conftest fixtures: ImportError: cannot import name 'Helpers' from 'oxitest'
+```
+
+Blast radius in this fork: **`conftest.py` plus 21 test files**, and **150
+call sites** through `helpers.common.<name>` — 90 `check_dir`, 36
+`patch_context`, 18 `make_logging_logger`, 5 `default_threading_excepthook`,
+1 `simulate_missing_frame_lineno`.
+
+Five further sites resolved a helper **by name string**, `getattr(helpers.common,
+simulate)()`, so a per-name import would not have covered them.
+
+**The migration:** the seven registered helpers became plain module-level
+functions in `conftest.py`, and every call site now reads `conftest.<name>`.
+That one form covers the static calls and the `getattr` sites together.
+
+**The retirement is right** — the proxy resolved through `__getattr__` to `Any`,
+so a type checker saw nothing at any call site. **The finding is that a major
+version removed a surface with no shim, no deprecation warning, and no entry in
+the migration guide.** An adopter meets it as an `ImportError` at conftest load,
+with nothing naming the replacement.
+
+### N7 — the module-identity workaround is STILL required on 4.0.0
+
+**This is the conclusion this re-verification was run to reach, and the answer
+is no.**
+
+`tests/_naming.py`'s `pin_module_name` exists because oxitest loads a test module
+under a synthetic name, and loguru derives a record's `name` field from the
+calling module's `__name__`. #1680 and #1684 both closed `COMPLETED`, so the
+question was whether the shim could be deleted.
+
+**It cannot.** Removing `pin_module_name` from all 10 consuming files:
+
+| Scope | Result without the shim |
+|---|---|
+| `tests/test_activation.py`, serial | **6 failed · 27 passed** |
+| whole suite | **the run did not finish inside 550 s** |
+
+The 6 failures are the same 6 that T8g recorded as xfails under #1684.
+
+**Measured on 4.0.0**, a test module still sees a synthetic name:
+
+```
+__name__='_oxitest_collect_9a4a63aec39d'  in_sys_modules=True
+```
+
+**What did change is the second half.** The synthetic name is now registered in
+`sys.modules`, which is what #1680 fixed — machinery that resolves a class back
+to its defining module (`dataclasses`, `pickle`, `copy`) works. **The name
+itself is still not the dotted package name**, so any suite that asserts on
+`__name__` still needs its own shim.
+
+`pin_module_name` therefore does two jobs, and only one of them is now
+redundant:
+
+| Job | State on 4.0.0 |
+|---|---|
+| Set `__name__` to the dotted name | **still required** |
+| Register the alias in `sys.modules` | **now redundant** — oxitest registers the synthetic name itself |
+
+⚠️ **The whole-suite hang is not explained.** Single-file removal fails fast and
+cleanly; whole-suite removal did not finish. The suite has multiprocessing and
+pickling tests, and pickling needs a resolvable module name, so a deadlock is
+plausible — **but this was not established, and it is recorded as unverified.**
