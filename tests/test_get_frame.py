@@ -1,6 +1,6 @@
+import conftest
 import sys
 
-from oxitest import helpers
 
 import loguru
 from loguru._get_frame import load_get_frame_function
@@ -10,7 +10,7 @@ def test_with_sys_getframe() -> None:
     def patched():
         return
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sys, "_getframe", patched())
         assert load_get_frame_function() == patched(), (
             "loguru must use sys._getframe() when the interpreter provides it, otherwise it "
@@ -19,7 +19,7 @@ def test_with_sys_getframe() -> None:
 
 
 def test_without_sys_getframe() -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.delattr(sys, "_getframe")
         assert load_get_frame_function() == loguru._get_frame.get_frame_fallback, (
             "loguru must fall back to its own frame lookup on interpreters lacking "

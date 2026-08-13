@@ -1,8 +1,9 @@
 import datetime
 import time
 
+import conftest
 from conftest import FreezeTime
-from oxitest import Fixture, TempDir, helpers
+from oxitest import Fixture, TempDir
 
 from loguru import logger
 
@@ -39,13 +40,13 @@ def test_compression(tmp: TempDir) -> None:
     logger.debug("a")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("file.log.gz", None)])
+    conftest.check_dir(tmp.path, files=[("file.log.gz", None)])
 
 
 def test_compression_early_remove(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "file.log", compression="gz", delay=True)
     logger.remove(i)
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 def test_retention(tmp: TempDir) -> None:
@@ -56,7 +57,7 @@ def test_retention(tmp: TempDir) -> None:
     logger.debug("a")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 def test_retention_early_remove(tmp: TempDir) -> None:
@@ -66,7 +67,7 @@ def test_retention_early_remove(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "test.log", retention=0, delay=True)
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 def test_rotation(tmp: TempDir, freeze_time: Fixture[FreezeTime]) -> None:
@@ -75,7 +76,7 @@ def test_rotation(tmp: TempDir, freeze_time: Fixture[FreezeTime]) -> None:
         logger.debug("a")
         logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.2001-02-03_00-00-00_000000.log", ""),
@@ -88,7 +89,7 @@ def test_rotation_early_remove(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "file.log", rotation=0, delay=True, format="{message}")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 def test_rotation_and_retention(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
@@ -100,7 +101,7 @@ def test_rotation_and_retention(freeze_time: Fixture[FreezeTime], tmp: TempDir) 
             frozen.tick(datetime.timedelta(seconds=0.05))
             logger.info(str(i) * 20)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.1999-12-12_00-00-00_350000.log", "7" * 20 + "\n"),
@@ -119,7 +120,7 @@ def test_rotation_and_retention_timed_file(freeze_time: Fixture[FreezeTime], tmp
             frozen.tick(datetime.timedelta(seconds=0.05))
             logger.info(str(i) * 20)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.1999-12-12_00-00-00_350000.log", "7" * 20 + "\n"),

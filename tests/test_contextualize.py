@@ -3,8 +3,9 @@ import sys
 import threading
 from unittest.mock import MagicMock
 
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 from loguru._contextvars import load_contextvar_class
@@ -259,7 +260,7 @@ def test_context_reset_despite_error(writer: Fixture[Writer]) -> None:
 # verifying third-library is properly imported to reach 100% coverage.
 def test_contextvars_fallback_352() -> None:
     mock_module = MagicMock()
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sys, "version_info", (3, 5, 2))
         context.setitem(sys.modules, "contextvars", mock_module)
         assert load_contextvar_class() == mock_module.ContextVar, (

@@ -5,8 +5,9 @@ from typing import Any
 from unittest.mock import Mock
 
 import oxitest
+import conftest
 from conftest import FreezeTime
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 from loguru import logger
 
@@ -62,16 +63,16 @@ def test_retention_time(freeze_time: Fixture[FreezeTime], tmp: TempDir, retentio
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
 
     future = datetime.datetime.now() + datetime.timedelta(days=1)
     with freeze_time(future):
         i = logger.add(tmp.path / "test.log", retention=retention)
         logger.debug("test")
 
-        helpers.common.check_dir(tmp.path, size=2)
+        conftest.check_dir(tmp.path, size=2)
         logger.remove(i)
-        helpers.common.check_dir(tmp.path, size=0)
+        conftest.check_dir(tmp.path, size=0)
 
 
 @oxitest.parametrize(
@@ -89,7 +90,7 @@ def test_retention_count(tmp: TempDir, retention: int) -> None:
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=retention)
+    conftest.check_dir(tmp.path, size=retention)
 
 
 def test_retention_function(tmp: TempDir) -> None:
@@ -103,7 +104,7 @@ def test_retention_function(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "test.log", retention=func)
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.log.1.xyz", "A"),
@@ -137,7 +138,7 @@ def test_managed_files(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "test.log", retention=0, catch=False)
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 def test_not_managed_files(tmp: TempDir) -> None:
@@ -213,7 +214,7 @@ def test_directories_ignored(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "test.log", retention=0, catch=False)
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=len(others))
+    conftest.check_dir(tmp.path, size=len(others))
 
 
 def test_manage_formatted_files(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
@@ -278,9 +279,9 @@ def test_manage_file_without_extension(tmp: TempDir) -> None:
 
     i = logger.add(file, retention=0)
     logger.debug("?")
-    helpers.common.check_dir(tmp.path, files=[("file", None)])
+    conftest.check_dir(tmp.path, files=[("file", None)])
     logger.remove(i)
-    helpers.common.check_dir(tmp.path, files=[])
+    conftest.check_dir(tmp.path, files=[])
 
 
 def test_manage_formatted_files_without_extension(tmp: TempDir) -> None:
@@ -292,7 +293,7 @@ def test_manage_formatted_files_without_extension(tmp: TempDir) -> None:
     logger.debug("1")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 @oxitest.parametrize(**MODE_CASES)
@@ -304,25 +305,25 @@ def test_retention_at_rotation(tmp: TempDir, mode: str) -> None:
     logger.add(tmp.path / "test.log", retention=1, rotation=0, mode=mode)
     logger.debug("test")
 
-    helpers.common.check_dir(tmp.path, size=2)
+    conftest.check_dir(tmp.path, size=2)
 
 
 @oxitest.parametrize(**MODE_CASES)
 def test_retention_at_remove_without_rotation(tmp: TempDir, mode: str) -> None:
     i = logger.add(tmp.path / "file.log", retention=0, mode=mode)
     logger.debug("1")
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
     logger.remove(i)
-    helpers.common.check_dir(tmp.path, size=0)
+    conftest.check_dir(tmp.path, size=0)
 
 
 @oxitest.parametrize(**MODE_CASES)
 def test_no_retention_at_remove_with_rotation(tmp: TempDir, mode: str) -> None:
     i = logger.add(tmp.path / "file.log", retention=0, rotation="100 MB", mode=mode)
     logger.debug("1")
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
     logger.remove(i)
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
 
 
 def test_no_renaming(tmp: TempDir) -> None:
@@ -330,7 +331,7 @@ def test_no_renaming(tmp: TempDir) -> None:
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", "test\n")])
+    conftest.check_dir(tmp.path, files=[("test.log", "test\n")])
 
 
 @oxitest.parametrize(**DELAY_CASES)
@@ -350,7 +351,7 @@ def test_exception_during_retention_at_rotation(
         frozen.tick()
         logger.debug("BBB")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2022-02-22_00-00-00_000000.log", ""),
@@ -388,7 +389,7 @@ def test_exception_during_retention_at_rotation_not_caught(
         frozen.tick()
         logger.debug("BBB")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2022-02-22_00-00-00_000000.log", ""),
@@ -420,7 +421,7 @@ def test_exception_during_retention_at_remove(tmp: TempDir, cap: StdCapture, del
 
     logger.debug("Nope")
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", "AAA\n")])
+    conftest.check_dir(tmp.path, files=[("test.log", "AAA\n")])
 
     captured = cap.readouterr()
     assert (

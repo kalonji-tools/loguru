@@ -1,8 +1,9 @@
 import inspect
 import logging
 
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -40,7 +41,7 @@ def test_formatting(writer: Fixture[Writer]) -> None:
         "{level.no} - {line} - {module} - {message}"
     )
 
-    with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format=fmt)
         # Read from the call site itself so reformatting this file cannot break the test.
         lineno = inspect.currentframe().f_lineno + 1
@@ -59,7 +60,7 @@ def test_formatting(writer: Fixture[Writer]) -> None:
 
 
 def test_intercept(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger(None, InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger(None, InterceptHandler()) as logging_logger:
         logging_logger.info("Nope")
         logger.add(writer, format="{message}")
         logging_logger.info("Test")
@@ -74,7 +75,7 @@ def test_intercept(writer: Fixture[Writer]) -> None:
 def test_add_before_intercept(writer: Fixture[Writer]) -> None:
     logger.add(writer, format="{message}")
 
-    with helpers.common.make_logging_logger(None, InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger(None, InterceptHandler()) as logging_logger:
         logging_logger.info("Test")
 
     result = writer.read()
@@ -87,7 +88,7 @@ def test_add_before_intercept(writer: Fixture[Writer]) -> None:
 def test_remove_interception(writer: Fixture[Writer]) -> None:
     h = InterceptHandler()
 
-    with helpers.common.make_logging_logger("foobar", h) as logging_logger:
+    with conftest.make_logging_logger("foobar", h) as logging_logger:
         logger.add(writer, format="{message}")
         logging_logger.debug("1")
         logging_logger.removeHandler(h)
@@ -101,7 +102,7 @@ def test_remove_interception(writer: Fixture[Writer]) -> None:
 
 
 def test_intercept_too_low(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger("tests.test_interception", InterceptHandler()):
+    with conftest.make_logging_logger("tests.test_interception", InterceptHandler()):
         logger.add(writer, format="{message}")
         logging.getLogger("tests").error("Nope 1")
         logging.getLogger("foobar").error("Nope 2")
@@ -114,8 +115,8 @@ def test_intercept_too_low(writer: Fixture[Writer]) -> None:
 
 
 def test_multiple_intercept(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger("test_1", InterceptHandler()) as logging_logger_1:
-        with helpers.common.make_logging_logger("test_2", InterceptHandler()) as logging_logger_2:
+    with conftest.make_logging_logger("test_1", InterceptHandler()) as logging_logger_1:
+        with conftest.make_logging_logger("test_2", InterceptHandler()) as logging_logger_2:
             logger.add(writer, format="{message}")
             logging_logger_1.info("1")
             logging_logger_2.info("2")
@@ -128,7 +129,7 @@ def test_multiple_intercept(writer: Fixture[Writer]) -> None:
 
 
 def test_exception(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger(
+    with conftest.make_logging_logger(
         "tests.test_interception", InterceptHandler()
     ) as logging_logger:
         logger.add(writer, format="{message}")
@@ -151,7 +152,7 @@ def test_exception(writer: Fixture[Writer]) -> None:
 
 
 def test_level_is_no(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format="<lvl>{level.no} - {level.name} - {message}</lvl>", colorize=True)
         logging_logger.log(12, "Hop")
 
@@ -165,7 +166,7 @@ def test_level_is_no(writer: Fixture[Writer]) -> None:
 def test_level_does_not_exist(writer: Fixture[Writer]) -> None:
     logging.addLevelName(152, "FANCY_LEVEL")
 
-    with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format="<lvl>{level.no} - {level.name} - {message}</lvl>", colorize=True)
         logging_logger.log(152, "Nop")
 
@@ -177,7 +178,7 @@ def test_level_does_not_exist(writer: Fixture[Writer]) -> None:
 
 
 def test_level_exist_builtin(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format="<lvl>{level.no} - {level.name} - {message}</lvl>", colorize=True)
         logging_logger.error("Error...")
 
@@ -192,7 +193,7 @@ def test_level_exists_custom(writer: Fixture[Writer]) -> None:
     logging.addLevelName(99, "ANOTHER_FANCY_LEVEL")
     logger.level("ANOTHER_FANCY_LEVEL", no=99, color="<green>", icon="")
 
-    with helpers.common.make_logging_logger("tests", InterceptHandler()) as logging_logger:
+    with conftest.make_logging_logger("tests", InterceptHandler()) as logging_logger:
         logger.add(writer, format="<lvl>{level.no} - {level.name} - {message}</lvl>", colorize=True)
         logging_logger.log(99, "Yep!")
 
@@ -204,7 +205,7 @@ def test_level_exists_custom(writer: Fixture[Writer]) -> None:
 
 
 def test_using_logging_function(writer: Fixture[Writer]) -> None:
-    with helpers.common.make_logging_logger(None, InterceptHandler()):
+    with conftest.make_logging_logger(None, InterceptHandler()):
         logger.add(writer, format="{function} {line} {module} {file.name} {message}")
         # Read from the call site itself so reformatting this file cannot break the test.
         lineno = inspect.currentframe().f_lineno + 1

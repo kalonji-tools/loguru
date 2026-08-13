@@ -9,8 +9,9 @@ from typing import Any, Iterator, List, Tuple, Union
 from unittest.mock import Mock
 
 import oxitest
+import conftest
 from conftest import FreezeTime
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 import loguru
 from loguru import logger
@@ -102,7 +103,7 @@ def test_renaming(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
         frozen.tick()
         logger.debug("a")
 
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("file.2020-01-01_00-00-00_000000.log", ""),
@@ -113,7 +114,7 @@ def test_renaming(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
         frozen.tick()
         logger.debug("b")
 
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("file.2020-01-01_00-00-00_000000.log", ""),
@@ -129,7 +130,7 @@ def test_no_renaming(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
 
         frozen.move_to("2019-01-01 00:00:00")
         logger.debug("a")
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("file_2018-01-01_00-00-00_000000.log", ""),
@@ -139,7 +140,7 @@ def test_no_renaming(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
 
         frozen.move_to("2020-01-01 00:00:00")
         logger.debug("b")
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("file_2018-01-01_00-00-00_000000.log", ""),
@@ -174,7 +175,7 @@ def test_size_rotation(freeze_time: Fixture[FreezeTime], tmp: TempDir, size: Any
         frozen.tick()
         logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-01-01_00-00-00_000000.log", "abcde\n"),
@@ -276,7 +277,7 @@ def test_time_rotation_dst(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> No
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_05-00-00_000000.log", "First\n"),
@@ -302,7 +303,7 @@ def test_time_rotation_with_tzinfo_diff_bigger(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_05-00-00_000000.log", "First\n"),
@@ -327,7 +328,7 @@ def test_time_rotation_with_tzinfo_diff_lower(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_06-00-00_000000.log", "First\n"),
@@ -353,7 +354,7 @@ def test_time_rotation_with_tzinfo_utc(freeze_time: Fixture[FreezeTime], tmp: Te
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_04-00-00.log", "First\n"),
@@ -385,7 +386,7 @@ def test_time_rotation_multiple_days_at_midnight_utc(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27.log", "First\nSecond\n"),
@@ -420,7 +421,7 @@ def test_daily_rotation_with_different_timezone(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27.log", "First\nSecond\n"),
@@ -458,7 +459,7 @@ def test_time_rotation_after_positive_timezone_changes_forward(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_01-00-00.log", "First\nSecond\n"),
@@ -487,7 +488,7 @@ def test_time_rotation_when_positive_timezone_changes_forward(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_02-00-00.log", "First\n"),
@@ -524,7 +525,7 @@ def test_time_rotation_after_negative_timezone_changes_forward(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_04-00-00.log", "First\nSecond\n"),
@@ -553,7 +554,7 @@ def test_time_rotation_when_negative_timezone_changes_forward(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_02-00-00.log", "First\n"),
@@ -588,7 +589,7 @@ def test_time_rotation_after_positive_timezone_changes_backward_aware(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_01-00-00.log", "First\nSecond\n"),
@@ -619,7 +620,7 @@ def test_time_rotation_after_positive_timezone_changes_backward_naive(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_01-00-00.log", "First\nSecond\nThird\n"),
@@ -654,7 +655,7 @@ def test_time_rotation_after_negative_timezone_changes_backward_aware(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_04-00-00.log", "First\nSecond\n"),
@@ -685,7 +686,7 @@ def test_time_rotation_after_negative_timezone_changes_backward_naive(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_04-00-00.log", "First\nSecond\nThird\n"),
@@ -713,7 +714,7 @@ def test_time_rotation_when_timezone_changes_backward_rename_file(
 
     logger.remove(i)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test_2018-10-27_01-00-00.2018-10-27_03-00-00_000000.log", "First\n"),
@@ -749,7 +750,7 @@ def test_dont_rotate_earlier_when_utc_is_one_day_before(
         logger.info("Third")
         logger.remove()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2018-10-24_00-30-00_000000.log", "First\nSecond\n"),
@@ -785,7 +786,7 @@ def test_dont_rotate_later_when_utc_is_one_day_after(
         logger.info("Third")
         logger.remove()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2018-10-23_23-30-00_000000.log", "First\n"),
@@ -813,7 +814,7 @@ def test_rotation_at_midnight_with_date_in_filename(
         logger.info("Second")
         logger.remove()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2018-10-23.log", "First\n"),
@@ -847,7 +848,7 @@ def test_time_rotation_reopening_native(delay: bool) -> None:
         i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
         logger.info("3")
 
-        helpers.common.check_dir(tmp_path_local, size=1)
+        conftest.check_dir(tmp_path_local, size=1)
         assert filepath.read_text() == "1\n2\n3\n", (
             "re-opening the file must recover its original creation time, so the rotation "
             "clock is not reset by a restart"
@@ -856,7 +857,7 @@ def test_time_rotation_reopening_native(delay: bool) -> None:
         time.sleep(1)
         logger.info("4")
 
-        helpers.common.check_dir(tmp_path_local, size=2)
+        conftest.check_dir(tmp_path_local, size=2)
         assert (
             filepath.read_text() == "4\n"
         ), "the elapsed time since the *original* creation must trigger the rotation"
@@ -866,7 +867,7 @@ def test_time_rotation_reopening_native(delay: bool) -> None:
         i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
         logger.info("5")
 
-        helpers.common.check_dir(tmp_path_local, size=2)
+        conftest.check_dir(tmp_path_local, size=2)
         assert (
             filepath.read_text() == "4\n5\n"
         ), "the creation time recorded at rotation must survive the next re-open too"
@@ -875,7 +876,7 @@ def test_time_rotation_reopening_native(delay: bool) -> None:
         logger.info("6")
         logger.remove(i)
 
-        helpers.common.check_dir(tmp_path_local, size=3)
+        conftest.check_dir(tmp_path_local, size=3)
         assert (
             filepath.read_text() == "6\n"
         ), "the rotation clock must keep running across re-opens rather than restart"
@@ -885,7 +886,7 @@ def test_time_rotation_reopening_native(delay: bool) -> None:
 @oxitest.parametrize(**DELAY_CASES)
 def test_time_rotation_reopening_xattr_attributeerror(delay: bool) -> None:
     with local_temporary_directory() as tmp_path_local:
-        with helpers.common.patch_context() as context:
+        with conftest.patch_context() as context:
             context.delattr(os, "setxattr")
             context.delattr(os, "getxattr")
             get_ctime, set_ctime = load_ctime_functions()
@@ -902,7 +903,7 @@ def test_time_rotation_reopening_xattr_attributeerror(delay: bool) -> None:
             i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
             logger.info("2")
             logger.remove(i)
-            helpers.common.check_dir(tmp_path_local, size=1)
+            conftest.check_dir(tmp_path_local, size=1)
             assert filepath.read_text() == "1\n2\n", (
                 "without xattr the creation time falls back to mtime, which must still give "
                 "a usable rotation clock rather than raise"
@@ -911,7 +912,7 @@ def test_time_rotation_reopening_xattr_attributeerror(delay: bool) -> None:
             i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
             logger.info("3")
             logger.remove(i)
-            helpers.common.check_dir(tmp_path_local, size=2)
+            conftest.check_dir(tmp_path_local, size=2)
             assert (
                 filepath.read_text() == "3\n"
             ), "the fallback clock must still trigger rotation once the interval elapses"
@@ -921,7 +922,7 @@ def test_time_rotation_reopening_xattr_attributeerror(delay: bool) -> None:
 @oxitest.parametrize(**DELAY_CASES)
 def test_time_rotation_reopening_xattr_oserror(delay: bool) -> None:
     with local_temporary_directory() as tmp_path_local:
-        with helpers.common.patch_context() as context:
+        with conftest.patch_context() as context:
             context.setattr(os, "setxattr", Mock(side_effect=OSError))
             context.setattr(os, "getxattr", Mock(side_effect=OSError))
             get_ctime, set_ctime = load_ctime_functions()
@@ -938,7 +939,7 @@ def test_time_rotation_reopening_xattr_oserror(delay: bool) -> None:
             i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
             logger.info("2")
             logger.remove(i)
-            helpers.common.check_dir(tmp_path_local, size=1)
+            conftest.check_dir(tmp_path_local, size=1)
             assert filepath.read_text() == "1\n2\n", (
                 "a filesystem that rejects xattr at run time must be handled like one that "
                 "has no xattr at all, rather than propagate the OSError"
@@ -947,7 +948,7 @@ def test_time_rotation_reopening_xattr_oserror(delay: bool) -> None:
             i = logger.add(filepath, format="{message}", delay=delay, rotation="2 s")
             logger.info("3")
             logger.remove(i)
-            helpers.common.check_dir(tmp_path_local, size=2)
+            conftest.check_dir(tmp_path_local, size=2)
             assert (
                 filepath.read_text() == "3\n"
             ), "the fallback clock must still trigger rotation once the interval elapses"
@@ -957,7 +958,7 @@ def test_time_rotation_reopening_xattr_oserror(delay: bool) -> None:
 def test_time_rotation_windows_no_setctime(tmp: TempDir) -> None:
     import win32_setctime
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(win32_setctime, "SUPPORTED", False)
         context.setattr(win32_setctime, "setctime", Mock())
 
@@ -966,13 +967,13 @@ def test_time_rotation_windows_no_setctime(tmp: TempDir) -> None:
         logger.info("1")
         time.sleep(1.5)
         logger.info("2")
-        helpers.common.check_dir(tmp.path, size=1)
+        conftest.check_dir(tmp.path, size=1)
         assert (
             filepath.read_text() == "1\n2\n"
         ), "on an unsupported Windows filesystem the rotation clock must still work"
         time.sleep(1)
         logger.info("3")
-        helpers.common.check_dir(tmp.path, size=2)
+        conftest.check_dir(tmp.path, size=2)
         assert filepath.read_text() == "3\n", "the rotation must still trigger on time"
 
         assert not win32_setctime.setctime.called, (
@@ -989,7 +990,7 @@ def test_time_rotation_windows_no_setctime(tmp: TempDir) -> None:
 def test_time_rotation_windows_setctime_exception(tmp: TempDir, exception: Any) -> None:
     import win32_setctime
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(win32_setctime, "setctime", Mock(side_effect=exception))
 
         filepath = tmp.path / "test.log"
@@ -997,13 +998,13 @@ def test_time_rotation_windows_setctime_exception(tmp: TempDir, exception: Any) 
         logger.info("1")
         time.sleep(1.5)
         logger.info("2")
-        helpers.common.check_dir(tmp.path, size=1)
+        conftest.check_dir(tmp.path, size=1)
         assert (
             filepath.read_text() == "1\n2\n"
         ), "a failure while stamping the creation time must not break logging"
         time.sleep(1)
         logger.info("3")
-        helpers.common.check_dir(tmp.path, size=2)
+        conftest.check_dir(tmp.path, size=2)
         assert filepath.read_text() == "3\n", "the rotation must still trigger on time"
 
         assert win32_setctime.setctime.called, (
@@ -1020,11 +1021,11 @@ def test_function_rotation(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> No
             format="{message}",
         )
         logger.debug("a")
-        helpers.common.check_dir(tmp.path, files=[("test_2018-01-01_00-00-00_000000.log", "a\n")])
+        conftest.check_dir(tmp.path, files=[("test_2018-01-01_00-00-00_000000.log", "a\n")])
 
         frozen.move_to("2019-01-01 00:00:00")
         logger.debug("b")
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("test_2018-01-01_00-00-00_000000.log", "a\n"),
@@ -1034,7 +1035,7 @@ def test_function_rotation(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> No
 
         frozen.move_to("2020-01-01 00:00:00")
         logger.debug("c")
-        helpers.common.check_dir(
+        conftest.check_dir(
             tmp.path,
             files=[
                 ("test_2018-01-01_00-00-00_000000.log", "a\n"),
@@ -1058,7 +1059,7 @@ def test_rotation_at_remove(freeze_time: Fixture[FreezeTime], tmp: TempDir, mode
         logger.debug("test")
         logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("test_2018.log", "test\n")])
+    conftest.check_dir(tmp.path, files=[("test_2018.log", "test\n")])
 
 
 @oxitest.parametrize(
@@ -1070,7 +1071,7 @@ def test_no_rotation_at_remove(tmp: TempDir, mode: str) -> None:
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", "test\n")])
+    conftest.check_dir(tmp.path, files=[("test.log", "test\n")])
 
 
 def test_rename_existing_with_creation_time(freeze_time: Fixture[FreezeTime], tmp: TempDir) -> None:
@@ -1080,7 +1081,7 @@ def test_rename_existing_with_creation_time(freeze_time: Fixture[FreezeTime], tm
         frozen.tick()
         logger.debug("Y" * 20)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2018-01-01_00-00-00_000000.log", "X\n"),
@@ -1096,7 +1097,7 @@ def test_renaming_rotation_dest_exists(freeze_time: Fixture[FreezeTime], tmp: Te
         logger.info("B")
         logger.info("C")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("rotate.2019-01-02_03-04-05_000006.log", ""),
@@ -1118,7 +1119,7 @@ def test_renaming_rotation_dest_exists_with_time(
         logger.info("B")
         logger.info("C")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("rotate.2019-01-02_03-04-05_000006.2019-01-02_03-04-05_000006.log", ""),
@@ -1140,7 +1141,7 @@ def test_exception_during_rotation(tmp: TempDir, cap: StdCapture) -> None:
     logger.info("A")
     logger.info("B")
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", "B\n")])
+    conftest.check_dir(tmp.path, files=[("test.log", "B\n")])
 
     captured = cap.readouterr()
     assert captured.out == "", "the error report goes to stderr, so stdout must stay empty"
@@ -1166,7 +1167,7 @@ def test_exception_during_rotation_not_caught(tmp: TempDir, cap: StdCapture) -> 
 
     logger.info("B")
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", "B\n")])
+    conftest.check_dir(tmp.path, files=[("test.log", "B\n")])
 
     captured = cap.readouterr()
     assert captured.out == captured.err == "", (
@@ -1211,7 +1212,7 @@ def test_recipe_rotation_both_size_and_time(freeze_time: Fixture[FreezeTime], tm
         logger.info("D")
         logger.info("E")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.2020-01-01_20-00-00_000000.log", "A" * 15 + "\n"),
@@ -1236,7 +1237,7 @@ def test_multiple_rotation_conditions(freeze_time: Fixture[FreezeTime], tmp: Tem
 
         logger.info("no")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.2020-01-01_20-00-00_000000.log", "abcde\n"),

@@ -12,12 +12,11 @@ import warnings
 from typing import Any, Callable, Iterator, List, NamedTuple, Type
 
 import freezegun
-from oxitest import Fixtures, Helpers, Yields
+from oxitest import Fixtures, Yields
 
 import loguru
 
 fx = Fixtures()
-common = Helpers()
 
 
 # ── Scoped patching ─────────────────────────────────────────────────────────
@@ -75,7 +74,6 @@ class _PatchContext:
         self._undos.clear()
 
 
-@common.helper
 @contextlib.contextmanager
 def patch_context() -> Iterator[_PatchContext]:
     context = _PatchContext()
@@ -224,7 +222,6 @@ class FreezeTime:
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
 
-@common.helper
 def check_dir(dir: Any, *, files: Any = None, size: Any = None) -> None:
     actual_files = set(dir.iterdir())
     seen = set()
@@ -255,7 +252,6 @@ def check_dir(dir: Any, *, files: Any = None, size: Any = None) -> None:
             seen.add(filepath)
 
 
-@common.helper
 @contextlib.contextmanager
 def default_threading_excepthook() -> Iterator[None]:
     if not hasattr(threading, "excepthook"):
@@ -277,7 +273,6 @@ def default_threading_excepthook() -> Iterator[None]:
     threading.excepthook = old_excepthook
 
 
-@common.helper
 @contextlib.contextmanager
 def make_logging_logger(
     name: Any, handler: Any, fmt: str = "%(message)s", level: str = "DEBUG"
@@ -298,7 +293,6 @@ def make_logging_logger(
         logging_logger.removeHandler(handler)
 
 
-@common.helper
 @contextlib.contextmanager
 def simulate_f_globals_name_absent() -> Iterator[None]:
     """Simulate execution in Dask environment, where "__name__" is not available in globals."""
@@ -314,7 +308,6 @@ def simulate_f_globals_name_absent() -> Iterator[None]:
         yield
 
 
-@common.helper
 @contextlib.contextmanager
 def simulate_no_frame_available() -> Iterator[None]:
     """Simulate execution in Cython, where there is no stack frame to retrieve."""
@@ -327,7 +320,6 @@ def simulate_no_frame_available() -> Iterator[None]:
         yield
 
 
-@common.helper
 @contextlib.contextmanager
 def simulate_missing_frame_lineno() -> Iterator[None]:
     """Simulate corner case where the "f_lineno" value is not available in stack frames."""

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+import conftest
 import oxitest
-from oxitest import helpers
 
 from loguru._defaults import env
 
@@ -16,7 +16,7 @@ class ValueCase:
     empty=ValueCase(value=""),
 )
 def test_string(value: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "VALID_STRING"
         context.setenv(key, value)
         assert env(key, str) == value, (
@@ -31,7 +31,7 @@ def test_string(value: str) -> None:
     word=ValueCase(value="TRUE"),
 )
 def test_bool_positive(value: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "VALID_BOOL_POS"
         context.setenv(key, value)
         assert env(key, bool) is True, (
@@ -46,7 +46,7 @@ def test_bool_positive(value: str) -> None:
     lowercase_word=ValueCase(value="false"),
 )
 def test_bool_negative(value: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "VALID_BOOL_NEG"
         context.setenv(key, value)
         assert env(key, bool) is False, (
@@ -56,7 +56,7 @@ def test_bool_negative(value: str) -> None:
 
 
 def test_int() -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "VALID_INT"
         context.setenv(key, "42")
         assert env(key, int) == 42, (
@@ -70,7 +70,7 @@ def test_int() -> None:
     letter=ValueCase(value="a"),
 )
 def test_invalid_int(value: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "INVALID_INT"
         context.setenv(key, value)
         with oxitest.raises(
@@ -85,7 +85,7 @@ def test_invalid_int(value: str) -> None:
     letter=ValueCase(value="a"),
 )
 def test_invalid_bool(value: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "INVALID_BOOL"
         context.setenv(key, value)
         with oxitest.raises(
@@ -96,7 +96,7 @@ def test_invalid_bool(value: str) -> None:
 
 
 def test_invalid_type() -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         key = "INVALID_TYPE"
         context.setenv(key, "42.0")
         with oxitest.raises(ValueError, match=r"^The requested type '[^']+' is not supported"):

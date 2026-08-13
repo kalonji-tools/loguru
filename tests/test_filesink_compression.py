@@ -7,8 +7,9 @@ from typing import Any
 from unittest.mock import Mock
 
 import oxitest
+import conftest
 from conftest import FreezeTime
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 from loguru import logger
 
@@ -61,7 +62,7 @@ def test_compression_ext(tmp: TempDir, compression: str) -> None:
     i = logger.add(tmp.path / "file.log", compression=compression)
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("file.log.%s" % compression, None)])
+    conftest.check_dir(tmp.path, files=[("file.log.%s" % compression, None)])
 
 
 def test_compression_function(tmp: TempDir) -> None:
@@ -71,7 +72,7 @@ def test_compression_function(tmp: TempDir) -> None:
     i = logger.add(tmp.path / "file.log", compression=compress)
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("file.log.rar", None)])
+    conftest.check_dir(tmp.path, files=[("file.log.rar", None)])
 
 
 @oxitest.parametrize(**MODE_CASES)
@@ -82,7 +83,7 @@ def test_compression_at_rotation(tmp: TempDir, mode: str, freeze_time: Fixture[F
         )
         logger.debug("After compression")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("file.2010-10-09_11-30-59_000000.log.gz", None),
@@ -97,7 +98,7 @@ def test_compression_at_remove_without_rotation(tmp: TempDir, mode: str) -> None
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("file.log.gz", None)])
+    conftest.check_dir(tmp.path, files=[("file.log.gz", None)])
 
 
 @oxitest.parametrize(**MODE_CASES)
@@ -106,7 +107,7 @@ def test_no_compression_at_remove_with_rotation(tmp: TempDir, mode: str) -> None
     logger.debug("test")
     logger.remove(i)
 
-    helpers.common.check_dir(tmp.path, files=[("test.log", None)])
+    conftest.check_dir(tmp.path, files=[("test.log", None)])
 
 
 def test_rename_existing_with_creation_time(tmp: TempDir, freeze_time: Fixture[FreezeTime]) -> None:
@@ -119,7 +120,7 @@ def test_rename_existing_with_creation_time(tmp: TempDir, freeze_time: Fixture[F
         logger.debug("test")
         logger.remove(j)
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[("test.2018-01-01_00-00-00_000000.log.tar.gz", None), ("test.log.tar.gz", None)],
     )
@@ -132,7 +133,7 @@ def test_renaming_compression_dest_exists(freeze_time: Fixture[FreezeTime], tmp:
             logger.info(str(i))
             logger.remove()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("rotate.log.tar.gz", None),
@@ -152,7 +153,7 @@ def test_renaming_compression_dest_exists_with_time(
             logger.info(str(i))
             logger.remove()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("rotate.2019-01-02_03-04-05_000006.log.tar.gz", None),
@@ -182,7 +183,7 @@ def test_compression_use_renamed_file_after_rotation(
 
     compression.assert_called_once_with(str(tmp.path / "test.2020-01-02_00-00-00_000000.log"))
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2020-01-02_00-00-00_000000.log", "Before\n"),
@@ -216,7 +217,7 @@ def test_threaded_compression_after_rotation(tmp: TempDir) -> None:
 
     thread.join()
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.log", "Rotation\nAfter\n"),
@@ -242,7 +243,7 @@ def test_exception_during_compression_at_rotation(
         frozen.tick()
         logger.debug("BBB")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2017-07-01_00-00-00_000000.log", ""),
@@ -281,7 +282,7 @@ def test_exception_during_compression_at_rotation_not_caught(
         frozen.tick()
         logger.debug("BBB")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.2017-07-01_00-00-00_000000.log", ""),
@@ -313,7 +314,7 @@ def test_exception_during_compression_at_remove(tmp: TempDir, cap: StdCapture, d
 
     logger.debug("Nope")
 
-    helpers.common.check_dir(
+    conftest.check_dir(
         tmp.path,
         files=[
             ("test.log", "AAA\n"),
@@ -355,7 +356,7 @@ def test_unknown_compression(compression: str) -> None:
     tarball=ExtensionCase(ext="tar.gz"),
 )
 def test_gzip_module_unavailable(ext: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(sys.modules, "gzip", None)
         with oxitest.raises(ImportError):
             logger.add("test.log", compression=ext)
@@ -366,7 +367,7 @@ def test_gzip_module_unavailable(ext: str) -> None:
     tarball=ExtensionCase(ext="tar.bz2"),
 )
 def test_bz2_module_unavailable(ext: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(sys.modules, "bz2", None)
         with oxitest.raises(ImportError):
             logger.add("test.log", compression=ext)
@@ -378,7 +379,7 @@ def test_bz2_module_unavailable(ext: str) -> None:
     tarball=ExtensionCase(ext="tar.xz"),
 )
 def test_lzma_module_unavailable(ext: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(sys.modules, "lzma", None)
         with oxitest.raises(ImportError):
             logger.add("test.log", compression=ext)
@@ -391,14 +392,14 @@ def test_lzma_module_unavailable(ext: str) -> None:
     xz=ExtensionCase(ext="tar.xz"),
 )
 def test_tarfile_module_unavailable(ext: str) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(sys.modules, "tarfile", None)
         with oxitest.raises(ImportError):
             logger.add("test.log", compression=ext)
 
 
 def test_zipfile_module_unavailable() -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(sys.modules, "zipfile", None)
         with oxitest.raises(ImportError):
             logger.add("test.log", compression="zip")

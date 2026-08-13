@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from typing import Any
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -107,7 +108,7 @@ def test_filtered_out(filter: Any, writer: Fixture[Writer]) -> None:
 def test_filtered_in_incomplete_frame_context(
     writer: Fixture[Writer], filter: Any, simulate: str
 ) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, filter=filter, format="{message}", catch=False)
         logger.info("It's ok")
         result = writer.read()
@@ -130,7 +131,7 @@ def test_filtered_in_incomplete_frame_context(
 def test_filtered_out_incomplete_frame_context(
     writer: Fixture[Writer], filter: Any, simulate: str
 ) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, filter=filter, format="{message}", catch=False)
         logger.info("It's not ok")
         result = writer.read()

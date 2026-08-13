@@ -6,8 +6,9 @@ from dataclasses import dataclass
 from typing import Any
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, StdCapture, helpers
+from oxitest import Fixture, StdCapture
 
 from loguru import logger
 
@@ -194,7 +195,7 @@ def test_not_caught_exception_queue_put(writer: Fixture[Writer], cap: StdCapture
 def test_not_caught_exception_queue_get(writer: Fixture[Writer], cap: StdCapture) -> None:
     logger.add(writer, enqueue=True, catch=False, format="{message}")
 
-    with helpers.common.default_threading_excepthook():
+    with conftest.default_threading_excepthook():
         logger.info("It's fine")
         logger.bind(broken=NotUnpicklable()).info("Bye bye...")
         logger.info("It's fine again")
@@ -216,7 +217,7 @@ def test_not_caught_exception_queue_get(writer: Fixture[Writer], cap: StdCapture
 def test_not_caught_exception_sink_write(cap: StdCapture) -> None:
     logger.add(NotWritable(), enqueue=True, catch=False, format="{message}")
 
-    with helpers.common.default_threading_excepthook():
+    with conftest.default_threading_excepthook():
         logger.info("It's fine")
         logger.bind(fail=True).info("Bye bye...")
         logger.info("It's fine again")
@@ -237,7 +238,7 @@ def test_not_caught_exception_sink_write(cap: StdCapture) -> None:
 def test_not_caught_exception_sink_write_then_complete(cap: StdCapture) -> None:
     logger.add(NotWritable(), enqueue=True, catch=False, format="{message}")
 
-    with helpers.common.default_threading_excepthook():
+    with conftest.default_threading_excepthook():
         logger.bind(fail=True).info("Bye bye...")
         logger.complete()
         logger.complete()  # Called twice to ensure it's re-usable.
@@ -257,7 +258,7 @@ def test_not_caught_exception_queue_get_then_complete(
 ) -> None:
     logger.add(writer, enqueue=True, catch=False, format="{message}")
 
-    with helpers.common.default_threading_excepthook():
+    with conftest.default_threading_excepthook():
         logger.bind(broken=NotUnpicklable()).info("Bye bye...")
         logger.complete()
         logger.complete()

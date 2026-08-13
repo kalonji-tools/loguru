@@ -4,8 +4,9 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Union
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -307,7 +308,7 @@ def test_log_formatting(
 
 
 def test_formatting_missing_lineno_frame_context(writer: Fixture[Writer]) -> None:
-    with helpers.common.simulate_missing_frame_lineno():
+    with conftest.simulate_missing_frame_lineno():
         logger.add(writer, format="{line} {message}", colorize=False)
         logger.info("Foobar")
         result = writer.read()
@@ -319,7 +320,7 @@ def test_formatting_missing_lineno_frame_context(writer: Fixture[Writer]) -> Non
 
 @oxitest.parametrize(**INCOMPLETE_FRAME_CASES)
 def test_formatting_incomplete_frame_context(writer: Fixture[Writer], simulate: str) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, format="{name} {message}", colorize=False)
         logger.info("Foobar")
         result = writer.read()

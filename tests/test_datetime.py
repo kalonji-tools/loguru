@@ -8,8 +8,9 @@ from unittest.mock import Mock
 
 import freezegun
 import oxitest
+import conftest
 from conftest import FreezeTime, Writer
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 import loguru
 from loguru import logger
@@ -363,7 +364,7 @@ def test_localtime_raising_exception(
     writer: Fixture[Writer], freeze_time: Fixture[FreezeTime], exception: Type[Exception]
 ) -> None:
     with freeze_time("2011-01-02 03:04:05.6", ("A", 7200), include_tm_zone=True):
-        with helpers.common.patch_context() as context:
+        with conftest.patch_context() as context:
             mock = Mock(side_effect=exception)
             context.setattr(loguru._datetime, "localtime", mock, raising=True)
 

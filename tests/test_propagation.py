@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from logging import StreamHandler
 
 import oxitest
-from oxitest import StdCapture, helpers
+import conftest
+from oxitest import StdCapture
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -31,7 +32,7 @@ def test_formatting(cap: StdCapture) -> None:
         "%(levelno)s - %(lineno)d - %(module)s - %(message)s"
     )
 
-    with helpers.common.make_logging_logger(
+    with conftest.make_logging_logger(
         "tests.test_propagation", StreamHandler(sys.stderr), fmt
     ):
         logger.add(PropagateHandler(), format="{message}")
@@ -53,7 +54,7 @@ def test_formatting(cap: StdCapture) -> None:
 
 
 def test_propagate(cap: StdCapture) -> None:
-    with helpers.common.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
+    with conftest.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
         logging_logger.debug("1")
         logger.debug("2")
 
@@ -71,7 +72,7 @@ def test_propagate(cap: StdCapture) -> None:
 
 
 def test_remove_propagation(cap: StdCapture) -> None:
-    with helpers.common.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
+    with conftest.make_logging_logger("tests", StreamHandler(sys.stderr)) as logging_logger:
         i = logger.add(PropagateHandler(), format="{message}")
 
         logger.debug("1")
@@ -91,7 +92,7 @@ def test_remove_propagation(cap: StdCapture) -> None:
 
 
 def test_propagate_too_high(cap: StdCapture) -> None:
-    with helpers.common.make_logging_logger(
+    with conftest.make_logging_logger(
         "tests.test_propagation.deep", StreamHandler(sys.stderr)
     ) as logging_logger:
         logger.add(PropagateHandler(), format="{message}")
@@ -111,7 +112,7 @@ def test_propagate_too_high(cap: StdCapture) -> None:
     via_opt=ExceptionCase(use_opt=True),
 )
 def test_exception(cap: StdCapture, use_opt: bool) -> None:
-    with helpers.common.make_logging_logger("tests", StreamHandler(sys.stderr)):
+    with conftest.make_logging_logger("tests", StreamHandler(sys.stderr)):
         logger.add(PropagateHandler(), format="{message}")
 
         try:

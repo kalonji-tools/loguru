@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from typing import Any, Callable, Type, Union
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 from tests._utils import (
@@ -140,7 +141,7 @@ def test_automatic_detection_when_stream_has_no_isatty() -> None:
 
 def test_override_no_color() -> None:
     stream = StreamIsattyTrue()
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(os.environ, "NO_COLOR", "1")
         logger.add(stream, format="<blue>{message}</blue>", colorize=True)
         logger.debug("Message", colorize=False)
@@ -152,7 +153,7 @@ def test_override_no_color() -> None:
 
 def test_override_force_color() -> None:
     stream = StreamIsattyFalse()
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setitem(os.environ, "FORCE_COLOR", "1")
         logger.add(stream, format="<blue>{message}</blue>", colorize=False)
         logger.debug("Message", colorize=False)

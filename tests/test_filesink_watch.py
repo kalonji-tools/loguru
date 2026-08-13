@@ -4,7 +4,8 @@ from typing import Any, Callable, Optional
 from unittest.mock import Mock
 
 import oxitest
-from oxitest import TempDir, helpers
+import conftest
+from oxitest import TempDir
 
 from loguru import logger
 
@@ -45,11 +46,11 @@ def test_file_deleted_before_write_with_delay(tmp: TempDir) -> None:
 @oxitest.mark.skip(when=os.name == "nt", reason=WINDOWS_KEEPS_FILES_LOCKED)
 def test_file_path_containing_placeholder(tmp: TempDir) -> None:
     logger.add(tmp.path / "test_{time}.log", format="{message}", watch=True)
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
     filepath = next(tmp.path.iterdir())
     os.remove(str(filepath))
     logger.info("Test")
-    helpers.common.check_dir(tmp.path, size=1)
+    conftest.check_dir(tmp.path, size=1)
     assert filepath.read_text() == "Test\n", (
         "re-creating the file must reuse the already-resolved name, otherwise a {time} "
         "placeholder would produce a brand-new file on every re-open"
@@ -163,7 +164,7 @@ def test_file_correctly_reused_after_rotation(tmp: TempDir) -> None:
     logger.info("Test 1")
     logger.info("Test 2")
     logger.info("Test 3")
-    helpers.common.check_dir(tmp.path, size=2)
+    conftest.check_dir(tmp.path, size=2)
     rotated = next(f for f in tmp.path.iterdir() if f != filepath)
     assert rotated.read_text() == "Test 1\n", (
         "the rotated file must hold only what preceded the rotation, otherwise watch mode "

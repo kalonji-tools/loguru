@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from typing import Any
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -153,7 +154,7 @@ def test_multiple_activations() -> None:
 
 @oxitest.parametrize(**INCOMPLETE_FRAME_CASES)
 def test_log_before_enable_incomplete_frame_context(writer: Fixture[Writer], simulate: str) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, format="{message}")
         logger.disable(None)
         logger.debug("nope")
@@ -170,7 +171,7 @@ def test_log_before_enable_incomplete_frame_context(writer: Fixture[Writer], sim
 def test_log_before_disable_incomplete_frame_context(
     writer: Fixture[Writer], simulate: str
 ) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, format="{message}")
         logger.enable(None)
         logger.debug("yes")
@@ -185,7 +186,7 @@ def test_log_before_disable_incomplete_frame_context(
 
 @oxitest.parametrize(**INCOMPLETE_FRAME_CASES)
 def test_incomplete_frame_context_with_others(writer: Fixture[Writer], simulate: str) -> None:
-    with getattr(helpers.common, simulate)():
+    with getattr(conftest, simulate)():
         logger.add(writer, format="{message}")
         logger.info("1")
         logger.enable(None)

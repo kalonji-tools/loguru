@@ -1,11 +1,10 @@
 """Stateless utilities that test modules need outside a running session.
 
 Everything here is plain module-level code rather than a ``conftest.py`` helper
-because the ``oxitest.helpers`` proxy only resolves while a session is running,
-and these are needed in two places where that is not true: ``@oxitest.parametrize``
+because these are needed in two places where a session is not running: ``@oxitest.parametrize``
 case values, which are built as the test module is imported, and worker functions
 executed in a child process. Utilities that are only ever called from inside a test
-body live in ``conftest.py`` instead, registered on the ``common`` helper namespace.
+body live in ``conftest.py`` instead, as plain module-level functions.
 """
 
 import asyncio

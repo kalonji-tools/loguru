@@ -7,8 +7,9 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 from loguru import logger
 from tests._naming import pin_module_name
@@ -224,7 +225,7 @@ def test_pickling_standard_handler_root_logger_not_picklable(cap: StdCapture) ->
     def reduce_protocol():
         raise TypeError("Not picklable")
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(logging.getLogger(), "__reduce__", reduce_protocol, raising=False)
 
         handler = StandardHandler(logging.NOTSET)

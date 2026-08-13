@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from typing import Any, Iterator, Type
 from unittest.mock import MagicMock
 
+import conftest
 import oxitest
-from oxitest import helpers
 
 from loguru import logger
 from loguru._colorama import should_colorize, should_wrap
@@ -74,7 +74,7 @@ def isolated_environment() -> Iterator[Any]:
     env = os.environ.copy()
     os.environ.clear()
     try:
-        with helpers.common.patch_context() as context:
+        with conftest.patch_context() as context:
             yield context
     finally:
         os.environ.clear()

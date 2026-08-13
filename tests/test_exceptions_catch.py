@@ -8,8 +8,9 @@ from dataclasses import dataclass
 from typing import Any
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, StdCapture, TempDir, helpers
+from oxitest import Fixture, StdCapture, TempDir
 
 from loguru import logger
 
@@ -164,7 +165,7 @@ def test_file_sink_utf8_encoding(tmp: TempDir) -> None:
 
 
 def test_has_sys_real_prefix(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sys, "real_prefix", "/foo/bar/baz", raising=False)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -180,7 +181,7 @@ def test_has_sys_real_prefix(writer: Fixture[Writer]) -> None:
 
 
 def test_no_sys_real_prefix(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.delattr(sys, "real_prefix", raising=False)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -196,7 +197,7 @@ def test_no_sys_real_prefix(writer: Fixture[Writer]) -> None:
 
 
 def test_has_site_getsitepackages(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(site, "getsitepackages", lambda: ["foo", "bar", "baz"], raising=False)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -212,7 +213,7 @@ def test_has_site_getsitepackages(writer: Fixture[Writer]) -> None:
 
 
 def test_no_site_getsitepackages(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.delattr(site, "getsitepackages", raising=False)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -228,7 +229,7 @@ def test_no_site_getsitepackages(writer: Fixture[Writer]) -> None:
 
 
 def test_user_site_is_path(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(site, "USER_SITE", "/foo/bar/baz")
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -244,7 +245,7 @@ def test_user_site_is_path(writer: Fixture[Writer]) -> None:
 
 
 def test_user_site_is_none(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(site, "USER_SITE", None)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -260,7 +261,7 @@ def test_user_site_is_none(writer: Fixture[Writer]) -> None:
 
 
 def test_sysconfig_get_path_return_path(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sysconfig, "get_path", lambda *a, **k: "/foo/bar/baz")
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 
@@ -276,7 +277,7 @@ def test_sysconfig_get_path_return_path(writer: Fixture[Writer]) -> None:
 
 
 def test_sysconfig_get_path_return_none(writer: Fixture[Writer]) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sysconfig, "get_path", lambda *a, **k: None)
         logger.add(writer, backtrace=False, diagnose=True, colorize=False, format="")
 

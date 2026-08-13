@@ -4,8 +4,9 @@ import time
 from dataclasses import dataclass
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, StdCapture, helpers
+from oxitest import Fixture, StdCapture
 
 from loguru import logger
 
@@ -48,7 +49,7 @@ def test_catch_is_false(cap: StdCapture) -> None:
 
 
 def test_no_sys_stderr(cap: StdCapture) -> None:
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sys, "stderr", None)
         logger.add(broken_sink, catch=True)
         logger.debug("a")
@@ -64,7 +65,7 @@ def test_broken_sys_stderr(cap: StdCapture) -> None:
     def broken_write(*args, **kwargs):
         raise OSError
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(sys.stderr, "write", broken_write)
         logger.add(broken_sink, catch=True)
         logger.debug("a")
@@ -179,7 +180,7 @@ def test_broken_sink_not_caught_enqueue() -> None:
 
     logger.add(broken_sink, format="{message}", enqueue=True, catch=False)
 
-    with helpers.common.default_threading_excepthook():
+    with conftest.default_threading_excepthook():
         logger.info("A")
         logger.info("B")
         time.sleep(0.1)

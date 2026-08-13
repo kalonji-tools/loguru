@@ -9,8 +9,9 @@ from typing import Tuple
 from unittest.mock import MagicMock
 
 import oxitest
+import conftest
 from conftest import Writer
-from oxitest import Fixture, helpers
+from oxitest import Fixture
 
 from loguru import logger
 
@@ -313,7 +314,7 @@ def test_group_exception_using_backport(writer: Fixture[Writer]) -> None:
 def test_invalid_format_exception_only_no_output(writer: Fixture[Writer]) -> None:
     logger.add(writer, backtrace=True, diagnose=True, colorize=False, format="")
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(traceback, "format_exception_only", lambda _e, _v: [])
         error = ValueError(0)
         logger.opt(exception=error).error("Error")
@@ -329,7 +330,7 @@ def test_invalid_format_exception_only_indented_error_message(
 ) -> None:
     logger.add(writer, backtrace=True, diagnose=True, colorize=False, format="")
 
-    with helpers.common.patch_context() as context:
+    with conftest.patch_context() as context:
         context.setattr(traceback, "format_exception_only", lambda _e, _v: ["    ValueError: 0\n"])
         error = ValueError(0)
         logger.opt(exception=error).error("Error")
